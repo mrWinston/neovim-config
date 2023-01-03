@@ -1,0 +1,27 @@
+# code block
+snippet highlight Add highlighting config
+	:source-highlighter: highlight.js
+
+snippet co Add a code block
+	.${1:description}
+	[,${2:language}]
+	----
+	${3:code}
+	----
+
+snippet quo Add a quote block
+	.${1:description}
+	****
+	${3:quote}
+	****
+
+snippet h1 First heading
+	= ${1:heading}
+snippet h2 First heading
+	== ${1:heading}
+snippet h3 First heading
+	=== ${1:heading}
+snippet h4 First heading
+	==== ${1:heading}
+snippet h5 First heading
+	===== ${1:heading}
