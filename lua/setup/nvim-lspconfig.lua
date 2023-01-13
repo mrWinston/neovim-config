@@ -6,27 +6,42 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
-
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
+  -- enable formatting for yamlls
+  if client.name == "yamlls" then
+    client.server_capabilities.documentFormattingProvider = true
+  end
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local wk = require("which-key")
+  local utils = require("utils")
 
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
+  --  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
 
   wk.register({
     c = {
       name = "code",
       a = { vim.lsp.buf.code_action, "code actions" },
       r = { vim.lsp.buf.rename, "rename function or variable" },
+      d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
+      f = { vim.lsp.buf.format, "Format Code" },
       g = {
         name = "goto",
         d = { vim.lsp.buf.definition, "Definition" },
         t = { vim.lsp.buf.type_definition, "Type definition" },
+        s = {
+          name = "horizontal split",
+          d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
+          t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
+        },
+        v = {
+          name = "vertical split",
+          d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
+          t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
+        },
       },
       l = {
         name = "List things",
@@ -41,7 +56,6 @@ local on_attach = function(client, bufnr)
         r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
         l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
       },
-      d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
     }
   },
     {
@@ -55,16 +69,19 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 --capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-require('lspconfig')['golangci_lint_ls'].setup {
+require('lspconfig').golangci_lint_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
-}
-require('lspconfig')['gopls'].setup {
+  init_options = {
+    command = { "golangci-lint", "run", "--out-format", "json" , "-j", "2"}
+  }
+})
+require('lspconfig').gopls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
-require('lspconfig')['sumneko_lua'].setup {
+require('lspconfig').sumneko_lua.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -87,8 +104,16 @@ require('lspconfig')['sumneko_lua'].setup {
       },
     },
   },
-}
-require('lspconfig')['bashls'].setup {}
+})
+require('lspconfig').bashls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
+
+require('lspconfig').yamlls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
 
 local luasnip = require('luasnip')
 require('luasnip.loaders.from_vscode').lazy_load()
@@ -108,28 +133,29 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+--    ['<Tab>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_next_item()
+--      elseif luasnip.expand_or_jumpable() then
+--        luasnip.expand_or_jump()
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
+--    ['<S-Tab>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_prev_item()
+--      elseif luasnip.jumpable(-1) then
+--        luasnip.jump(-1)
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
   }),
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-    { name = 'nvim_lsp_signature_help' }
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'path' },
   },
 }

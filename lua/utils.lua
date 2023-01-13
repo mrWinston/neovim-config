@@ -1,0 +1,46 @@
+local utils = {}
+utils.cmdThenFunc = function(cmd, func)
+  local embed = function()
+    vim.cmd(cmd)
+    func()
+  end
+  return embed
+end
+
+utils.createGitBranch = function()
+  local branchName = vim.fn.input("Branch Name: ")
+  if branchName ~= "" then
+    vim.cmd("Git switch -c " .. branchName)
+  end
+end
+
+utils.wrapFunction = function(func, ...)
+  local args = { ... }
+  return function()
+    func(unpack(args))
+  end
+end
+
+utils.reloadConfig = function()
+  for name, _ in pairs(package.loaded) do
+    if not name:match('nvim-tree') then
+      package.loaded[name] = nil
+    end
+  end
+
+  dofile(vim.env.MYVIMRC)
+  vim.notify(string.format("Nvim configuration %s reloaded!", vim.env.MYVIMRC), vim.log.levels.INFO)
+end
+
+utils.toggleCheckbox = function()
+  local curLine = vim.api.nvim_get_current_line()
+  local newLine = curLine
+  if string.find(curLine, "%[%S%]") ~= nil then
+    newLine = string.gsub(curLine, "%[%S%]", "[ ]", 1)
+  else
+    newLine = string.gsub(curLine, "%[%s?%]", "[x]", 1)
+  end
+  vim.api.nvim_set_current_line(newLine)
+end
+
+return utils

@@ -18,16 +18,11 @@ vim.keymap.set('t', '<c-j>', '<C-\\><C-N><C-w>j')
 vim.keymap.set('t', '<c-k>', '<C-\\><C-N><C-w>k')
 vim.keymap.set('t', '<c-l>', '<C-\\><C-N><C-w>l')
 
-
-local function wrap(func, ...)
-  local args = { ... }
-  return function()
-    func(unpack(args))
-  end
-end
+vim.keymap.set({'n', 'i'}, '<c-t>', ':tabnew<cr>')
 
 local telescope = require('telescope.builtin')
 local telescope_dap = require('telescope._extensions.dap')
+local utils = require('utils')
 
 local wk = require("which-key")
 wk.register({
@@ -38,9 +33,10 @@ wk.register({
     b = { telescope.buffers, "Buffers" },
     h = { telescope.help_tags, "Help" },
     c = { telescope.commands, "Commands" },
-    t = { wrap(telescope.builtin, { include_extensions = true }), "Telescope Pickers" },
+    t = { utils.wrapFunction(telescope.builtin, { include_extensions = true }), "Telescope Pickers" },
     d = { telescope_dap.commands, "DAP Commands" },
     s = { telescope.treesitter, "Symbols" },
+    j = { telescope.jumplist, "Jumplist" },
   },
   g = {
     name = "git",
@@ -49,38 +45,16 @@ wk.register({
     s = { ":Git<cr>", "Status" },
     p = { ":Git pull<cr>", "Pull" },
     l = { ":LazyGit<cr>", "Lazygit" },
-  }
+    n = { utils.createGitBranch, "New Branch" },
+  },
+  u = {
+    name = "utils",
+    t = { utils.toggleCheckbox, "Toggle Checkbox" },
+  },
 },
   {
     prefix = "<leader>",
   })
 
---local telescope_mappings = {
---  f = telescope.find_files,
---  g = telescope.live_grep,
---  b = telescope.buffers,
---  h = telescope.help_tags,
---  c = telescope.commands,
---  t = wrap(telescope.builtin, { include_extensions = true }),
---  d = telescope_dap.commands,
---  s = telescope.treesitter,
---}
---
---for k, v in pairs(telescope_mappings) do
---  local key = '<leader>f' .. k
---  vim.keymap.set('n', key, v)
---end
-
-local function reloadConfig()
-  for name, _ in pairs(package.loaded) do
-    if not name:match('nvim-tree') then
-      package.loaded[name] = nil
-    end
-  end
-
-  dofile(vim.env.MYVIMRC)
-  vim.notify(string.format("Nvim configuration %s reloaded!", vim.env.MYVIMRC), vim.log.levels.INFO)
-end
-
-vim.api.nvim_create_user_command('Reload', reloadConfig, { nargs = 0 })
+vim.api.nvim_create_user_command('Reload', utils.reloadConfig, { nargs = 0 })
 vim.api.nvim_create_user_command('Open', '!xdg-open %', { nargs = 0 })

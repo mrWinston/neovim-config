@@ -13,14 +13,14 @@ tree.setup { -- BEGIN_DEFAULT_OPTS
     float = {
       enable = true,
       open_win_config = {
-        height = 100,
+        relative = "cursor",
       }
     },
     mappings = {
       custom_only = false,
       list = {
-        { key = "s", action = "vsplit" },
-        { key = "i", action = "split" },
+        { key = "s", action = "split" },
+        { key = "v", action = "vsplit" },
       },
     },
   },

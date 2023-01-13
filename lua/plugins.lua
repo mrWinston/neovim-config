@@ -126,4 +126,8 @@ return require('packer').startup(function()
     requires = "nvim-lua/plenary.nvim",
     config = get_setup('todo-comments'),
   }
+  use {
+    "hrsh7th/cmp-path",
+    requires = "hrsh7th/nvim-cmp",
+  }
 end)

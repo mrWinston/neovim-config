@@ -3,6 +3,11 @@ snippet highlight Add highlighting config
 	:source-highlighter: highlight.js
 
 snippet co Add a code block
+	----
+	${1:code}
+	----
+
+snippet cod Add a code block with description
 	.${1:description}
 	[,${2:language}]
 	----
@@ -17,11 +22,34 @@ snippet quo Add a quote block
 
 snippet h1 First heading
 	= ${1:heading}
-snippet h2 First heading
+snippet h2 Second heading
 	== ${1:heading}
-snippet h3 First heading
+snippet h3 Third heading
 	=== ${1:heading}
-snippet h4 First heading
+snippet h4 Fourth heading
 	==== ${1:heading}
-snippet h5 First heading
+snippet h5 Fifth heading
 	===== ${1:heading}
+
+snippet toc Table of Contents
+	:toc:
+	:toclevels: ${1:levels}
+
+snippet list Simple, Unordered List
+	* ${1:element}	
+
+snippet listo Simple, Ordered List
+	. ${1:element}	
+
+snippet listd Description List
+	${1:Description}:: ${2:element}	
+
+snippet checki Create an interactive checklist
+	[%interactive]
+	* [ ] ${1:element}
+
+snippet check Create a checkbox item
+	* [ ] ${1:element}
+
+snippet link Link to a file or web page
+	link:${1:link}[${2:Display Text}]
