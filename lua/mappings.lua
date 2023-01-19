@@ -18,10 +18,11 @@ vim.keymap.set('t', '<c-j>', '<C-\\><C-N><C-w>j')
 vim.keymap.set('t', '<c-k>', '<C-\\><C-N><C-w>k')
 vim.keymap.set('t', '<c-l>', '<C-\\><C-N><C-w>l')
 
-vim.keymap.set({'n', 'i'}, '<c-t>', ':tabnew<cr>')
+vim.keymap.set({ 'n', 'i' }, '<c-t>', ':tabnew<cr>')
 
 local telescope = require('telescope.builtin')
 local telescope_dap = require('telescope._extensions.dap')
+local telescope_make = require('telescope._extensions.make')
 local utils = require('utils')
 
 local wk = require("which-key")
@@ -37,6 +38,7 @@ wk.register({
     d = { telescope_dap.commands, "DAP Commands" },
     s = { telescope.treesitter, "Symbols" },
     j = { telescope.jumplist, "Jumplist" },
+    m = { ":Telescope make<cr>", "Run Make Targets" },
   },
   g = {
     name = "git",
@@ -46,10 +48,18 @@ wk.register({
     p = { ":Git pull<cr>", "Pull" },
     l = { ":LazyGit<cr>", "Lazygit" },
     n = { utils.createGitBranch, "New Branch" },
+    g = {
+      name = "gists",
+      l = { ":GistList<cr>", "List Gists" },
+      c = { ":GistCreate<cr>", "Create Gists" },
+    },
   },
   u = {
     name = "utils",
-    t = { utils.toggleCheckbox, "Toggle Checkbox" },
+    c = { utils.toggleCheckbox, "Toggle Checkbox" },
+    t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
+    s = { ":nohlsearch<cr>", "Hide Search Results" },
+    n = { ":s/\n//g<cr>", "Remove Linebreaks" },
   },
 },
   {

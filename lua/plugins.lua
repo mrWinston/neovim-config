@@ -130,4 +130,20 @@ return require('packer').startup(function()
     "hrsh7th/cmp-path",
     requires = "hrsh7th/nvim-cmp",
   }
+
+  use {
+    "akinsho/toggleterm.nvim",
+    config = get_setup("toggleterm"),
+  }
+
+  use {
+    "mrWinston/telescope-makefile",
+    branch = "fix-merge-nil",
+    requires = "akinsho/toggleterm.nvim",
+  }
+
+  use {
+    "rudylee/nvim-gist"
+  }
+
 end)

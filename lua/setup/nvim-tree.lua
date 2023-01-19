@@ -11,7 +11,7 @@ tree.setup { -- BEGIN_DEFAULT_OPTS
   view = {
     adaptive_size = true,
     float = {
-      enable = true,
+      enable = false,
       open_win_config = {
         relative = "cursor",
       }
