@@ -16,7 +16,13 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local wk = require("which-key")
   local utils = require("utils")
+  print("Init LSP Bindings")
+--  vim.api.nvim_create_autocmd( "CursorHold", {
+--    buffer = bufnr,
+--    callback = vim.lsp.buf.hover,
+--  })
 
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   --  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
@@ -28,6 +34,7 @@ local on_attach = function(client, bufnr)
       r = { vim.lsp.buf.rename, "rename function or variable" },
       d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
       f = { vim.lsp.buf.format, "Format Code" },
+      h = { vim.lsp.buf.signature_help, "Signature Help"},
       g = {
         name = "goto",
         d = { vim.lsp.buf.definition, "Definition" },
@@ -115,6 +122,19 @@ require('lspconfig').yamlls.setup({
   capabilities = capabilities,
 })
 
+-- yarn global add typescript typescript-language-server
+require('lspconfig').tsserver.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
+
+-- yarn global add vscode-langservers-extracted
+require('lspconfig').eslint.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
+
+
 local luasnip = require('luasnip')
 require('luasnip.loaders.from_vscode').lazy_load()
 -- nvim-cmp setup
@@ -133,24 +153,24 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
---    ['<Tab>'] = cmp.mapping(function(fallback)
---      if cmp.visible() then
---        cmp.select_next_item()
---      elseif luasnip.expand_or_jumpable() then
---        luasnip.expand_or_jump()
---      else
---        fallback()
---      end
---    end, { 'i', 's' }),
---    ['<S-Tab>'] = cmp.mapping(function(fallback)
---      if cmp.visible() then
---        cmp.select_prev_item()
---      elseif luasnip.jumpable(-1) then
---        luasnip.jump(-1)
---      else
---        fallback()
---      end
---    end, { 'i', 's' }),
+    ['<C-n>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<C-p>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
   }),
   sources = {
     { name = 'nvim_lsp' },
