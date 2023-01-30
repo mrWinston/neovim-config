@@ -17,10 +17,10 @@ local on_attach = function(client, bufnr)
   local wk = require("which-key")
   local utils = require("utils")
   print("Init LSP Bindings")
---  vim.api.nvim_create_autocmd( "CursorHold", {
---    buffer = bufnr,
---    callback = vim.lsp.buf.hover,
---  })
+  --  vim.api.nvim_create_autocmd( "CursorHold", {
+  --    buffer = bufnr,
+  --    callback = vim.lsp.buf.hover,
+  --  })
 
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
   -- Mappings.
@@ -28,13 +28,20 @@ local on_attach = function(client, bufnr)
   --  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
 
   wk.register({
+    e = {
+      name = "errors",
+      l = { vim.diagnostic.setloclist, "Show Errors" },
+      n = { vim.diagnostic.goto_next, "Go to Next" },
+      p = { vim.diagnostic.goto_prev, "Go to Previous" },
+      o = { vim.diagnostic.open_float, "Open Float Window" },
+    },
     c = {
       name = "code",
       a = { vim.lsp.buf.code_action, "code actions" },
       r = { vim.lsp.buf.rename, "rename function or variable" },
       d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
       f = { vim.lsp.buf.format, "Format Code" },
-      h = { vim.lsp.buf.signature_help, "Signature Help"},
+      h = { vim.lsp.buf.signature_help, "Signature Help" },
       g = {
         name = "goto",
         d = { vim.lsp.buf.definition, "Definition" },
@@ -80,7 +87,7 @@ require('lspconfig').golangci_lint_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   init_options = {
-    command = { "golangci-lint", "run", "--out-format", "json" , "-j", "2"}
+    command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" }
   }
 })
 require('lspconfig').gopls.setup({

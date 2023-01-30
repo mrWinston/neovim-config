@@ -3,17 +3,19 @@ local tree = require('nvim-tree')
 
 
 tree.setup { -- BEGIN_DEFAULT_OPTS
-  open_on_setup = false,
+  open_on_setup = true,
   open_on_setup_file = false,
   open_on_tab = false,
+  create_in_closed_folder = true,
   sort_by = "name",
-  update_cwd = false,
+  sync_root_with_cwd = false,
   view = {
     adaptive_size = true,
     float = {
-      enable = false,
+      enable = true,
       open_win_config = {
         relative = "cursor",
+        border = "rounded",
       }
     },
     mappings = {
