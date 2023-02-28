@@ -82,6 +82,10 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 --capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+}
 
 require('lspconfig').golangci_lint_ls.setup({
   on_attach = on_attach,
@@ -90,12 +94,7 @@ require('lspconfig').golangci_lint_ls.setup({
     command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" }
   }
 })
-require('lspconfig').gopls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
-
-require('lspconfig').sumneko_lua.setup({
+require('lspconfig').lua_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -119,28 +118,56 @@ require('lspconfig').sumneko_lua.setup({
     },
   },
 })
-require('lspconfig').bashls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
 
-require('lspconfig').yamlls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
+local simpleLs = {
+  "gopls",
+  "bashls",
+  "yamlls",
+  "tsserver", -- yarn global add typescript typescript-language-server
+  "eslint", -- yarn global add vscode-langservers-extracted
+--  "pylsp", -- pip install pyright --user
+  "pyright",
+}
 
--- yarn global add typescript typescript-language-server
-require('lspconfig').tsserver.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
+for _, value in ipairs(simpleLs) do
+  require('lspconfig')[value].setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+  })
+end
 
--- yarn global add vscode-langservers-extracted
-require('lspconfig').eslint.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
-
+--require('lspconfig').gopls.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--require('lspconfig').bashls.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--
+--require('lspconfig').yamlls.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--
+---- yarn global add typescript typescript-language-server
+--require('lspconfig').tsserver.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--
+---- yarn global add vscode-langservers-extracted
+--require('lspconfig').eslint.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--
+---- pip install pyright --user
+--require('lspconfig').pyright.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--})
+--
 
 local luasnip = require('luasnip')
 require('luasnip.loaders.from_vscode').lazy_load()
@@ -158,7 +185,7 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
     ['<C-n>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -179,6 +206,7 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   }),
+  preselect = cmp.PreselectMode.None,
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },

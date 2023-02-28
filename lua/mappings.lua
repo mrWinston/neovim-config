@@ -20,12 +20,18 @@ vim.keymap.set('t', '<c-l>', '<C-\\><C-N><C-w>l')
 
 vim.keymap.set({ 'n', 'i' }, '<c-t>', ':tabnew<cr>')
 
+-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith, {})
+
 local telescope = require('telescope.builtin')
 local telescope_dap = require('telescope._extensions.dap')
-local telescope_make = require('telescope._extensions.make')
 local utils = require('utils')
+local outline = require('symbols-outline')
 
 local wk = require("which-key")
+
 wk.register({
   f = {
     name = "find",
@@ -60,6 +66,24 @@ wk.register({
     t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
     s = { ":nohlsearch<cr>", "Hide Search Results" },
     n = { ":s/\n//g<cr>", "Remove Linebreaks" },
+    o = { outline.toggle_outline, "Show Outline" },
+    l = {
+      name = "lsp server diagnostics",
+      r = { ":LspRestart<cr>", "Restart Lsp Server" },
+      i = { ":LspInfo<cr>", "Lsp Server Info" },
+      l = { ":LspLog<cr>", "Lsp Server Logs" },
+    }
+  },
+  o = {
+    name = "obsidian",
+    o = { ":ObsidianOpen<cr>", "Open Obsidian" },
+    n = { ":ObsidianLinkNew<cr>", "Create New note and add link to it" },
+    l = { ":ObsidianLink<cr>", "Insert a link to an existing note" },
+    g = { ":ObsidianSearch<cr>", "Grep through all notes" },
+    s = { ":ObsidianQuickSwitch<cr>", "Search notes by name" },
+    t = { ":ObsidianToday<cr>", "Create (or open) the Today Note" },
+    y = { ":ObsidianYesterday<cr>", "Open (or create) yesterdays note" },
+    f = { ":ObsidianFollowLink<cr>", "Follow link under cursor" },
   },
 },
   {

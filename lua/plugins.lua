@@ -122,11 +122,6 @@ return require('packer').startup(function()
   }
   -- Lua
   use {
-    "folke/todo-comments.nvim",
-    requires = "nvim-lua/plenary.nvim",
-    config = get_setup('todo-comments'),
-  }
-  use {
     "hrsh7th/cmp-path",
     requires = "hrsh7th/nvim-cmp",
   }
@@ -134,6 +129,11 @@ return require('packer').startup(function()
   use {
     "akinsho/toggleterm.nvim",
     config = get_setup("toggleterm"),
+  }
+  use {
+    "kevinhwang91/nvim-ufo",
+    requires = "kevinhwang91/promise-async",
+    config = get_setup("nvim-ufo")
   }
 
   use {
@@ -144,6 +144,20 @@ return require('packer').startup(function()
 
   use {
     "rudylee/nvim-gist"
+  }
+
+  use {
+    "simrat39/symbols-outline.nvim",
+    config = get_setup("symbols-outline"),
+  }
+
+  use {
+    "epwalsh/obsidian.nvim",
+    config = get_setup("obsidian"),
+  }
+
+  use {
+    "fladson/vim-kitty"
   }
 
 end)
