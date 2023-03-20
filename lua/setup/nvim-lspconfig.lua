@@ -6,6 +6,14 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
+-- full settings see https://github.com/ray-x/lsp_signature.nvim#full-configuration-with-default-values
+local signature_help_settings = {
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    handler_opts = {
+      border = "rounded"
+    }
+}
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -16,7 +24,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   local wk = require("which-key")
   local utils = require("utils")
-  print("Init LSP Bindings")
+  require("lsp_signature").on_attach(signature_help_settings, bufnr)
   --  vim.api.nvim_create_autocmd( "CursorHold", {
   --    buffer = bufnr,
   --    callback = vim.lsp.buf.hover,

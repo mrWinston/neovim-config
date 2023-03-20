@@ -51,6 +51,9 @@ return require('packer').startup(function()
     'hrsh7th/cmp-nvim-lsp-signature-help'
   }
   use {
+    'ray-x/lsp_signature.nvim'
+  }
+  use {
     'saadparwaiz1/cmp_luasnip'
   }
   use {
