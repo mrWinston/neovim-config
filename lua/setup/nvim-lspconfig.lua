@@ -28,63 +28,62 @@ local on_attach = function(client, bufnr)
   --  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
 
   wk.register({
-    e = {
-      name = "errors",
-      l = { vim.diagnostic.setloclist, "Show Errors" },
-      n = { vim.diagnostic.goto_next, "Go to Next" },
-      p = { vim.diagnostic.goto_prev, "Go to Previous" },
-      o = { vim.diagnostic.open_float, "Open Float Window" },
+      e = {
+        name = "errors",
+        l = { vim.diagnostic.setloclist, "Show Errors" },
+        n = { vim.diagnostic.goto_next, "Go to Next" },
+        p = { vim.diagnostic.goto_prev, "Go to Previous" },
+        o = { vim.diagnostic.open_float, "Open Float Window" },
+      },
+      c = {
+        name = "code",
+        a = { vim.lsp.buf.code_action, "code actions" },
+        r = { vim.lsp.buf.rename, "rename function or variable" },
+        d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
+        f = { vim.lsp.buf.format, "Format Code" },
+        h = { vim.lsp.buf.signature_help, "Signature Help" },
+        g = {
+          name = "goto",
+          d = { vim.lsp.buf.definition, "Definition" },
+          t = { vim.lsp.buf.type_definition, "Type definition" },
+          s = {
+            name = "horizontal split",
+            d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
+            t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
+          },
+          v = {
+            name = "vertical split",
+            d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
+            t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
+          },
+        },
+        l = {
+          name = "List things",
+          r = { vim.lsp.buf.references, "References" },
+          I = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
+          O = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
+          i = { vim.lsp.buf.implementation, "Implementations" },
+        },
+        w = {
+          name = "workspace actions",
+          a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },
+          r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
+          l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
+        },
+      }
     },
-    c = {
-      name = "code",
-      a = { vim.lsp.buf.code_action, "code actions" },
-      r = { vim.lsp.buf.rename, "rename function or variable" },
-      d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
-      f = { vim.lsp.buf.format, "Format Code" },
-      h = { vim.lsp.buf.signature_help, "Signature Help" },
-      g = {
-        name = "goto",
-        d = { vim.lsp.buf.definition, "Definition" },
-        t = { vim.lsp.buf.type_definition, "Type definition" },
-        s = {
-          name = "horizontal split",
-          d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
-          t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
-        },
-        v = {
-          name = "vertical split",
-          d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
-          t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
-        },
-      },
-      l = {
-        name = "List things",
-        r = { vim.lsp.buf.references, "References" },
-        I = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
-        O = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
-        i = { vim.lsp.buf.implementation, "Implementations" },
-      },
-      w = {
-        name = "workspace actions",
-        a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },
-        r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
-        l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
-      },
-    }
-  },
     {
       buffer = bufnr,
       prefix = "<leader>",
     })
-
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 --capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true
+  dynamicRegistration = false,
+  lineFoldingOnly = true
 }
 
 require('lspconfig').golangci_lint_ls.setup({
@@ -119,13 +118,19 @@ require('lspconfig').lua_ls.setup({
   },
 })
 
+
+-- yarn global add @volar/vue-language-server
+require('lspconfig').volar.setup({
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'}
+})
+
 local simpleLs = {
   "gopls",
   "bashls",
   "yamlls",
   "tsserver", -- yarn global add typescript typescript-language-server
-  "eslint", -- yarn global add vscode-langservers-extracted
---  "pylsp", -- pip install pyright --user
+  "eslint",   -- yarn global add vscode-langservers-extracted
+  --  "pylsp", -- pip install pyright --user
   "pyright",
 }
 
