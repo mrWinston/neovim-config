@@ -140,6 +140,7 @@ local simpleLs = {
   "eslint",   -- yarn global add vscode-langservers-extracted
   --  "pylsp", -- pip install pyright --user
   "pyright",
+  "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
 }
 
 for _, value in ipairs(simpleLs) do
@@ -227,3 +228,20 @@ cmp.setup {
     { name = 'path' },
   },
 }
+
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {border = 'rounded'}
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help,
+  {border = 'rounded'}
+)
+vim.diagnostic.config({
+  float = {
+    border = 'rounded',
+  },
+})
+
