@@ -63,7 +63,12 @@ wk.register({
   u = {
     name = "utils",
     c = { utils.toggleCheckbox, "Toggle Checkbox" },
-    t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
+    t = {
+      name = "ToggleTerm",
+      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
+      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
+      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
+    },
     s = { ":nohlsearch<cr>", "Hide Search Results" },
     n = { ":s/\n//g<cr>", "Remove Linebreaks" },
     o = { outline.toggle_outline, "Show Outline" },

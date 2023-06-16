@@ -21,6 +21,11 @@ return require('packer').startup(function()
     run = ':TSUpdate',
     config = get_setup('nvim-treesitter')
   }
+  use({
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    after = "nvim-treesitter",
+    requires = "nvim-treesitter/nvim-treesitter",
+  })
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {
@@ -163,4 +168,11 @@ return require('packer').startup(function()
     "fladson/vim-kitty"
   }
 
+  use {
+    "echasnovski/mini.nvim",
+    config = get_setup("mini")
+  }
+  use {
+    "dkarter/bullets.vim"
+  }
 end)

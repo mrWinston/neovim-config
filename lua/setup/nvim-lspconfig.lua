@@ -8,10 +8,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 
 -- full settings see https://github.com/ray-x/lsp_signature.nvim#full-configuration-with-default-values
 local signature_help_settings = {
-    bind = true, -- This is mandatory, otherwise border config won't get registered.
-    handler_opts = {
-      border = "rounded"
-    }
+  bind = true, -- This is mandatory, otherwise border config won't get registered.
+  handler_opts = {
+    border = "rounded"
+  }
 }
 
 -- Use an on_attach function to only map the following keys
@@ -35,51 +35,70 @@ local on_attach = function(client, bufnr)
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   --  vim.cmd [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
 
+  vim.cmd [[au FileType dap-repl lua require('dap.ext.autocompl').attach() ]]
+
+  local dap = require('dap')
+
   wk.register({
-      e = {
-        name = "errors",
-        l = { vim.diagnostic.setloclist, "Show Errors" },
-        n = { vim.diagnostic.goto_next, "Go to Next" },
-        p = { vim.diagnostic.goto_prev, "Go to Previous" },
-        o = { vim.diagnostic.open_float, "Open Float Window" },
-      },
-      c = {
-        name = "code",
-        a = { vim.lsp.buf.code_action, "code actions" },
-        r = { vim.lsp.buf.rename, "rename function or variable" },
-        d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
-        f = { vim.lsp.buf.format, "Format Code" },
-        h = { vim.lsp.buf.signature_help, "Signature Help" },
-        g = {
-          name = "goto",
-          d = { vim.lsp.buf.definition, "Definition" },
-          t = { vim.lsp.buf.type_definition, "Type definition" },
-          s = {
-            name = "horizontal split",
-            d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
-            t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
-          },
-          v = {
-            name = "vertical split",
-            d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
-            t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
-          },
-        },
-        l = {
-          name = "List things",
-          r = { vim.lsp.buf.references, "References" },
-          I = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
-          O = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
-          i = { vim.lsp.buf.implementation, "Implementations" },
-        },
-        w = {
-          name = "workspace actions",
-          a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },
-          r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
-          l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
-        },
+    e = {
+      name = "errors",
+      l = { vim.diagnostic.setloclist, "Show Errors" },
+      n = { vim.diagnostic.goto_next, "Go to Next" },
+      p = { vim.diagnostic.goto_prev, "Go to Previous" },
+      o = { vim.diagnostic.open_float, "Open Float Window" },
+    },
+    d = {
+      name = "debugger",
+      d = { dap.continue, "Start Debugging" },
+      b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
+      pb = { function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Toggle Breakpoint" },
+      k = { dap.terminate, "Kill Session" },
+      l = { ":DapShowLog<cr>", "Show Log" },
+      c = { ":DapContinue<cr>", "Continue Execution" },
+      s = {
+        name = "Step",
+        n = { ":DapStepOver<cr>", "Step Next/Over" },
+        i = { ":DapStepInto<cr>", "Step Into" },
+        o = { ":DapStepOut<cr>", "Step Out" },
       }
     },
+    c = {
+      name = "code",
+      a = { vim.lsp.buf.code_action, "code actions" },
+      r = { vim.lsp.buf.rename, "rename function or variable" },
+      d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
+      f = { vim.lsp.buf.format, "Format Code" },
+      h = { vim.lsp.buf.signature_help, "Signature Help" },
+      g = {
+        name = "goto",
+        d = { vim.lsp.buf.definition, "Definition" },
+        t = { vim.lsp.buf.type_definition, "Type definition" },
+        s = {
+          name = "horizontal split",
+          d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
+          t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
+        },
+        v = {
+          name = "vertical split",
+          d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
+          t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
+        },
+      },
+      l = {
+        name = "List things",
+        r = { vim.lsp.buf.references, "References" },
+        I = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
+        O = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
+        i = { vim.lsp.buf.implementation, "Implementations" },
+      },
+      w = {
+        name = "workspace actions",
+        a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },
+        r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
+        l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
+      },
+    }
+  },
     {
       buffer = bufnr,
       prefix = "<leader>",
@@ -94,13 +113,6 @@ capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true
 }
 
-require('lspconfig').golangci_lint_ls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = {
-    command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" }
-  }
-})
 require('lspconfig').lua_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
@@ -129,7 +141,7 @@ require('lspconfig').lua_ls.setup({
 
 -- yarn global add @volar/vue-language-server
 require('lspconfig').volar.setup({
-  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'}
+  filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' }
 })
 
 local simpleLs = {
@@ -137,18 +149,53 @@ local simpleLs = {
   "bashls",
   "yamlls",
   "tsserver", -- yarn global add typescript typescript-language-server
-  "eslint",   -- yarn global add vscode-langservers-extracted
+  "eslint", -- yarn global add vscode-langservers-extracted
   --  "pylsp", -- pip install pyright --user
   "pyright",
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
+  --  "marksman", -- download from https://github.com/artempyanykh/marksman/releases
+  "markdown",
 }
 
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig.configs'
+
+if not configs.markdown then
+  configs.markdown = {
+    default_config = {
+      cmd = { 'vscode-markdown-language-server', '--stdio' },
+      filetypes = { 'markdown' },
+      root_dir = function(fname)
+        return lspconfig.util.find_git_ancestor(fname)
+      end,
+      single_file_support = true,
+      handlers = {
+        ["markdown/parse"] = function(err, args, ctx, config)
+          local tokens = vim.fn.Func(args)
+          print(tokens)
+          return tokens
+        end,
+      },
+      settings = {},
+    },
+  }
+end
+
 for _, value in ipairs(simpleLs) do
-  require('lspconfig')[value].setup({
+  lspconfig[value].setup({
     on_attach = on_attach,
     capabilities = capabilities,
   })
 end
+
+
+require('lspconfig').golangci_lint_ls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  init_options = {
+    command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" }
+  }
+})
 
 --require('lspconfig').gopls.setup({
 --  on_attach = on_attach,
@@ -232,16 +279,15 @@ cmp.setup {
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   vim.lsp.handlers.hover,
-  {border = 'rounded'}
+  { border = 'rounded' }
 )
 
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
   vim.lsp.handlers.signature_help,
-  {border = 'rounded'}
+  { border = 'rounded' }
 )
 vim.diagnostic.config({
   float = {
     border = 'rounded',
   },
 })
-

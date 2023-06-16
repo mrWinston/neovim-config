@@ -19,9 +19,8 @@ local options = {
   termguicolors = true,
   timeoutlen = 200,
   updatetime = 200,
---  foldexpr = 'nvim_treesitter#foldexpr()',
---  foldmethod = 'expr',
-  markdown_folding = 1,
+  --  foldexpr = 'nvim_treesitter#foldexpr()',
+  --  foldmethod = 'expr',
 }
 
 local globalOptions = {
@@ -36,3 +35,5 @@ end
 for k, v in pairs(globalOptions) do
   vim.g[k] = v
 end
+
+vim.api.nvim_set_hl(0, 'MiniIndentscopeSymbol', { default = true, link = 'comment' })
