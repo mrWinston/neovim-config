@@ -8,10 +8,23 @@ utils.cmdThenFunc = function(cmd, func)
 end
 
 utils.createGitBranch = function()
-  local branchName = vim.fn.input("Branch Name: ")
-  if branchName ~= "" then
-    vim.cmd("Git switch -c " .. branchName)
-  end
+  vim.ui.input({ prompt = "Branch Name:" }, function(branchName)
+    if branchName ~= "" then
+      vim.cmd("Git switch -c " .. branchName)
+    end
+  end)
+end
+
+utils.gitDiffBranch = function()
+  local tele = require('telescope.builtin')
+  local job = require('plenary.job')
+  local stdout, ret = job:new({
+    command = "git",
+    args = { "branch", "--list", '--format', '%(refname:short)' },
+  }):sync()
+  vim.ui.select(stdout, {}, function(branch, _)
+    require('diffview').open({ branch })
+  end)
 end
 
 utils.wrapFunction = function(func, ...)
@@ -53,6 +66,10 @@ utils.visual_selection_range = function()
   end
 end
 
+utils.set_table_default = function(table, default)
+  local mt = { __index = function() return default end }
+  setmetatable(table, mt)
+end
 
 
 return utils

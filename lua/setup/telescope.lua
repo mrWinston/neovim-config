@@ -1,5 +1,6 @@
 local actions = require("telescope.actions")
 
+
 require('telescope').setup {
   defaults = {
     mappings = {
@@ -30,3 +31,4 @@ require('telescope').load_extension('lsp_handlers')
 require('telescope').load_extension('goimpl')
 require('telescope').load_extension('luasnip')
 require('telescope').load_extension('make')
+require('telescope').load_extension('gopass')

@@ -27,12 +27,49 @@ vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith, {})
 
 local telescope = require('telescope.builtin')
 local telescope_dap = require('telescope._extensions.dap')
+local telescope_gopass = require('telescope._extensions.gopass')
 local utils = require('utils')
 local outline = require('symbols-outline')
 
 local wk = require("which-key")
 
+local change_neovide_scale_factor = function(delta)
+  vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+end
+
+local askCommandRun = function() 
+  vim.ui.input({ prompt = "Command to run: " }, function(input)
+    local Terminal     = require("toggleterm.terminal").Terminal
+    local run_term = Terminal:new({
+        cmd = input,
+        direction = "horizontal",
+        close_on_exit = false,
+    })
+    run_term:toggle()
+  end)
+end
+
+local createRunFunc = function (command)
+  return function ()
+    local Terminal     = require("toggleterm.terminal").Terminal
+    local run_term = Terminal:new({
+        cmd = command,
+        direction = "horizontal",
+        close_on_exit = false,
+    })
+    run_term:toggle()
+  end
+end
+
 wk.register({
+  r = {
+    name = "run",
+    r = { askCommandRun, "Run command"},
+    t = {
+      name = "terraform",
+      p = { createRunFunc("terraform plan"), "plan" },
+    },
+  },
   f = {
     name = "find",
     f = { telescope.find_files, "Files" },
@@ -45,15 +82,21 @@ wk.register({
     s = { telescope.treesitter, "Symbols" },
     j = { telescope.jumplist, "Jumplist" },
     m = { ":Telescope make<cr>", "Run Make Targets" },
+    p = { require('telescope').extensions.gopass.gopass, "Gopass"},
   },
   g = {
     name = "git",
-    b = { telescope.git_branches, "Branches" },
-    c = { telescope.git_commits, "Commits" },
+    b = {
+      name = "Branches",
+      c = { telescope.git_branches, "Checkout" },
+      n = { utils.createGitBranch, "New Branch" },
+      d = { utils.gitDiffBranch, "Diff" },
+    },
+    c = { ":Git commit<cr>", "Commit" },
     s = { ":Git<cr>", "Status" },
     p = { ":Git pull<cr>", "Pull" },
+    P = { ":Git push<cr>", "Push" },
     l = { ":LazyGit<cr>", "Lazygit" },
-    n = { utils.createGitBranch, "New Branch" },
     g = {
       name = "gists",
       l = { ":GistList<cr>", "List Gists" },
@@ -69,14 +112,22 @@ wk.register({
       v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
       l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
     },
-    s = { ":nohlsearch<cr>", "Hide Search Results" },
-    n = { ":s/\n//g<cr>", "Remove Linebreaks" },
+    n = { ":nohlsearch<cr>", "Hide Search Results" },
+    s = {
+      name = "neovide scaling",
+      i = { function () change_neovide_scale_factor(1.25) end, "Increase" },
+      d = { function () change_neovide_scale_factor(1/1.25) end, "Decrease" },
+    },
     o = { outline.toggle_outline, "Show Outline" },
     l = {
       name = "lsp server diagnostics",
       r = { ":LspRestart<cr>", "Restart Lsp Server" },
       i = { ":LspInfo<cr>", "Lsp Server Info" },
       l = { ":LspLog<cr>", "Lsp Server Logs" },
+    },
+    r = {
+      name = "replace hotkeys",
+      n = { ":s/\n//g<cr>", "Remove Linebreaks" },
     }
   },
   o = {

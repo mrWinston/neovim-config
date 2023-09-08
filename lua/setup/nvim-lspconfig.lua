@@ -14,6 +14,9 @@ local signature_help_settings = {
   }
 }
 
+local function get_maingo()
+  return vim.fn.findfile("main.go", ".;")
+end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -37,7 +40,6 @@ local on_attach = function(client, bufnr)
 
   vim.cmd [[au FileType dap-repl lua require('dap.ext.autocompl').attach() ]]
 
-  local dap = require('dap')
 
   wk.register({
     e = {
@@ -46,21 +48,6 @@ local on_attach = function(client, bufnr)
       n = { vim.diagnostic.goto_next, "Go to Next" },
       p = { vim.diagnostic.goto_prev, "Go to Previous" },
       o = { vim.diagnostic.open_float, "Open Float Window" },
-    },
-    d = {
-      name = "debugger",
-      d = { dap.continue, "Start Debugging" },
-      b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
-      pb = { function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Toggle Breakpoint" },
-      k = { dap.terminate, "Kill Session" },
-      l = { ":DapShowLog<cr>", "Show Log" },
-      c = { ":DapContinue<cr>", "Continue Execution" },
-      s = {
-        name = "Step",
-        n = { ":DapStepOver<cr>", "Step Next/Over" },
-        i = { ":DapStepInto<cr>", "Step Into" },
-        o = { ":DapStepOut<cr>", "Step Out" },
-      }
     },
     c = {
       name = "code",
@@ -73,6 +60,10 @@ local on_attach = function(client, bufnr)
         name = "goto",
         d = { vim.lsp.buf.definition, "Definition" },
         t = { vim.lsp.buf.type_definition, "Type definition" },
+        r = { vim.lsp.buf.references, "References" },
+        i = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
+        o = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
+        I = { vim.lsp.buf.implementation, "Implementations" },
         s = {
           name = "horizontal split",
           d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
@@ -83,13 +74,6 @@ local on_attach = function(client, bufnr)
           d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
           t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
         },
-      },
-      l = {
-        name = "List things",
-        r = { vim.lsp.buf.references, "References" },
-        I = { vim.lsp.buf.incoming_calls, "Incoming Calls" },
-        O = { vim.lsp.buf.outgoing_calls, "Outgoing Calls" },
-        i = { vim.lsp.buf.implementation, "Implementations" },
       },
       w = {
         name = "workspace actions",
@@ -124,15 +108,18 @@ require('lspconfig').lua_ls.setup({
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = { 'vim' },
+        globals = { 'vim', 'root', 'awesome', 'client', 'screen' },
       },
       workspace = {
+        checkThirdParty = false,
         -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
+        library = vim.tbl_deep_extend("error", vim.api.nvim_get_runtime_file("", true), {
+          ['/usr/share/awesome/lib'] = true,
+        }),
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
-        enable = true,
+       enable = true,
       },
     },
   },
@@ -145,20 +132,28 @@ require('lspconfig').volar.setup({
 })
 
 local simpleLs = {
-  "gopls",
+  "gopls", -- go install golang.org/x/tools/gopls@latest
   "bashls",
   "yamlls",
   "tsserver", -- yarn global add typescript typescript-language-server
   "eslint", -- yarn global add vscode-langservers-extracted
-  --  "pylsp", -- pip install pyright --user
-  "pyright",
+  "jedi_language_server",
+--  "pylsp", -- pip install pyright --user
+--  "pyright",
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
-  --  "marksman", -- download from https://github.com/artempyanykh/marksman/releases
-  "markdown",
+  "marksman", -- download from https://github.com/artempyanykh/marksman/releases
+--  "markdown",
 }
+
 
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig.configs'
+
+-- lspconfig.marksman.setup({
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   single_file_support = false
+-- })
 
 if not configs.markdown then
   configs.markdown = {

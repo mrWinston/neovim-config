@@ -159,10 +159,10 @@ return require('packer').startup(function()
     config = get_setup("symbols-outline"),
   }
 
-  use {
-    "epwalsh/obsidian.nvim",
-    config = get_setup("obsidian"),
-  }
+  --  use {
+  --    "epwalsh/obsidian.nvim",
+  --    config = get_setup("obsidian"),
+  --  }
 
   use {
     "fladson/vim-kitty"
@@ -175,4 +175,39 @@ return require('packer').startup(function()
   use {
     "dkarter/bullets.vim"
   }
+
+  use {
+    'norcalli/nvim-terminal.lua',
+    config = get_setup("nvim-terminal")
+  }
+  use {
+    'sindrets/diffview.nvim',
+    config = get_setup("diffview"),
+  }
+  use {
+    'projekt0n/github-nvim-theme',
+  }
+  use {
+    "catppuccin/nvim", as = "catppuccin"
+  }
+  use {
+    "mcchrish/zenbones.nvim",
+    -- Optionally install Lush. Allows for more configuration or extending the colorscheme
+    -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
+    -- In Vim, compat mode is turned on as Lush only works in Neovim.
+    requires = "rktjmp/lush.nvim"
+  }
+
+  use {
+    'nvim-lualine/lualine.nvim',
+    config = get_setup('lualine'),
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+  }
+  --  use {
+  --    "ellisonleao/glow.nvim",
+  --    config = get_setup("glow"),
+  --  }
+  --  use {
+  --    'mg979/vim-visual-multi'
+  --  }
 end)

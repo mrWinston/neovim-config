@@ -24,10 +24,12 @@ require 'nvim-treesitter.configs'.setup {
 
       keymaps = {
         -- You can use the capture groups defined in textobjects.scm
---        ["ia"] = "@assignment.inner",
---        ["aa"] = "@assignment.outer",
+        ["iA"] = "@assignment.inner",
+        ["aA"] = "@assignment.outer",
         ["aF"] = "@function.outer",
         ["iF"] = "@function.inner",
+        ["aP"] = "@parameter.outer",
+        ["iP"] = "@parameter.inner",
 --        ["ac"] = "@class.outer",
         -- You can optionally set descriptions to the mappings (used in the desc parameter of
         -- nvim_buf_set_keymap) which plugins like which-key display
