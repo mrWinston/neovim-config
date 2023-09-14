@@ -10,7 +10,7 @@ local function get_args()
   return args
 end
 
-require('dap-go').setup({
+require("dap-go").setup({
   dap_configurations = {
     {
       type = "go",
@@ -22,24 +22,23 @@ require('dap-go').setup({
   },
 })
 
-
-require("nvim-dap-virtual-text").setup {
-  enabled = true,                        -- enable this plugin (the default)
-  enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
-  highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
-  highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
-  show_stop_reason = true,               -- show stop reason when stopped for exceptions
-  commented = false,                     -- prefix virtual text with comment string
-  only_first_definition = true,          -- only show virtual text at first definition (if there are multiple)
-  all_references = false,                -- show virtual text on all all references of the variable (not only definitions)
-  filter_references_pattern = '<module', -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
+require("nvim-dap-virtual-text").setup({
+  enabled = true, -- enable this plugin (the default)
+  enabled_commands = true, -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+  highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+  highlight_new_as_changed = false, -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+  show_stop_reason = true, -- show stop reason when stopped for exceptions
+  commented = false, -- prefix virtual text with comment string
+  only_first_definition = true, -- only show virtual text at first definition (if there are multiple)
+  all_references = false, -- show virtual text on all all references of the variable (not only definitions)
+  filter_references_pattern = "<module", -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
   -- experimental features:
-  virt_text_pos = 'eol',                 -- position of virtual text, see `:h nvim_buf_set_extmark()`
-  all_frames = false,                    -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
-  virt_lines = false,                    -- show virtual lines instead of virtual text (will flicker!)
-  virt_text_win_col = nil                -- position the virtual text at a fixed window column (starting from the first text column) ,
+  virt_text_pos = "eol", -- position of virtual text, see `:h nvim_buf_set_extmark()`
+  all_frames = false, -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+  virt_lines = false, -- show virtual lines instead of virtual text (will flicker!)
+  virt_text_win_col = nil, -- position the virtual text at a fixed window column (starting from the first text column) ,
   -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
-}
+})
 
 require("dapui").setup({
   icons = { expanded = "▾", collapsed = "▸" },
@@ -66,10 +65,10 @@ require("dapui").setup({
     {
       elements = {
         -- Elements can be strings or table with id and size keys.
-       -- { id = "scopes", size = 0.25 },
+        -- { id = "scopes", size = 0.25 },
         "scopes",
         "breakpoints",
---        "stacks",
+        --        "stacks",
         "watches",
       },
       size = 0.25, -- 40 columns
@@ -78,7 +77,7 @@ require("dapui").setup({
     {
       elements = {
         "repl",
---        "console",
+        --        "console",
       },
       size = 0.25, -- 25% of total lines
       position = "bottom",
@@ -95,7 +94,7 @@ require("dapui").setup({
   windows = { indent = 1 },
   render = {
     max_type_length = nil, -- Can be integer or nil.
-  }
+  },
 })
 
 local dapui = require("dapui")
@@ -103,7 +102,6 @@ local dapui = require("dapui")
 local dap = require("dap")
 
 dap.defaults.fallback.focus_terminal = true
-
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
@@ -151,9 +149,10 @@ local function filter(list, compareFunc)
 end
 
 local function modifyDebugConfig()
-  local previewers = require('telescope.previewers')
+  local previewers = require("telescope.previewers")
 
-  vim.ui.select(filter(dap.configurations.go, function(value)
+  vim.ui.select(
+    filter(dap.configurations.go, function(value)
       vim.print(value)
       return value.custom or false
     end),
@@ -167,10 +166,11 @@ local function modifyDebugConfig()
           title = "My preview",
           define_preview = function(self, entry, _)
             vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, vim.split(vim.inspect(entry.value), "\n"))
-          end
-        })
-      }
-    }, function(_, idx)
+          end,
+        }),
+      },
+    },
+    function(_, idx)
       if idx == nil then
         return
       end
@@ -192,7 +192,8 @@ local function modifyDebugConfig()
           end
         end)
       end)
-    end)
+    end
+  )
 end
 
 local function getCustomConfigurations(configs)
@@ -207,7 +208,9 @@ end
 
 local function findFirstIndex(list, compareFunc)
   for index, value in ipairs(list) do
-    if compareFunc(value) then return index end
+    if compareFunc(value) then
+      return index
+    end
   end
   return -1
 end
@@ -219,8 +222,10 @@ end
 
 local function parseDapConfigFile(path)
   local file = io.open(path, "rb") -- r read mode and b binary mode
-  if not file then return {} end
-  local content = file:read("*a")  -- *a or *all reads the whole file
+  if not file then
+    return {}
+  end
+  local content = file:read("*a") -- *a or *all reads the whole file
   file:close()
 
   return vim.fn.json_decode(content) or {}
@@ -246,7 +251,9 @@ local function loadDapConfig()
   vim.print(savedConf)
 
   for _, dapConf in pairs(savedConf.configurations or {}) do
-    local idxInConf = findFirstIndex(dap.configurations.go, function(value) return dapConf.name == value.name end)
+    local idxInConf = findFirstIndex(dap.configurations.go, function(value)
+      return dapConf.name == value.name
+    end)
     if idxInConf == -1 then
       table.insert(dap.configurations.go, dapConf)
     else
@@ -263,7 +270,7 @@ local function saveDapConfigs()
 
   local outstuff = {
     path = cwd,
-    configurations = getCustomConfigurations(dap.configurations.go)
+    configurations = getCustomConfigurations(dap.configurations.go),
   }
   local curConf = parseDapConfigFile(outFile)
   local confIdx = -1
@@ -290,32 +297,40 @@ local function saveDapConfigs()
 end
 
 wk.register({
-    d = {
-      name = "debugger",
-      d = { dap.continue, "Start Debugging" },
-      b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
-      pb = { function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, "Toggle Breakpoint" },
-      k = { dap.terminate, "Kill Session" },
-      u = { dapui.toggle, "Toggle dap ui" },
-      l = { ":DapShowLog<cr>", "Show Log" },
-      c = {
-        name = "Config Management",
-        a = { addDebugConfig, "Add Debug Configuration" },
-        m = { modifyDebugConfig, "Modify Debug Config" },
-        s = { saveDapConfigs, "Save Debug Config" },
-        l = { loadDapConfig, "Load Debug Config" },
-        p = { function() vim.print(dap.configurations.go) end, "Print Debug Config" },
-        j = { require('dap.ext.vscode').load_launchjs, "load launch.json" }
+  d = {
+    name = "debugger",
+    d = { dap.continue, "Start Debugging" },
+    b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
+    pb = {
+      function()
+        dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
+      end,
+      "Toggle Breakpoint",
+    },
+    k = { dap.terminate, "Kill Session" },
+    u = { dapui.toggle, "Toggle dap ui" },
+    l = { ":DapShowLog<cr>", "Show Log" },
+    c = {
+      name = "Config Management",
+      a = { addDebugConfig, "Add Debug Configuration" },
+      m = { modifyDebugConfig, "Modify Debug Config" },
+      s = { saveDapConfigs, "Save Debug Config" },
+      l = { loadDapConfig, "Load Debug Config" },
+      p = {
+        function()
+          vim.print(dap.configurations.go)
+        end,
+        "Print Debug Config",
       },
-      s = {
-        name = "Step",
-        n = { ":DapStepOver<cr>", "Step Next/Over" },
-        i = { ":DapStepInto<cr>", "Step Into" },
-        o = { ":DapStepOut<cr>", "Step Out" },
-      }
+      j = { require("dap.ext.vscode").load_launchjs, "load launch.json" },
+    },
+    s = {
+      name = "Step",
+      n = { ":DapStepOver<cr>", "Step Next/Over" },
+      i = { ":DapStepInto<cr>", "Step Into" },
+      o = { ":DapStepOut<cr>", "Step Out" },
     },
   },
-  {
-    prefix = "<leader>",
-  }
-)
+}, {
+  prefix = "<leader>",
+})

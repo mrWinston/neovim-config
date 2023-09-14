@@ -1,9 +1,11 @@
 local install = {}
 
 local runInZsh = function(cmd)
-  return vim.system({ 'zsh', '-c', cmd }, {
-    text = true
-  }):wait()
+  return vim
+    .system({ "zsh", "-c", cmd }, {
+      text = true,
+    })
+    :wait()
 end
 
 install.withAsdf = function(tool)
@@ -13,8 +15,8 @@ install.withAsdf = function(tool)
   if vim.fn.executable(tool.exe) == 1 then
     return
   end
-  local addPluginOut = runInZsh('asdf plugin-add ' .. tool.name)
-  if addPluginOut.code == 2 then   -- means, that the plugin is already added
+  local addPluginOut = runInZsh("asdf plugin-add " .. tool.name)
+  if addPluginOut.code == 2 then -- means, that the plugin is already added
     return
   end
   if addPluginOut.code ~= 0 then
@@ -39,7 +41,6 @@ install.withAsdf = function(tool)
     vim.print(setGlobalOut.stderr)
   end
 end
-
 
 install.withCargo = function(tool)
   if not tool.exe or not tool.name then
@@ -98,8 +99,8 @@ install.withDownload = function(tool)
     return
   end
 
-  local installPluginOut = runInZsh(string.format("curl -L -o ~/.local/bin/%s %s && chmod +x ~/.local/bin/%s", tool
-    .exe, tool.url, tool.exe))
+  local installPluginOut =
+    runInZsh(string.format("curl -L -o ~/.local/bin/%s %s && chmod +x ~/.local/bin/%s", tool.exe, tool.url, tool.exe))
   if installPluginOut.code ~= 0 then
     vim.print(string.format("Error installing %s with download:", tool.name))
     vim.print(installPluginOut.stdout)
@@ -216,14 +217,14 @@ install.tools = {
   },
 }
 
-install.installAll = function ()
+install.installAll = function()
   for _, tool in pairs(install.tools) do
     if not tool.install then
       vim.print(string.format("tool %s is missing an install function", tool.name))
       goto continue
     end
     tool.install(tool)
-      ::continue::
+    ::continue::
   end
 end
 

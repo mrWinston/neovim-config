@@ -16,14 +16,16 @@ utils.createGitBranch = function()
 end
 
 utils.gitDiffBranch = function()
-  local tele = require('telescope.builtin')
-  local job = require('plenary.job')
-  local stdout, ret = job:new({
-    command = "git",
-    args = { "branch", "--list", '--format', '%(refname:short)' },
-  }):sync()
+  local tele = require("telescope.builtin")
+  local job = require("plenary.job")
+  local stdout, ret = job
+    :new({
+      command = "git",
+      args = { "branch", "--list", "--format", "%(refname:short)" },
+    })
+    :sync()
   vim.ui.select(stdout, {}, function(branch, _)
-    require('diffview').open({ branch })
+    require("diffview").open({ branch })
   end)
 end
 
@@ -36,7 +38,7 @@ end
 
 utils.reloadConfig = function()
   for name, _ in pairs(package.loaded) do
-    if not name:match('nvim-tree') then
+    if not name:match("nvim-tree") then
       package.loaded[name] = nil
     end
   end
@@ -66,17 +68,20 @@ utils.visual_selection_range = function()
   end
 end
 
-utils.toggle_autoformat = function ()
-  local bufnr = vim.api.nvim_get_current_buf()
-  if not vim.b[bufnr].disable_autoformat then
-    vim.b[bufnr].disable_autoformat = true
+utils.toggle_autoformat = function()
+  if not vim.g.disable_autoformat then
+    vim.g.disable_autoformat = true
   else
-    vim.b[bufnr].disable_autoformat = false
+    vim.g.disable_autoformat = false
   end
 end
 
 utils.set_table_default = function(table, default)
-  local mt = { __index = function() return default end }
+  local mt = {
+    __index = function()
+      return default
+    end,
+  }
   setmetatable(table, mt)
 end
 

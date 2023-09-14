@@ -1,8 +1,7 @@
 local opts = { noremap = true, silent = true }
-local tree = require('nvim-tree')
+local tree = require("nvim-tree")
 
-
-tree.setup { -- BEGIN_DEFAULT_OPTS
+tree.setup({ -- BEGIN_DEFAULT_OPTS
   open_on_setup = true,
   open_on_setup_file = false,
   open_on_tab = false,
@@ -16,7 +15,7 @@ tree.setup { -- BEGIN_DEFAULT_OPTS
       open_win_config = {
         relative = "cursor",
         border = "rounded",
-      }
+      },
     },
     mappings = {
       custom_only = false,
@@ -114,5 +113,4 @@ tree.setup { -- BEGIN_DEFAULT_OPTS
       profile = false,
     },
   },
-} -- END_DEFAULT_OPTS
-
+}) -- END_DEFAULT_OPTS

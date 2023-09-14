@@ -2,7 +2,6 @@ local function get_config(plugin, opts)
   require("setup/" .. plugin.name:gsub(".nvim", ""):gsub(".lua", ""):lower())
 end
 
-
 return {
   {
     "catppuccin/nvim",
@@ -11,80 +10,80 @@ return {
     priority = 1000,
   },
   {
-    'marko-cerovac/material.nvim',
-    config = get_config
-  },
-  {
-    'mfussenegger/nvim-dap',
+    "marko-cerovac/material.nvim",
     config = get_config,
   },
   {
-    'folke/which-key.nvim',
+    "mfussenegger/nvim-dap",
     config = get_config,
   },
-  { 'leoluz/nvim-dap-go', },
-  { 'theHamsta/nvim-dap-virtual-text' },
-  { 'gbrlsnchs/telescope-lsp-handlers.nvim' },
+  {
+    "folke/which-key.nvim",
+    config = get_config,
+  },
+  { "leoluz/nvim-dap-go" },
+  { "theHamsta/nvim-dap-virtual-text" },
+  { "gbrlsnchs/telescope-lsp-handlers.nvim" },
   {
 
-    'edolphin-ydf/goimpl.nvim',
+    "edolphin-ydf/goimpl.nvim",
     dependencies = {
-      { 'nvim-lua/plenary.nvim' },
-      { 'nvim-lua/popup.nvim' },
-      { 'nvim-telescope/telescope.nvim' },
-      { 'nvim-treesitter/nvim-treesitter' },
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-lua/popup.nvim" },
+      { "nvim-telescope/telescope.nvim" },
+      { "nvim-treesitter/nvim-treesitter" },
     },
   },
   {
-    'rcarriga/nvim-dap-ui',
-    dependencies = { 'mfussenegger/nvim-dap' }
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "mfussenegger/nvim-dap" },
   },
   {
-    'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-dap.nvim' },
+    "nvim-telescope/telescope.nvim",
+    branch = "0.1.x",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-dap.nvim" },
     config = get_config,
   },
   {
-    'saadparwaiz1/cmp_luasnip'
+    "saadparwaiz1/cmp_luasnip",
   },
   {
-    'L3MON4D3/LuaSnip',
+    "L3MON4D3/LuaSnip",
     config = get_config,
   },
   {
-    'benfowler/telescope-luasnip.nvim'
+    "benfowler/telescope-luasnip.nvim",
   },
   {
-    'hrsh7th/nvim-cmp'
+    "hrsh7th/nvim-cmp",
   },
   {
-    'hrsh7th/cmp-nvim-lsp'
+    "hrsh7th/cmp-nvim-lsp",
   },
   {
-    'hrsh7th/cmp-nvim-lsp-signature-help'
+    "hrsh7th/cmp-nvim-lsp-signature-help",
   },
   {
-    'ray-x/lsp_signature.nvim'
+    "ray-x/lsp_signature.nvim",
   },
   {
-    'tpope/vim-fugitive'
+    "tpope/vim-fugitive",
   },
   {
-    'tpope/vim-repeat'
+    "tpope/vim-repeat",
   },
   {
-    'tpope/vim-surround'
+    "tpope/vim-surround",
   },
   {
-    'airblade/vim-gitgutter'
+    "airblade/vim-gitgutter",
   },
   {
-    'stevearc/dressing.nvim',
+    "stevearc/dressing.nvim",
     config = get_config,
   },
   {
-    'ggandor/lightspeed.nvim',
+    "ggandor/lightspeed.nvim",
     config = get_config,
   },
   {
@@ -93,7 +92,7 @@ return {
     dependencies = "akinsho/toggleterm.nvim",
   },
   {
-    'norcalli/nvim-terminal.lua',
+    "norcalli/nvim-terminal.lua",
     config = get_config,
   },
   {
@@ -106,14 +105,14 @@ return {
     config = get_config,
   },
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
     config = get_config,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
-  { 'kyazdani42/nvim-web-devicons' },
+  { "kyazdani42/nvim-web-devicons" },
   {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
@@ -124,11 +123,11 @@ return {
     config = get_config,
   },
   {
-    'habamax/vim-asciidoctor',
+    "habamax/vim-asciidoctor",
     config = get_config,
   },
   {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
     config = get_config,
   },
   {
@@ -141,24 +140,24 @@ return {
     version = false,
   },
   {
-    'mcchrish/zenbones.nvim',
-    dependencies = { 'rktjmp/lush.nvim' },
+    "mcchrish/zenbones.nvim",
+    dependencies = { "rktjmp/lush.nvim" },
   },
   {
-    'nvim-lualine/lualine.nvim',
+    "nvim-lualine/lualine.nvim",
     config = get_config,
   },
   {
-    'stevearc/conform.nvim',
+    "stevearc/conform.nvim",
     config = get_config,
   },
-  'sindrets/diffview.nvim',
-  'hrsh7th/cmp-path',
-  'ray-x/lsp_signature.nvim',
-  'rafamadriz/friendly-snippets',
-  'kdheepak/lazygit.nvim',
-  'rudylee/nvim-gist',
-  'fladson/vim-kitty',
-  'dkarter/bullets.vim',
-  'projekt0n/github-nvim-theme',
+  "sindrets/diffview.nvim",
+  "hrsh7th/cmp-path",
+  "ray-x/lsp_signature.nvim",
+  "rafamadriz/friendly-snippets",
+  "kdheepak/lazygit.nvim",
+  "rudylee/nvim-gist",
+  "fladson/vim-kitty",
+  "dkarter/bullets.vim",
+  "projekt0n/github-nvim-theme",
 }

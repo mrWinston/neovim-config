@@ -1,11 +1,11 @@
 -- let g:mapleader = ' '
 
-local utils = require('utils')
+local utils = require("utils")
 
 local options = {
   cursorline = true,
   expandtab = true,
-  foldcolumn = '1', -- yes, that's 1 as a string
+  foldcolumn = "1", -- yes, that's 1 as a string
   foldenable = true,
   foldlevel = 99,
   foldlevelstart = 99,
@@ -13,7 +13,7 @@ local options = {
   number = true,
   relativenumber = true,
   scrolloff = 1,
-  shellcmdflag = '-c',
+  shellcmdflag = "-c",
   shiftwidth = 2,
   showcmd = true,
   smartcase = true,
@@ -25,10 +25,10 @@ local options = {
   --  foldmethod = 'expr',
 }
 
-
 local globalOptions = {
   markdown_folding = 1,
   markdown_recommended_style = 0,
+  disable_autoformat = true,
 }
 
 if vim.g.neovide then
@@ -44,7 +44,7 @@ for k, v in pairs(globalOptions) do
   vim.g[k] = v
 end
 
-vim.api.nvim_set_hl(0, 'MiniIndentscopeSymbol', { default = true, link = 'comment' })
+vim.api.nvim_set_hl(0, "MiniIndentscopeSymbol", { default = true, link = "comment" })
 -- set theme based on kitty theme
 local kittyToNvim = {
   ["GitHub Light"] = "github_light",
@@ -53,8 +53,10 @@ local kittyToNvim = {
   ["Catppuccin-Latte"] = "catppuccin-latte",
 }
 utils.set_table_default(kittyToNvim, "material")
-local obj = vim.system({'zsh', '-c', 'cat ~/.config/kitty/current-theme.conf | grep "## name" | cut -d ":" -f 2'} ,{
-  text = true
-}):wait()
-local theme_name = string.gsub(obj.stdout, '^%s*(.-)%s*$', '%1')
-vim.cmd("colorscheme ".. kittyToNvim[theme_name])
+local obj = vim
+  .system({ "zsh", "-c", 'cat ~/.config/kitty/current-theme.conf | grep "## name" | cut -d ":" -f 2' }, {
+    text = true,
+  })
+  :wait()
+local theme_name = string.gsub(obj.stdout, "^%s*(.-)%s*$", "%1")
+vim.cmd("colorscheme " .. kittyToNvim[theme_name])
