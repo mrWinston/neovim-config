@@ -1,4 +1,4 @@
-require('conform').setup({
+require("conform").setup({
   formatters_by_ft = {
     python = { "black" },
     lua = { "stylua" },
@@ -27,6 +27,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
-local shfmt = require('conform.formatters.shfmt')
+local shfmt = require("conform.formatters.shfmt")
 table.insert(shfmt.args, "-i")
 table.insert(shfmt.args, "4")

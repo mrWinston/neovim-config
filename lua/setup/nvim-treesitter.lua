@@ -1,4 +1,3 @@
-
 --@assignment.inner
 --@assignment.lhs
 --@assignment.outer
@@ -14,7 +13,7 @@
 --@regex.inner
 --
 
-require 'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup({
   textobjects = {
     select = {
       enable = true,
@@ -30,12 +29,12 @@ require 'nvim-treesitter.configs'.setup {
         ["iF"] = "@function.inner",
         ["aP"] = "@parameter.outer",
         ["iP"] = "@parameter.inner",
---        ["ac"] = "@class.outer",
+        --        ["ac"] = "@class.outer",
         -- You can optionally set descriptions to the mappings (used in the desc parameter of
         -- nvim_buf_set_keymap) which plugins like which-key display
---        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
---        -- You can also use captures from other query groups like `locals.scm`
---        ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
+        --        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+        --        -- You can also use captures from other query groups like `locals.scm`
+        --        ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
       },
       -- You can choose the select mode (default is charwise 'v')
       --
@@ -44,11 +43,11 @@ require 'nvim-treesitter.configs'.setup {
       -- * method: eg 'v' or 'o'
       -- and should return the mode ('v', 'V', or '<c-v>') or a table
       -- mapping query_strings to modes.
---      selection_modes = {
---        ['@parameter.outer'] = 'v', -- charwise
---        ['@function.outer'] = 'V', -- linewise
---        ['@class.outer'] = '<c-v>', -- blockwise
---      },
+      --      selection_modes = {
+      --        ['@parameter.outer'] = 'v', -- charwise
+      --        ['@function.outer'] = 'V', -- linewise
+      --        ['@class.outer'] = '<c-v>', -- blockwise
+      --      },
     },
   },
   -- A list of parser names, or "all"
@@ -102,20 +101,20 @@ require 'nvim-treesitter.configs'.setup {
     },
   },
   indent = {
-    enable = true
+    enable = true,
   },
-}
+})
 
 vim.filetype.add({
   extension = {
-    rules = 'suricata',
-  }
+    rules = "suricata",
+  },
 })
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.suricata = {
   install_info = {
     url = "https://github.com/bergmannf/tree-sitter-suricata", -- local path or git repo
-    files = {"src/parser.c"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
+    files = { "src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
     -- optional entries:
     branch = "main", -- default branch in case of git repo if different from master
     generate_requires_npm = false, -- if stand-alone parser without npm dependencies
