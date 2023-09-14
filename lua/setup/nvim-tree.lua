@@ -116,4 +116,3 @@ tree.setup { -- BEGIN_DEFAULT_OPTS
   },
 } -- END_DEFAULT_OPTS
 
-vim.keymap.set('n', '<leader>t', ':NvimTreeToggle<CR>', opts)

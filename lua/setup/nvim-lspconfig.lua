@@ -113,13 +113,11 @@ require('lspconfig').lua_ls.setup({
       workspace = {
         checkThirdParty = false,
         -- Make the server aware of Neovim runtime files
-        library = vim.tbl_deep_extend("error", vim.api.nvim_get_runtime_file("", true), {
-          ['/usr/share/awesome/lib'] = true,
-        }),
+        library = table.insert(vim.api.nvim_get_runtime_file("", true), '/usr/share/awesome/lib'),
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
-       enable = true,
+       enable = false,
       },
     },
   },
@@ -138,22 +136,13 @@ local simpleLs = {
   "tsserver", -- yarn global add typescript typescript-language-server
   "eslint", -- yarn global add vscode-langservers-extracted
   "jedi_language_server",
---  "pylsp", -- pip install pyright --user
---  "pyright",
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
   "marksman", -- download from https://github.com/artempyanykh/marksman/releases
---  "markdown",
 }
 
 
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig.configs'
-
--- lspconfig.marksman.setup({
---   on_attach = on_attach,
---   capabilities = capabilities,
---   single_file_support = false
--- })
 
 if not configs.markdown then
   configs.markdown = {

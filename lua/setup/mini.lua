@@ -34,7 +34,6 @@ if not vim.g.neovide then
 end
 -- see https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
 require('mini.ai').setup({
-
 })
 
 require('mini.files').setup({

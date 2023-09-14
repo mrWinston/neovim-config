@@ -66,10 +66,18 @@ utils.visual_selection_range = function()
   end
 end
 
+utils.toggle_autoformat = function ()
+  local bufnr = vim.api.nvim_get_current_buf()
+  if not vim.b[bufnr].disable_autoformat then
+    vim.b[bufnr].disable_autoformat = true
+  else
+    vim.b[bufnr].disable_autoformat = false
+  end
+end
+
 utils.set_table_default = function(table, default)
   local mt = { __index = function() return default end }
   setmetatable(table, mt)
 end
-
 
 return utils
