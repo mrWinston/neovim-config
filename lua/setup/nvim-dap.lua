@@ -309,6 +309,7 @@ wk.register({
     },
     k = { dap.terminate, "Kill Session" },
     u = { dapui.toggle, "Toggle dap ui" },
+    r = { dap.run_last, "Re-run last session" },
     l = { ":DapShowLog<cr>", "Show Log" },
     c = {
       name = "Config Management",

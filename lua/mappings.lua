@@ -32,6 +32,7 @@ local outline = require("symbols-outline")
 
 local wk = require("which-key")
 
+
 local change_neovide_scale_factor = function(delta)
   vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
 end
@@ -118,10 +119,15 @@ wk.register({
     },
     n = { ":nohlsearch<cr>", "Hide Search Results" },
     s = {
-      name = "neovide scaling",
-      i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
-      d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
+      name = "Spellcheck",
+      e = { ":setlocal spell spelllang=en_us<cr>", "Enable English Spellcheck" },
+      g = { ":setlocal spell spelllang=de_20<cr>", "Enable German Spellcheck" },
     },
+    --    s = {
+    --      name = "neovide scaling",
+    --      i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
+    --      d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
+    --    },
     o = { outline.toggle_outline, "Show Outline" },
     l = {
       name = "lsp server diagnostics",
@@ -133,6 +139,13 @@ wk.register({
       name = "replace hotkeys",
       n = { ":s/\n//g<cr>", "Remove Linebreaks" },
     },
+  },
+  k = {
+    name = "Knowledge mappings",
+    o = { require("granite").open_note, "Open note"},
+    t = { ":Telescope granite<cr>", "Show Todos"},
+    n = { require("granite").Note, "New Note"},
+    l = { require("granite").link_to_file, "insert link"},
   },
   e = {
     name = "errors",
@@ -146,7 +159,7 @@ wk.register({
     a = { vim.lsp.buf.code_action, "code actions" },
     r = { vim.lsp.buf.rename, "rename function or variable" },
     d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
-    f = { vim.lsp.buf.format, "Format Code" },
+    f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     h = { vim.lsp.buf.signature_help, "Signature Help" },
     g = {
       name = "goto",
@@ -178,5 +191,6 @@ wk.register({
   prefix = "<leader>",
 })
 
+vim.api.nvim_create_user_command("PeekToggle", utils.toggle_peek, { nargs = 0 })
 vim.api.nvim_create_user_command("Reload", utils.reloadConfig, { nargs = 0 })
 vim.api.nvim_create_user_command("Open", "!xdg-open %", { nargs = 0 })

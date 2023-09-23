@@ -85,4 +85,13 @@ utils.set_table_default = function(table, default)
   setmetatable(table, mt)
 end
 
+utils.toggle_peek = function()
+  local peek = require("peek")
+  if peek.is_open() then
+    peek.close()
+  else
+    peek.open()
+  end
+end
+
 return utils

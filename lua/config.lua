@@ -29,6 +29,17 @@ local globalOptions = {
   markdown_folding = 1,
   markdown_recommended_style = 0,
   disable_autoformat = true,
+  bullets_enabled_file_types = {
+    "markdown",
+    "text",
+    "org",
+    "gitcommit",
+    "scratch",
+  },
+  bullets_outline_levels = { "ROM", "ABC", "num", "abc", "rom", "std-" },
+  -- lazygit conf
+  lazygit_floating_window_winblend = 1,
+  lazygit_floating_window_use_plenary = 1,
 }
 
 if vim.g.neovide then

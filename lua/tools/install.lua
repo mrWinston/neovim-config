@@ -66,7 +66,7 @@ install.withPip = function(tool)
     return
   end
 
-  local installPluginOut = runInZsh(string.format("pip install %s --user", tool.name))
+  local installPluginOut = runInZsh(string.format("pip install '%s' --user", tool.name))
   if installPluginOut.code ~= 0 then
     vim.print(string.format("Error installing %s pip:", tool.name))
     vim.print(installPluginOut.stdout)
@@ -180,6 +180,11 @@ install.tools = {
     install = install.withPip,
   },
   {
+    name = "python-lsp-server[all]",
+    exe = "pylsp",
+    install = install.withPip,
+  },
+  {
     name = "stylua",
     exe = "stylua",
     install = install.withAsdf,
@@ -214,6 +219,21 @@ install.tools = {
     name = "prettier",
     exe = "prettier",
     install = install.withYarn,
+  },
+  {
+    name = "deno",
+    exe = "deno",
+    install = install.withAsdf,
+  },
+  {
+    name = "remark-language-server",
+    exe = "remark-language-server",
+    install = install.withYarn,
+  },
+  {
+    name = "fd",
+    exe = "fd",
+    install = install.withAsdf,
   },
 }
 

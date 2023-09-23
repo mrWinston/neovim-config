@@ -10,6 +10,12 @@ return {
     priority = 1000,
   },
   {
+    "mrWinston/granite.nvim",
+    -- use local files in code folder instead of gh
+    dev = true,
+    config = get_config,
+  },
+  {
     "marko-cerovac/material.nvim",
     config = get_config,
   },
@@ -20,6 +26,10 @@ return {
   {
     "folke/which-key.nvim",
     config = get_config,
+  },
+  {
+    "folke/neodev.nvim",
+    priority = 1000,
   },
   { "leoluz/nvim-dap-go" },
   { "theHamsta/nvim-dap-virtual-text" },
@@ -45,11 +55,8 @@ return {
     config = get_config,
   },
   {
-    "saadparwaiz1/cmp_luasnip",
-  },
-  {
     "L3MON4D3/LuaSnip",
-    config = get_config,
+    dependencies = { "saadparwaiz1/cmp_luasnip", "rafamadriz/friendly-snippets" },
   },
   {
     "benfowler/telescope-luasnip.nvim",
@@ -60,12 +67,9 @@ return {
   {
     "hrsh7th/cmp-nvim-lsp",
   },
-  {
-    "hrsh7th/cmp-nvim-lsp-signature-help",
-  },
-  {
-    "ray-x/lsp_signature.nvim",
-  },
+  --  {
+  --    "hrsh7th/cmp-nvim-lsp-signature-help",
+  --  },
   {
     "tpope/vim-fugitive",
   },
@@ -151,13 +155,46 @@ return {
     "stevearc/conform.nvim",
     config = get_config,
   },
+  {
+    "michaelb/sniprun",
+    build = "sh ./install.sh",
+    config = get_config,
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    config = get_config,
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+  },
+  {
+    "s1n7ax/nvim-window-picker",
+    name = "window-picker",
+    event = "VeryLazy",
+    version = "2.*",
+    config = function()
+      require("window-picker").setup()
+    end,
+  },
+  {
+    "toppair/peek.nvim",
+    build = "deno task --quiet build:fast",
+    config = get_config,
+  },
+  "folke/trouble.nvim",
   "sindrets/diffview.nvim",
   "hrsh7th/cmp-path",
-  "ray-x/lsp_signature.nvim",
   "rafamadriz/friendly-snippets",
   "kdheepak/lazygit.nvim",
   "rudylee/nvim-gist",
   "fladson/vim-kitty",
   "dkarter/bullets.vim",
   "projekt0n/github-nvim-theme",
+  "f3fora/cmp-spell",
 }

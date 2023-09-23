@@ -7,6 +7,7 @@ require("conform").setup({
     terraform = { "terraform_fmt" },
     json = { "prettier" },
     javascript = { "prettier" },
+    markdown = { "prettier" },
     go = { "gofmt", "golines" },
   },
 })
