@@ -127,6 +127,11 @@ end
 
 install.tools = {
   {
+    name = "rust",
+    exe = "cargo",
+    install = install.withAsdf,
+  },
+  {
     name = "black",
     exe = "black",
     install = install.withPip,
@@ -213,6 +218,12 @@ install.tools = {
     name = "shfmt",
     exe = "shfmt",
     url = "mvdan.cc/sh/v3/cmd/shfmt@latest",
+    install = install.withGo,
+  },
+  {
+    name = "moustache",
+    exe = "moustache",
+    url = "github.com/cbroglie/mustache/cmd/mustache@latest",
     install = install.withGo,
   },
   {

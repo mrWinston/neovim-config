@@ -158,7 +158,6 @@ return {
   {
     "michaelb/sniprun",
     build = "sh ./install.sh",
-    config = get_config,
   },
   {
     "folke/noice.nvim",
@@ -185,6 +184,10 @@ return {
   {
     "toppair/peek.nvim",
     build = "deno task --quiet build:fast",
+    config = get_config,
+  },
+  {
+  "seblj/nvim-tabline",
     config = get_config,
   },
   "folke/trouble.nvim",
