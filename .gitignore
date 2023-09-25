@@ -2,3 +2,4 @@ pack/
 plugin/
 spell/
 dapconfigs.json
+test.lua
