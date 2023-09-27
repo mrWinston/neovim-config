@@ -16,6 +16,10 @@ local on_attach = function(client, bufnr)
   if client.name == "yamlls" then
     client.server_capabilities.documentFormattingProvider = true
   end
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.buf.inlay_hint(bufnr, true)
+  end
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
@@ -55,7 +59,7 @@ require("lspconfig").lua_ls.setup({
       workspace = {
         checkThirdParty = false,
         -- Make the server aware of Neovim runtime files
-        library = {"/usr/share/awesome/lib"},
+        library = { "/usr/share/awesome/lib" },
       },
       -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
@@ -82,6 +86,27 @@ local simpleLs = {
   "marksman", -- download from https://github.com/artempyanykh/marksman/releases
   --  "remark_ls",
 }
+
+require("lspconfig").gopls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    gopls = {
+      usePlaceholders = true,
+      semanticTokens = true,
+      staticcheck = true,
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+    },
+  },
+})
 
 local lspconfig = require("lspconfig")
 local configs = require("lspconfig.configs")

@@ -133,6 +133,9 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = get_config,
+    opts = {
+      inlay_hints = { enabled = true },
+    },
   },
   {
     "akinsho/toggleterm.nvim",
