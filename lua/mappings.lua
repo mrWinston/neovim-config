@@ -20,10 +20,13 @@ vim.keymap.set("t", "<c-l>", "<C-\\><C-N><C-w>l")
 
 vim.keymap.set({ "n", "i" }, "<c-t>", ":tabnew<cr>")
 
+local utils = require("utils")
 -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-vim.keymap.set("n", "zm", require("ufo").closeFoldsWith, {})
+vim.keymap.set("n", "zR", utils.openAllFolds)
+vim.keymap.set("n", "zM", utils.closeAllFolds)
+vim.keymap.set("n", "zm", utils.decreaseFoldLevel)
+vim.keymap.set("n", "zr", utils.increaseFoldLevel)
+
 
 local telescope = require("telescope.builtin")
 local telescope_dap = require("telescope._extensions.dap")
@@ -31,7 +34,6 @@ local utils = require("utils")
 local outline = require("symbols-outline")
 
 local wk = require("which-key")
-
 
 local change_neovide_scale_factor = function(delta)
   vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
@@ -108,44 +110,44 @@ wk.register({
   u = {
     name = "utils",
     c = { utils.toggleCheckbox, "Toggle Checkbox" },
-    m = { require("mini.files").open, "Mini Files" },
-    f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     d = { utils.toggle_autoformat, "toggle autoformat after save" },
-    t = {
-      name = "ToggleTerm",
-      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
-      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
-      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
-    },
-    n = { ":nohlsearch<cr>", "Hide Search Results" },
-    s = {
-      name = "Spellcheck",
-      e = { ":setlocal spell spelllang=en_us<cr>", "Enable English Spellcheck" },
-      g = { ":setlocal spell spelllang=de_20<cr>", "Enable German Spellcheck" },
-    },
-    --    s = {
-    --      name = "neovide scaling",
-    --      i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
-    --      d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
-    --    },
-    o = { outline.toggle_outline, "Show Outline" },
+    f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     l = {
       name = "lsp server diagnostics",
       r = { ":LspRestart<cr>", "Restart Lsp Server" },
       i = { ":LspInfo<cr>", "Lsp Server Info" },
       l = { ":LspLog<cr>", "Lsp Server Logs" },
     },
+    m = { require("mini.files").open, "Mini Files" },
+    n = { ":nohlsearch<cr>", "Hide Search Results" },
+    o = { outline.toggle_outline, "Show Outline" },
     r = {
       name = "replace hotkeys",
       n = { ":s/\n//g<cr>", "Remove Linebreaks" },
     },
+    s = {
+      name = "Spellcheck",
+      e = { ":setlocal spell spelllang=en_us<cr>", "Enable English Spellcheck" },
+      g = { ":setlocal spell spelllang=de_20<cr>", "Enable German Spellcheck" },
+    },
+    t = {
+      name = "ToggleTerm",
+      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
+      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
+      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
+    },
+    w = {
+      name = "neovide scaling",
+      i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
+      d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
+    },
   },
   k = {
     name = "Knowledge mappings",
-    o = { require("granite").open_note, "Open note"},
-    t = { ":Telescope granite<cr>", "Show Todos"},
-    n = { require("granite").Note, "New Note"},
-    l = { require("granite").link_to_file, "insert link"},
+    o = { require("granite").open_note, "Open note" },
+    t = { ":Telescope granite_telescope<cr>", "Show Todos" },
+    n = { require("granite").new_note_from_template, "New Note" },
+    l = { require("granite").link_to_file, "insert link" },
   },
   e = {
     name = "errors",

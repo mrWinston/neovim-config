@@ -187,7 +187,7 @@ return {
     config = get_config,
   },
   {
-  "seblj/nvim-tabline",
+    "seblj/nvim-tabline",
     config = get_config,
   },
   "folke/trouble.nvim",

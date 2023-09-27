@@ -5,10 +5,6 @@ local utils = require("utils")
 local options = {
   cursorline = true,
   expandtab = true,
-  foldcolumn = "1", -- yes, that's 1 as a string
-  foldenable = true,
-  foldlevel = 99,
-  foldlevelstart = 99,
   ignorecase = true,
   number = true,
   relativenumber = true,
@@ -21,8 +17,14 @@ local options = {
   termguicolors = true,
   timeoutlen = 200,
   updatetime = 200,
-  --  foldexpr = 'nvim_treesitter#foldexpr()',
-  --  foldmethod = 'expr',
+
+  -- folding
+  foldcolumn = "1", -- yes, that's 1 as a string
+  foldenable = true,
+  foldlevel = 99,
+  foldlevelstart = 99,
+--  foldexpr = 'nvim_treesitter#foldexpr()',
+--  foldmethod = 'expr',
 }
 
 local globalOptions = {

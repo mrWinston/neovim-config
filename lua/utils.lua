@@ -1,4 +1,44 @@
 local utils = {}
+
+utils.increaseFoldLevel = function()
+  if not vim.b.current_fold then
+    vim.b.current_fold = 0
+  end
+  vim.b.current_fold = vim.b.current_fold + 1
+  require('ufo').closeFoldsWith(vim.b.current_fold)
+end
+
+utils.decreaseFoldLevel = function()
+  if not vim.b.current_fold then
+    vim.b.current_fold = utils.getMaxFold()
+  end
+  vim.b.current_fold = vim.b.current_fold - 1
+  require('ufo').closeFoldsWith(vim.b.current_fold)
+end
+
+utils.closeAllFolds = function()
+  vim.b.current_fold = 0
+  require('ufo').closeFoldsWith(vim.b.current_fold)
+end
+
+utils.openAllFolds = function()
+  vim.b.current_fold = utils.getMaxFold()
+  require('ufo').closeFoldsWith(vim.b.current_fold)
+end
+
+utils.getMaxFold = function()
+  local curbuf = vim.api.nvim_get_current_buf()
+  local total_lines = vim.api.nvim_buf_line_count(curbuf)
+  local maxLevel = 0
+  for i = 1, total_lines, 1 do
+    if vim.fn.foldlevel(i) > maxLevel then
+      maxLevel = vim.fn.foldlevel(i)
+    end
+  end
+  return maxLevel
+end
+
+
 utils.cmdThenFunc = function(cmd, func)
   local embed = function()
     vim.cmd(cmd)
