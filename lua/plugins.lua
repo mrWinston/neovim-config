@@ -190,6 +190,11 @@ return {
     config = get_config,
   },
   {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {}, -- this is equalent to setup({}) function
+  },
+  {
     "seblj/nvim-tabline",
     config = get_config,
   },
