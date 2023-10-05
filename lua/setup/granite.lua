@@ -1,4 +1,3 @@
 require("granite").setup({
-  knowledge_base_path = "~/Documents/notevault",
-  template_config = "templates/templates.yaml",
+  granite_yaml = "/home/maschulz/Documents/notevault/granite.yaml",
 })

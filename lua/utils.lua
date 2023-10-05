@@ -38,6 +38,11 @@ utils.getMaxFold = function()
   return maxLevel
 end
 
+utils.goimpl = function()
+  require("telescope").load_extension("goimpl")
+  require('telescope').extensions.goimpl.goimpl({})
+end
+
 
 utils.cmdThenFunc = function(cmd, func)
   local embed = function()

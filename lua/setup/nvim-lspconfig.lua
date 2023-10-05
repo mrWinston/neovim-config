@@ -6,6 +6,7 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
+require("telescope").load_extension("lsp_handlers")
 local function get_maingo()
   return vim.fn.findfile("main.go", ".;")
 end
@@ -34,6 +35,8 @@ capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true,
 }
 
+local lspconfig = require("lspconfig")
+
 require("neodev").setup({
   override = function(root_dir, library)
     if root_dir:find("granite") then
@@ -43,7 +46,7 @@ require("neodev").setup({
   end,
 })
 
-require("lspconfig").lua_ls.setup({
+lspconfig.lua_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -70,7 +73,7 @@ require("lspconfig").lua_ls.setup({
 })
 
 -- yarn global add @volar/vue-language-server
-require("lspconfig").volar.setup({
+lspconfig.volar.setup({
   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
 })
 
@@ -87,7 +90,7 @@ local simpleLs = {
   --  "remark_ls",
 }
 
-require("lspconfig").gopls.setup({
+lspconfig.gopls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -108,30 +111,6 @@ require("lspconfig").gopls.setup({
   },
 })
 
-local lspconfig = require("lspconfig")
-local configs = require("lspconfig.configs")
-
---if not configs.markdown then
---  configs.markdown = {
---    default_config = {
---      cmd = { "vscode-markdown-language-server", "--stdio" },
---      filetypes = { "markdown" },
---      root_dir = function(fname)
---        return lspconfig.util.find_git_ancestor(fname)
---      end,
---      single_file_support = true,
---      handlers = {
---        ["markdown/parse"] = function(err, args, ctx, config)
---          local tokens = vim.fn.Func(args)
---          print(tokens)
---          return tokens
---        end,
---      },
---      settings = {},
---    },
---  }
---end
-
 for _, value in ipairs(simpleLs) do
   lspconfig[value].setup({
     on_attach = on_attach,
@@ -139,7 +118,7 @@ for _, value in ipairs(simpleLs) do
   })
 end
 
-require("lspconfig").golangci_lint_ls.setup({
+lspconfig.golangci_lint_ls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   init_options = {
@@ -152,6 +131,8 @@ require("luasnip.loaders.from_vscode").lazy_load()
 require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" } })
 -- nvim-cmp setup
 local cmp = require("cmp")
+
+---@diagnostic disable-next-line: missing-fields
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -188,10 +169,10 @@ cmp.setup({
   preselect = cmp.PreselectMode.None,
   sources = {
     { name = "nvim_lsp" },
+    { name = "granite_cmp" },
     { name = "luasnip" },
     --    { name = "nvim_lsp_signature_help" },
     { name = "path" },
-    { name = "orgmode" },
     {
       name = "spell",
       option = {

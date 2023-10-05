@@ -24,11 +24,9 @@ require("telescope").setup({
     --    },
   },
 })
-require("telescope").load_extension("dap")
-require("telescope").load_extension("lsp_handlers")
-require("telescope").load_extension("goimpl")
-require("telescope").load_extension("luasnip")
-require("telescope").load_extension("make")
-require("telescope").load_extension("gopass")
-require("telescope").load_extension("granite_telescope")
-require("telescope").load_extension("lazygit")
+--require("telescope").load_extension("dap")
+--require("telescope").load_extension("luasnip")
+--require("telescope").load_extension("make")
+--require("telescope").load_extension("gopass")
+--require("telescope").load_extension("lazygit")
+--require("telescope").load_extension("granite_telescope")

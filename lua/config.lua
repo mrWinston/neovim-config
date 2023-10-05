@@ -14,6 +14,7 @@ local options = {
   showcmd = true,
   smartcase = true,
   tabstop = 2,
+  conceallevel = 2,
   termguicolors = true,
   timeoutlen = 200,
   updatetime = 200,

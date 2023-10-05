@@ -27,12 +27,6 @@ vim.keymap.set("n", "zM", utils.closeAllFolds)
 vim.keymap.set("n", "zm", utils.decreaseFoldLevel)
 vim.keymap.set("n", "zr", utils.increaseFoldLevel)
 
-
-local telescope = require("telescope.builtin")
-local telescope_dap = require("telescope._extensions.dap")
-local utils = require("utils")
-local outline = require("symbols-outline")
-
 local wk = require("which-key")
 
 local change_neovide_scale_factor = function(delta)
@@ -74,23 +68,22 @@ wk.register({
   },
   f = {
     name = "find",
-    f = { telescope.find_files, "Files" },
-    g = { telescope.live_grep, "File content (grep)" },
-    b = { telescope.buffers, "Buffers" },
-    h = { telescope.help_tags, "Help" },
-    c = { telescope.commands, "Commands" },
-    t = { utils.wrapFunction(telescope.builtin, { include_extensions = true }), "Telescope Pickers" },
-    d = { telescope_dap.commands, "DAP Commands" },
-    s = { telescope.treesitter, "Symbols" },
-    j = { telescope.jumplist, "Jumplist" },
+    f = { function() require("telescope.builtin").find_files() end, "Files" },
+    g = { function() require("telescope.builtin").live_grep() end, "File content (grep)" },
+    b = { function() require("telescope.builtin").buffers() end, "Buffers" },
+    h = { function() require("telescope.builtin").help_tags() end, "Help" },
+    c = { function() require("telescope.builtin").commands() end, "Commands" },
+    t = { utils.wrapFunction(require("telescope.builtin").builtin, { include_extensions = true }), "Telescope Pickers" },
+    s = { function() require("telescope.builtin").treesitter() end, "Symbols" },
+    j = { function() require("telescope.builtin").jumplist() end, "Jumplist" },
     m = { ":Telescope make<cr>", "Run Make Targets" },
-    p = { require("telescope").extensions.gopass.gopass, "Gopass" },
+    p = { function() require("telescope").extensions.gopass.gopass() end, "Gopass" },
   },
   g = {
     name = "git",
     b = {
       name = "Branches",
-      c = { telescope.git_branches, "Checkout" },
+      c = { function() require("telescope.builtin").git_branches() end, "Checkout" },
       n = { utils.createGitBranch, "New Branch" },
       d = { utils.gitDiffBranch, "Diff" },
     },
@@ -105,7 +98,7 @@ wk.register({
       c = { ":GistCreate<cr>", "Create Gists" },
     },
   },
-  t = { ":Neotree toggle<cr>", "Open Neotree" },
+  t = { function() require("neo-tree.command").execute({toggle=true}) end, "Open Neotree" },
   l = { require("lazy").home, "Lazy" },
   u = {
     name = "utils",
@@ -118,9 +111,9 @@ wk.register({
       i = { ":LspInfo<cr>", "Lsp Server Info" },
       l = { ":LspLog<cr>", "Lsp Server Logs" },
     },
-    m = { require("mini.files").open, "Mini Files" },
+    m = { function() require("mini.files").open() end, "Mini Files" },
     n = { ":nohlsearch<cr>", "Hide Search Results" },
-    o = { outline.toggle_outline, "Show Outline" },
+    o = { function() require("symbols-outline").toggle_outline() end, "Show Outline" },
     r = {
       name = "replace hotkeys",
       n = { ":s/\n//g<cr>", "Remove Linebreaks" },
@@ -141,11 +134,17 @@ wk.register({
       i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
       d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
     },
+    i = { require("tools.install").installAll, "Install Dependencies" },
   },
   k = {
     name = "Knowledge mappings",
     o = { require("granite").open_note, "Open note" },
-    t = { ":Telescope granite_telescope<cr>", "Show Todos" },
+    t = {
+      name = "Todos",
+      o = { function () require("telescope").extensions.granite_telescope.granite_telescope({states = {"OPEN", "IN_PROGRESS"}}) end, "Open Todos" },
+      a = { function () require("telescope").extensions.granite_telescope.granite_telescope({}) end, "all Todos" },
+      d = { function () require("telescope").extensions.granite_telescope.granite_telescope({states = {"DONE"}}) end, "done Todos" },
+    },
     n = { require("granite").new_note_from_template, "New Note" },
     l = { require("granite").link_to_file, "insert link" },
   },
@@ -182,6 +181,7 @@ wk.register({
         t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
       },
     },
+    i = {utils.goimpl, "Run go impl"},
     w = {
       name = "workspace actions",
       a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },

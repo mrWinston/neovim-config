@@ -51,8 +51,9 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-dap.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = get_config,
+    lazy = true,
   },
   {
     "L3MON4D3/LuaSnip",
@@ -67,9 +68,6 @@ return {
   {
     "hrsh7th/cmp-nvim-lsp",
   },
-  --  {
-  --    "hrsh7th/cmp-nvim-lsp-signature-help",
-  --  },
   {
     "tpope/vim-fugitive",
   },
@@ -123,6 +121,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
+      "s1n7ax/nvim-window-picker",
     },
     config = get_config,
   },
@@ -133,6 +132,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = get_config,
+    lazy = false,
     opts = {
       inlay_hints = { enabled = true },
     },
@@ -145,10 +145,6 @@ return {
     "echasnovski/mini.nvim",
     config = get_config,
     version = false,
-  },
-  {
-    "mcchrish/zenbones.nvim",
-    dependencies = { "rktjmp/lush.nvim" },
   },
   {
     "nvim-lualine/lualine.nvim",
