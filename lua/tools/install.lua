@@ -13,6 +13,7 @@ install.withAsdf = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
   local addPluginOut = runInZsh("asdf plugin-add " .. tool.name)
@@ -47,10 +48,11 @@ install.withCargo = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
 
-  local installPluginOut = runInZsh(string.format("cargo install %s && asdf reshim rust", tool.name))
+  local installPluginOut = runInZsh(string.format("cargo install %s", tool.name))
   if installPluginOut.code ~= 0 then
     vim.print(string.format("Error installing %s cargo:", tool.name))
     vim.print(installPluginOut.stdout)
@@ -63,6 +65,7 @@ install.withPip = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
 
@@ -79,6 +82,7 @@ install.withYarn = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
 
@@ -96,6 +100,7 @@ install.withDownload = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
 
@@ -114,6 +119,7 @@ install.withGo = function(tool)
     return
   end
   if vim.fn.executable(tool.exe) == 1 then
+    vim.notify(string.format("%s is already installed.", tool.name))
     return
   end
 
@@ -126,11 +132,6 @@ install.withGo = function(tool)
 end
 
 install.tools = {
-  {
-    name = "rust",
-    exe = "cargo",
-    install = install.withAsdf,
-  },
   {
     name = "black",
     exe = "black",
@@ -254,6 +255,7 @@ install.installAll = function()
       vim.print(string.format("tool %s is missing an install function", tool.name))
       goto continue
     end
+    vim.notify("Installing " .. tool.name)
     tool.install(tool)
     ::continue::
   end

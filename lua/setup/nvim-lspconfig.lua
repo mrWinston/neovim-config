@@ -18,9 +18,6 @@ local on_attach = function(client, bufnr)
     client.server_capabilities.documentFormattingProvider = true
   end
 
-  if client.server_capabilities.inlayHintProvider then
-    vim.lsp.buf.inlay_hint(bufnr, true)
-  end
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
@@ -78,9 +75,8 @@ lspconfig.volar.setup({
 })
 
 local simpleLs = {
-  "gopls", -- go install golang.org/x/tools/gopls@latest
+  "gopls",
   "bashls",
-  "yamlls",
   "tsserver", -- yarn global add typescript typescript-language-server
   "eslint", -- yarn global add vscode-langservers-extracted
   --  "jedi_language_server",
@@ -90,26 +86,43 @@ local simpleLs = {
   --  "remark_ls",
 }
 
-lspconfig.gopls.setup({
+require("lspconfig").yamlls.setup({
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
-    gopls = {
-      usePlaceholders = true,
-      semanticTokens = true,
-      staticcheck = true,
-      hints = {
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        constantValues = true,
-        functionTypeParameters = true,
-        parameterNames = true,
-        rangeVariableTypes = true,
+    yaml = {
+      yamlVersion = "1.2",
+      schemas = {
+        --        ["http://localhost:9000/all.json"] = "app-interface/**/*.yaml",
       },
     },
   },
 })
+
+--lspconfig.gopls.setup({
+--  on_attach = on_attach,
+--  capabilities = capabilities,
+--  settings = {
+--    gopls = {
+--      usePlaceholders = true,
+--      semanticTokens = true,
+--      staticcheck = true,
+--      directoryFilters = {
+--        "-**/node_modules",
+--        "-**/generated",
+--      },
+--      hints = {
+--        assignVariableTypes = true,
+--        compositeLiteralFields = true,
+--        compositeLiteralTypes = true,
+--        constantValues = true,
+--        functionTypeParameters = true,
+--        parameterNames = true,
+--        rangeVariableTypes = true,
+--      },
+--    },
+--  },
+--})
 
 for _, value in ipairs(simpleLs) do
   lspconfig[value].setup({
@@ -169,7 +182,7 @@ cmp.setup({
   preselect = cmp.PreselectMode.None,
   sources = {
     { name = "nvim_lsp" },
-    { name = "granite_cmp" },
+--    { name = "granite_cmp", trigger_characters = {"#"} },
     { name = "luasnip" },
     --    { name = "nvim_lsp_signature_help" },
     { name = "path" },

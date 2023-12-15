@@ -24,8 +24,7 @@ require("telescope").setup({
     --    },
   },
 })
---require("telescope").load_extension("dap")
---require("telescope").load_extension("luasnip")
+require("telescope").load_extension("luasnip")
 --require("telescope").load_extension("make")
 --require("telescope").load_extension("gopass")
 --require("telescope").load_extension("lazygit")

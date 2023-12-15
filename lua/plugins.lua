@@ -56,6 +56,14 @@ return {
     lazy = true,
   },
   {
+    "ldelossa/gh.nvim",
+    dependencies = {
+      "ldelossa/litee.nvim",
+    },
+    config = get_config,
+    lazy = false,
+  },
+  {
     "L3MON4D3/LuaSnip",
     dependencies = { "saadparwaiz1/cmp_luasnip", "rafamadriz/friendly-snippets" },
   },
@@ -168,7 +176,7 @@ return {
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
+      --      "rcarriga/nvim-notify",
     },
   },
   {
@@ -194,6 +202,35 @@ return {
     "seblj/nvim-tabline",
     config = get_config,
   },
+  {
+    "mikesmithgh/kitty-scrollback.nvim",
+    enabled = true,
+    lazy = true,
+    cmd = { "KittyScrollbackGenerateKittens", "KittyScrollbackCheckHealth" },
+    -- version = '*', -- latest stable version, may have breaking changes if major version changed
+    -- version = '^1.0.0', -- pin major version, include fixes and features that do not have breaking changes
+    config = function()
+      require("kitty-scrollback").setup()
+    end,
+  },
+  {
+    "rcarriga/nvim-notify",
+    lazy = true,
+    opts = {
+      render = "compact",
+    },
+  },
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-neorg/neorg-telescope",
+      "laher/neorg-exec",
+    },
+    config = get_config,
+  },
+  "ElPiloto/significant.nvim",
   "folke/trouble.nvim",
   "sindrets/diffview.nvim",
   "hrsh7th/cmp-path",

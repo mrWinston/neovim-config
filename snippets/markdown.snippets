@@ -1,2 +1,27 @@
 snippet todo Add a task
 	- [ ] #task ${1:text}
+
+snippet cblogin login codeblock
+	\`\`\`sh
+	ocd ${1:clusterid}
+	export NO_ATTACH=yes
+	ocm-container -o "--name $CLUSTER_NAME" $CLUSTER_ID
+	\`\`\`
+
+snippet cblogout logout codeblock
+	\`\`\`sh
+	podman kill ${1:clustername}
+	\`\`\`
+
+snippet cbcluster cluster code block
+	\`\`\`sh CWD=docker:CLUSTER_NAME
+	${1}
+	\`\`\`
+
+snippet clusterstart login codeblock
+	\`\`\`sh
+	ocd ${1:clusterid}
+	export NO_ATTACH=yes
+	ocm-container -o "--name $CLUSTER_NAME" $CLUSTER_ID
+	\`\`\`
+

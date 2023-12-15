@@ -29,6 +29,10 @@ require("nvim-treesitter.configs").setup({
         ["iF"] = "@function.inner",
         ["aP"] = "@parameter.outer",
         ["iP"] = "@parameter.inner",
+        ["ac"] = "@conditional.outer",
+        ["ic"] = "@conditional.inner",
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
         --        ["ac"] = "@class.outer",
         -- You can optionally set descriptions to the mappings (used in the desc parameter of
         -- nvim_buf_set_keymap) which plugins like which-key display
@@ -83,18 +87,20 @@ require("nvim-treesitter.configs").setup({
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
     -- the name of the parser)
     -- list of language that will be disabled
-    disable = {},
+    disable = { },
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     --    additional_vim_regex_highlighting = false,
-    additional_vim_regex_highlighting = { "markdown", "org" },
+    -- additional_vim_regex_highlighting = { "markdown", "org" },
+    additional_vim_regex_highlighting = false,
+    use_languagetree = true,
   },
 
   incremental_selection = {
-    enable = true,
+    enable = false,
     keymaps = {
       init_selection = "gnn",
       node_incremental = "grn",
@@ -112,6 +118,9 @@ vim.filetype.add({
     rules = "suricata",
   },
 })
+
+vim.treesitter.language.register("markdown", "granite")
+
 --local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 --parser_config.suricata = {
 --  install_info = {

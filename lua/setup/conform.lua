@@ -8,7 +8,7 @@ require("conform").setup({
     json = { "prettier" },
     javascript = { "prettier" },
     markdown = { "prettier" },
-    go = { "gofmt", "golines" },
+    go = { "gofmt" },
   },
 })
 

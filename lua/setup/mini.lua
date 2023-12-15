@@ -10,28 +10,32 @@ require("mini.indentscope").setup({
   },
 })
 
-if not vim.g.neovide then
-  -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-animate.md#default-config
-  require("mini.animate").setup({
-    cursor = {
-      timing = animationDuration,
-      path = animate.gen_path.angle(),
-    },
-    scroll = {
-      timing = animationDuration,
-    },
-    resize = {
-      timing = animationDuration,
-    },
-    open = {
-      timing = animationDuration,
-    },
-    close = {
-      timing = animationDuration,
-    },
-  })
-end
+-- if not vim.g.neovide then
+--   -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-animate.md#default-config
+--  require("mini.animate").setup({
+--    cursor = {
+--      timing = animationDuration,
+--      path = animate.gen_path.angle(),
+--    },
+--    scroll = {
+--      timing = animationDuration,
+--    },
+--    resize = {
+--      timing = animationDuration,
+--    },
+--    open = {
+--      timing = animationDuration,
+--    },
+--    close = {
+--      timing = animationDuration,
+--    },
+--  })
+-- end
 -- see https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
 require("mini.ai").setup({})
 
 require("mini.files").setup({})
+
+require("mini.comment").setup({
+
+})

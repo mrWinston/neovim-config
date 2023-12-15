@@ -14,11 +14,10 @@ local options = {
   showcmd = true,
   smartcase = true,
   tabstop = 2,
-  conceallevel = 2,
+  conceallevel = 0,
   termguicolors = true,
   timeoutlen = 200,
   updatetime = 200,
-
   -- folding
   foldcolumn = "1", -- yes, that's 1 as a string
   foldenable = true,
@@ -43,11 +42,14 @@ local globalOptions = {
   -- lazygit conf
   lazygit_floating_window_winblend = 1,
   lazygit_floating_window_use_plenary = 1,
+  netrw_browsex_viewer = "cd %:h && xdg-open",
+--  markdown_fenced_languages = {"bash", "lua", "go", "typescript", "python"}
 }
 
 if vim.g.neovide then
   globalOptions["neovide_cursor_animate_command_line"] = false
   globalOptions["neovide_scale_factor"] = 1.0
+  vim.o.guifont = '0xProto Nerd Font:h10'
 end
 
 for k, v in pairs(options) do

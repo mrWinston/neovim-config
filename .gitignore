@@ -3,3 +3,5 @@ plugin/
 spell/
 dapconfigs.json
 test.lua
+abbreviations.json
+__pycache__
