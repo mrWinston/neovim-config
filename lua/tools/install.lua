@@ -221,12 +221,12 @@ install.tools = {
     url = "mvdan.cc/sh/v3/cmd/shfmt@latest",
     install = install.withGo,
   },
-  {
-    name = "moustache",
-    exe = "moustache",
-    url = "github.com/cbroglie/mustache/cmd/mustache@latest",
-    install = install.withGo,
-  },
+ {
+   name = "mustache",
+   exe = "mustache",
+   url = "github.com/cbroglie/mustache/cmd/mustache@latest",
+   install = install.withGo,
+ },
   {
     name = "prettier",
     exe = "prettier",
@@ -234,6 +234,11 @@ install.tools = {
   },
   {
     name = "deno",
+    exe = "deno",
+    install = install.withAsdf,
+  },
+  {
+    name = "github-cli",
     exe = "deno",
     install = install.withAsdf,
   },
@@ -247,12 +252,25 @@ install.tools = {
     exe = "fd",
     install = install.withAsdf,
   },
+  {
+    name = "github-cli",
+    exe = "gh",
+    install = install.withAsdf,
+  },
+  {
+    name = "lazygit",
+    exe = "lazygit",
+    install = install.withAsdf,
+  }
 }
 
 install.installAll = function()
   for _, tool in pairs(install.tools) do
     if not tool.install then
       vim.print(string.format("tool %s is missing an install function", tool.name))
+      goto continue
+    end
+    if vim.fn.executable(tool.exe) == 1 then
       goto continue
     end
     vim.notify("Installing " .. tool.name)

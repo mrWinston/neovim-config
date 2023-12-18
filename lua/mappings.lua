@@ -256,37 +256,37 @@ wk.register({
     d = { require("tools.kube").Describe, "Describe resource" },
     D = { require("tools.kube").DescribeCursor, "Describe resource under cursor" },
   },
-  k = {
-    name = "Knowledge mappings",
-    o = { require("granite").open_note, "Open note" },
-    t = {
-      name = "Todos",
-      o = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({ states = { "OPEN", "IN_PROGRESS" } })
-        end,
-        "Open Todos",
-      },
-      a = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({})
-        end,
-        "all Todos",
-      },
-      d = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({ states = { "DONE" } })
-        end,
-        "done Todos",
-      },
-    },
-    n = { require("granite").new_note_from_template, "New Note" },
-    l = { require("granite").link_to_file, "insert link" },
-    h = { require("granite").newHandwritten, "New Handwriting for this note"},
-    d = { ":ParseDate<cr>", "Parse selected Date String"},
-    p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks"},
-    r = { require("granite").RunCodeblock, "run codeblock under cursor"},
-  },
+ k = {
+   name = "Knowledge mappings",
+   o = { require("granite").open_note, "Open note" },
+   t = {
+     name = "Todos",
+     o = {
+       function()
+         require("telescope").extensions.granite_telescope.granite_telescope({ states = { "OPEN", "IN_PROGRESS" } })
+       end,
+       "Open Todos",
+     },
+     a = {
+       function()
+         require("telescope").extensions.granite_telescope.granite_telescope({})
+       end,
+       "all Todos",
+     },
+     d = {
+       function()
+         require("telescope").extensions.granite_telescope.granite_telescope({ states = { "DONE" } })
+       end,
+       "done Todos",
+     },
+   },
+   n = { require("granite").new_note_from_template, "New Note" },
+   l = { require("granite").link_to_file, "insert link" },
+   h = { require("granite").newHandwritten, "New Handwriting for this note"},
+   d = { ":ParseDate<cr>", "Parse selected Date String"},
+   p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks"},
+   r = { require("granite").RunCodeblock, "run codeblock under cursor"},
+ },
   e = {
     name = "errors",
     l = { vim.diagnostic.setloclist, "Show Errors" },

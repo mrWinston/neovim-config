@@ -97,8 +97,9 @@ return {
     config = get_config,
   },
   {
-    "mrWinston/telescope-makefile",
-    branch = "fix-merge-nil",
+    "sopa0/telescope-makefile",
+    --"mrWinston/telescope-makefile",
+    --branch = "fix-merge-nil",
     dependencies = "akinsho/toggleterm.nvim",
   },
   {
