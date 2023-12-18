@@ -261,6 +261,11 @@ install.tools = {
     name = "lazygit",
     exe = "lazygit",
     install = install.withAsdf,
+  },
+  {
+    name = "lua-language-server",
+    exe = "lua-language-server",
+    install = install.withAsdf,
   }
 }
 
