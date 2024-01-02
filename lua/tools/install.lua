@@ -221,12 +221,24 @@ install.tools = {
     url = "mvdan.cc/sh/v3/cmd/shfmt@latest",
     install = install.withGo,
   },
- {
-   name = "mustache",
-   exe = "mustache",
-   url = "github.com/cbroglie/mustache/cmd/mustache@latest",
-   install = install.withGo,
- },
+  {
+    name = "mustache",
+    exe = "mustache",
+    url = "github.com/cbroglie/mustache/cmd/mustache@latest",
+    install = install.withGo,
+  },
+  {
+    name = "golangci-lint-langserver",
+    exe = "golangci-lint-langserver",
+    url = "github.com/nametake/golangci-lint-langserver@latest",
+    install = install.withGo,
+  },
+  {
+    name = "impl",
+    exe = "impl",
+    url = "github.com/josharian/impl@latest",
+    install = install.withGo,
+  },
   {
     name = "prettier",
     exe = "prettier",
@@ -266,7 +278,7 @@ install.tools = {
     name = "lua-language-server",
     exe = "lua-language-server",
     install = install.withAsdf,
-  }
+  },
 }
 
 install.installAll = function()
