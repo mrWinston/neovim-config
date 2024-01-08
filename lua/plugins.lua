@@ -10,6 +10,12 @@ return {
     priority = 1000,
   },
   {
+    "mrWinston/mdrun.nvim",
+    -- use local files in code folder instead of gh
+    dev = true,
+    config = get_config,
+  },
+  {
     "mrWinston/granite.nvim",
     -- use local files in code folder instead of gh
     dev = true,
@@ -104,8 +110,9 @@ return {
     config = get_config,
   },
   {
-    "mrWinston/telescope-makefile",
-    branch = "fix-merge-nil",
+    "sopa0/telescope-makefile",
+    --"mrWinston/telescope-makefile",
+    --branch = "fix-merge-nil",
     dependencies = "akinsho/toggleterm.nvim",
   },
   {
@@ -225,6 +232,7 @@ return {
     lazy = true,
     opts = {
       render = "compact",
+      timeout = "1000",
     },
   },
   {

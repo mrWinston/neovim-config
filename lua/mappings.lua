@@ -202,7 +202,7 @@ wk.register({
     name = "utils",
     a = { utils.replaceAcronym, "Replace Acronym under Cursor"},
     c = { utils.toggleCheckbox, "Toggle Checkbox" },
-    d = { utils.toggle_autoformat, "toggle autoformat after save" },
+    d = { ":Noice dismiss<cr>", "Dismiss Notifications"},
     f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     l = {
       name = "lsp/treesitter",
@@ -298,7 +298,7 @@ wk.register({
     name = "code",
     a = { vim.lsp.buf.code_action, "code actions" },
     r = { vim.lsp.buf.rename, "rename function or variable" },
-    d = { vim.lsp.buf.document_symbol, "Show Symbols in Document" },
+    d = { utils.toggle_autoformat, "toggle autoformat after save" },
     f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     h = { vim.lsp.buf.signature_help, "Signature Help" },
     g = {

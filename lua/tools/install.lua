@@ -222,9 +222,21 @@ install.tools = {
     install = install.withGo,
   },
   {
-    name = "moustache",
-    exe = "moustache",
+    name = "mustache",
+    exe = "mustache",
     url = "github.com/cbroglie/mustache/cmd/mustache@latest",
+    install = install.withGo,
+  },
+  {
+    name = "golangci-lint-langserver",
+    exe = "golangci-lint-langserver",
+    url = "github.com/nametake/golangci-lint-langserver@latest",
+    install = install.withGo,
+  },
+  {
+    name = "impl",
+    exe = "impl",
+    url = "github.com/josharian/impl@latest",
     install = install.withGo,
   },
   {
@@ -238,6 +250,11 @@ install.tools = {
     install = install.withAsdf,
   },
   {
+    name = "github-cli",
+    exe = "deno",
+    install = install.withAsdf,
+  },
+  {
     name = "remark-language-server",
     exe = "remark-language-server",
     install = install.withYarn,
@@ -247,12 +264,30 @@ install.tools = {
     exe = "fd",
     install = install.withAsdf,
   },
+  {
+    name = "github-cli",
+    exe = "gh",
+    install = install.withAsdf,
+  },
+  {
+    name = "lazygit",
+    exe = "lazygit",
+    install = install.withAsdf,
+  },
+  {
+    name = "lua-language-server",
+    exe = "lua-language-server",
+    install = install.withAsdf,
+  },
 }
 
 install.installAll = function()
   for _, tool in pairs(install.tools) do
     if not tool.install then
       vim.print(string.format("tool %s is missing an install function", tool.name))
+      goto continue
+    end
+    if vim.fn.executable(tool.exe) == 1 then
       goto continue
     end
     vim.notify("Installing " .. tool.name)

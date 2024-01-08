@@ -1,3 +1,3 @@
 require("granite").setup({
-  granite_yaml = "/home/maschulz/Documents/notevault/granite.yaml",
+  granite_yaml = vim.fn.expand("~/Documents/notevault/granite.yaml"),
 })

@@ -68,7 +68,7 @@ local kittyToNvim = {
   ["Catppuccin-Mocha"] = "catppuccin-mocha",
   ["Catppuccin-Latte"] = "catppuccin-latte",
 }
-utils.set_table_default(kittyToNvim, "material")
+utils.set_table_default(kittyToNvim, "catppuccin-mocha")
 local obj = vim
   .system({ "zsh", "-c", 'cat ~/.config/kitty/current-theme.conf | grep "## name" | cut -d ":" -f 2' }, {
     text = true,

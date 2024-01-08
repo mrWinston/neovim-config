@@ -1,1 +1,3 @@
-require("mdrun").setup()
+require("mdrun").setup({
+
+})
