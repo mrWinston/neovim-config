@@ -16,6 +16,13 @@ return {
     config = get_config,
   },
   {
+    "mrWinston/mdrun.nvim",
+    -- use local files in code folder instead of gh
+    dev = true,
+    config = get_config,
+--    lazy = false,
+  },
+  {
     "marko-cerovac/material.nvim",
     config = get_config,
   },

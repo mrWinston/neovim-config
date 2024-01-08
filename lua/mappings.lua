@@ -11,7 +11,7 @@ vim.keymap.set("n", "<c-k>", "<c-w>k")
 vim.keymap.set("n", "<c-h>", "<c-w>h")
 vim.keymap.set("n", "<c-l>", "<c-w>l")
 
-vim.keymap.set("n", "gx", ":!cd %:h && xdg-open <cfile><cr>")
+vim.keymap.set("n", "gx", ":!cd %:h && xdg-open '<cfile>'<cr>")
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
@@ -285,7 +285,7 @@ wk.register({
     h = { require("granite").newHandwritten, "New Handwriting for this note"},
     d = { ":ParseDate<cr>", "Parse selected Date String"},
     p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks"},
-    r = { require("granite").RunCodeblock, "run codeblock under cursor"},
+    r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor"},
   },
   e = {
     name = "errors",

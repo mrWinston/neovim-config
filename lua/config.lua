@@ -76,3 +76,17 @@ local obj = vim
   :wait()
 local theme_name = string.gsub(obj.stdout, "^%s*(.-)%s*$", "%1")
 vim.cmd("colorscheme " .. kittyToNvim[theme_name])
+
+-- set fold colors to something more tolerable
+
+-- hi! link Folded Pmenu   
+-- hi! link UfoFoldedEllipsis Comment
+
+vim.api.nvim_set_hl(0, "Folded", {
+  link = "Pmenu",
+  force = true,
+})
+vim.api.nvim_set_hl(0, "UfoFoldedEllipsis", {
+  link = "Comment",
+  force = true,
+})
