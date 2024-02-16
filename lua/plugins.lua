@@ -26,7 +26,7 @@ return {
     -- use local files in code folder instead of gh
     dev = true,
     config = get_config,
---    lazy = false,
+    --    lazy = false,
   },
   {
     "marko-cerovac/material.nvim",
@@ -78,7 +78,7 @@ return {
   },
   {
     "L3MON4D3/LuaSnip",
-    dependencies = { "saadparwaiz1/cmp_luasnip", "rafamadriz/friendly-snippets" },
+    dependencies = { "saadparwaiz1/cmp_luasnip" },
   },
   {
     "benfowler/telescope-luasnip.nvim",
@@ -99,8 +99,12 @@ return {
     "tpope/vim-surround",
   },
   {
-    "airblade/vim-gitgutter",
+    "lewis6991/gitsigns.nvim",
+    config = get_config,
   },
+  -- {
+  --   "airblade/vim-gitgutter",
+  -- },
   {
     "stevearc/dressing.nvim",
     config = get_config,
@@ -245,11 +249,69 @@ return {
     },
     config = get_config,
   },
+  {
+    "chrisgrieser/nvim-scissors",
+    dependencies = "nvim-telescope/telescope.nvim", -- optional
+    opts = {
+      snippetDir = vim.fn.stdpath("config") .. "/snippets/vscode/",
+      jsonFormatter = "jq",
+      telescope = {
+        -- By default, the query only searches snippet prefixes. Set this to
+        -- `true` to also search the body of the snippets.
+        alsoSearchSnippetBody = false,
+      },
+    },
+  },
+  {
+    "mrWinston/friendly-snippets",
+    branch = "main",
+  },
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+
+      -- Only one of these is needed, not both.
+      "nvim-telescope/telescope.nvim", -- optional
+      "ibhagwan/fzf-lua", -- optional
+    },
+    config = get_config,
+  },
+  {
+    "Everblush/nvim",
+    name = "everblush",
+    config = {
+      transparent_background = true,
+      nvim_tree = {
+        contrast = true,
+      },
+    },
+  },
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+    config = {
+      style = "night",
+      styles = {
+        -- Background styles. Can be "dark", "transparent" or "normal"
+        sidebars = "normal", -- style for sidebars, see below
+        floats = "dark", -- style for floating windows
+      },
+      transparent = true, -- Enable this to disable setting the background color
+      dim_inactive = false,
+      lualine_bold = true,
+    },
+  },
+  "mfussenegger/nvim-ansible",
+  "onsails/lspkind.nvim",
+  "nvimtools/none-ls.nvim",
   "ElPiloto/significant.nvim",
   "folke/trouble.nvim",
   "sindrets/diffview.nvim",
   "hrsh7th/cmp-path",
-  "rafamadriz/friendly-snippets",
   "kdheepak/lazygit.nvim",
   "rudylee/nvim-gist",
   "fladson/vim-kitty",

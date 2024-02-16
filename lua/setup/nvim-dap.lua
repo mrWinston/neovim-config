@@ -19,6 +19,14 @@ require("dap-go").setup({
       program = get_maingo,
       args = get_args,
     },
+    {
+      type = "go",
+      name = "Verbose Test",
+      request = "launch",
+      mode = "test",
+      program = "./${relativeFileDirname}",
+      args = {"-test.v"},
+    },
   },
 })
 

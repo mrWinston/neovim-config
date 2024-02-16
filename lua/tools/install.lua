@@ -191,6 +191,16 @@ install.tools = {
     install = install.withPip,
   },
   {
+    name = "pyflakes",
+    exe = "pyflakes",
+    install = install.withPip,
+  },
+  {
+    name = "yapf",
+    exe = "yapf",
+    install = install.withPip,
+  },
+  {
     name = "stylua",
     exe = "stylua",
     install = install.withAsdf,

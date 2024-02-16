@@ -11,7 +11,7 @@ vim.keymap.set("n", "<c-k>", "<c-w>k")
 vim.keymap.set("n", "<c-h>", "<c-w>h")
 vim.keymap.set("n", "<c-l>", "<c-w>l")
 
-vim.keymap.set("n", "gx", ":!cd %:h && xdg-open '<cfile>'<cr>")
+vim.keymap.set("n", "gx", ":te cd %:h && xdg-open '<cfile>'<cr>")
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
@@ -114,6 +114,12 @@ wk.register({
       "Jumplist",
     },
     m = { ":Telescope make<cr>", "Run Make Targets" },
+    n = {
+      function()
+        require("telescope").extensions.notify.notify()
+      end,
+      "Show Notifications",
+    },
     p = {
       function()
         require("telescope").extensions.gopass.gopass()
@@ -121,76 +127,7 @@ wk.register({
       "Gopass",
     },
   },
-  g = {
-    name = "git",
-    b = {
-      name = "Branches",
-      c = {
-        function()
-          require("telescope.builtin").git_branches()
-        end,
-        "Checkout",
-      },
-      n = { utils.createGitBranch, "New Branch" },
-      d = { utils.gitDiffBranch, "Diff" },
-    },
-    c = { ":Git commit<cr>", "Commit" },
-    s = { ":Git<cr>", "Status" },
-    p = { ":Git pull<cr>", "Pull" },
-    P = { ":Git push<cr>", "Push" },
-    l = { ":LazyGit<cr>", "Lazygit" },
-    o = { ":!gh browse %<cr>", "Open in Github" },
-    h = {
-      name = "+Github",
-      c = {
-        name = "+Commits",
-        c = { "<cmd>GHCloseCommit<cr>", "Close" },
-        e = { "<cmd>GHExpandCommit<cr>", "Expand" },
-        o = { "<cmd>GHOpenToCommit<cr>", "Open To" },
-        p = { "<cmd>GHPopOutCommit<cr>", "Pop Out" },
-        z = { "<cmd>GHCollapseCommit<cr>", "Collapse" },
-      },
-      i = {
-        name = "+Issues",
-        p = { "<cmd>GHPreviewIssue<cr>", "Preview" },
-      },
-      l = {
-        name = "+Litee",
-        t = { "<cmd>LTPanel<cr>", "Toggle Panel" },
-      },
-      r = {
-        name = "+Review",
-        b = { "<cmd>GHStartReview<cr>", "Begin" },
-        c = { "<cmd>GHCloseReview<cr>", "Close" },
-        d = { "<cmd>GHDeleteReview<cr>", "Delete" },
-        e = { "<cmd>GHExpandReview<cr>", "Expand" },
-        s = { "<cmd>GHSubmitReview<cr>", "Submit" },
-        z = { "<cmd>GHCollapseReview<cr>", "Collapse" },
-      },
-      p = {
-        name = "+Pull Request",
-        c = { "<cmd>GHClosePR<cr>", "Close" },
-        d = { "<cmd>GHPRDetails<cr>", "Details" },
-        e = { "<cmd>GHExpandPR<cr>", "Expand" },
-        o = { "<cmd>GHOpenPR<cr>", "Open" },
-        p = { "<cmd>GHPopOutPR<cr>", "PopOut" },
-        r = { "<cmd>GHRefreshPR<cr>", "Refresh" },
-        t = { "<cmd>GHOpenToPR<cr>", "Open To" },
-        z = { "<cmd>GHCollapsePR<cr>", "Collapse" },
-      },
-      t = {
-        name = "+Threads",
-        c = { "<cmd>GHCreateThread<cr>", "Create" },
-        n = { "<cmd>GHNextThread<cr>", "Next" },
-        t = { "<cmd>GHToggleThread<cr>", "Toggle" },
-      },
-    },
-    g = {
-      name = "gists",
-      l = { ":GistList<cr>", "List Gists" },
-      c = { ":GistCreate<cr>", "Create Gists" },
-    },
-  },
+  g = require("mappings_git"),
   t = {
     function()
       require("neo-tree.command").execute({ toggle = true })
@@ -200,16 +137,16 @@ wk.register({
   l = { require("lazy").home, "Lazy" },
   u = {
     name = "utils",
-    a = { utils.replaceAcronym, "Replace Acronym under Cursor"},
+    a = { utils.replaceAcronym, "Replace Acronym under Cursor" },
     c = { utils.toggleCheckbox, "Toggle Checkbox" },
-    d = { ":Noice dismiss<cr>", "Dismiss Notifications"},
+    d = { ":Noice dismiss<cr>", "Dismiss Notifications" },
     f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     l = {
       name = "lsp/treesitter",
       r = { ":LspRestart<cr>", "Restart Lsp Server" },
       i = { ":LspInfo<cr>", "Lsp Server Info" },
       l = { ":LspLog<cr>", "Lsp Server Logs" },
-      t = { vim.treesitter.inspect_tree, "Show Treesitter Tree"},
+      t = { vim.treesitter.inspect_tree, "Show Treesitter Tree" },
     },
     m = {
       function()
@@ -282,10 +219,10 @@ wk.register({
     },
     n = { require("granite").new_note_from_template, "New Note" },
     l = { require("granite").link_to_file, "insert link" },
-    h = { require("granite").newHandwritten, "New Handwriting for this note"},
-    d = { ":ParseDate<cr>", "Parse selected Date String"},
-    p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks"},
-    r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor"},
+    h = { require("granite").newHandwritten, "New Handwriting for this note" },
+    d = { ":ParseDate<cr>", "Parse selected Date String" },
+    p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks" },
+    r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor" },
   },
   e = {
     name = "errors",
@@ -299,6 +236,21 @@ wk.register({
     a = { vim.lsp.buf.code_action, "code actions" },
     r = { vim.lsp.buf.rename, "rename function or variable" },
     d = { utils.toggle_autoformat, "toggle autoformat after save" },
+    s = {
+      name = "snippets",
+      e = {
+        function()
+          require("scissors").editSnippet()
+        end,
+        "Edit snippet",
+      },
+      a = {
+        function()
+          require("scissors").addNewSnippet()
+        end,
+        "Add Snippet",
+      },
+    },
     f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
     h = { vim.lsp.buf.signature_help, "Signature Help" },
     g = {
@@ -353,7 +305,7 @@ wk.register({
     i = { utils.goimpl, "Run go impl" },
     u = {
       name = "Utility Stuff",
-      t = { utils.generateGoStructTags, "Generate Go struct tags"},
+      t = { utils.generateGoStructTags, "Generate Go struct tags" },
     },
     w = {
       name = "workspace actions",

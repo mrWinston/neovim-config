@@ -84,45 +84,10 @@ local simpleLs = {
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
   "marksman", -- download from https://github.com/artempyanykh/marksman/releases
   --  "remark_ls",
+  "rust_analyzer",
+  "yamlls",
+  "ansiblels",
 }
-
-require("lspconfig").yamlls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    yaml = {
-      yamlVersion = "1.2",
-      schemas = {
-        --        ["http://localhost:9000/all.json"] = "app-interface/**/*.yaml",
-      },
-    },
-  },
-})
-
---lspconfig.gopls.setup({
---  on_attach = on_attach,
---  capabilities = capabilities,
---  settings = {
---    gopls = {
---      usePlaceholders = true,
---      semanticTokens = true,
---      staticcheck = true,
---      directoryFilters = {
---        "-**/node_modules",
---        "-**/generated",
---      },
---      hints = {
---        assignVariableTypes = true,
---        compositeLiteralFields = true,
---        compositeLiteralTypes = true,
---        constantValues = true,
---        functionTypeParameters = true,
---        parameterNames = true,
---        rangeVariableTypes = true,
---      },
---    },
---  },
---})
 
 for _, value in ipairs(simpleLs) do
   lspconfig[value].setup({
@@ -140,11 +105,13 @@ lspconfig.golangci_lint_ls.setup({
 })
 
 local luasnip = require("luasnip")
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" } })
+require("luasnip.loaders.from_vscode").lazy_load({ override_priority = 1000 })
+require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets/vscode" }, override_priority = 1100 })
+require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" }, override_priority = 1100 })
+require("luasnip.loaders.from_lua").load({ paths = { "./snippets" }, override_priority = 1100 })
 -- nvim-cmp setup
 local cmp = require("cmp")
-
+local lspkind = require('lspkind')
 ---@diagnostic disable-next-line: missing-fields
 cmp.setup({
   snippet = {
@@ -182,7 +149,7 @@ cmp.setup({
   preselect = cmp.PreselectMode.None,
   sources = {
     { name = "nvim_lsp" },
---    { name = "granite_cmp", trigger_characters = {"#"} },
+    -- { name = "granite_cmp", trigger_characters = {"#"} },
     { name = "luasnip" },
     --    { name = "nvim_lsp_signature_help" },
     { name = "path" },
@@ -197,7 +164,42 @@ cmp.setup({
       },
     },
   },
+  window = {
+    completion = cmp.config.window.bordered({
+      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+    }),
+    documentation = cmp.config.window.bordered({
+      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+    }),
+  },
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text', -- show only symbol annotations
+      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+      show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+    })
+  }
 })
+
+null_ls = require("null-ls")
+null_ls.setup({})
+local gotests_source = {}
+gotests_source.method = null_ls.methods.CODE_ACTION
+gotests_source.filetypes = { "go" }
+gotests_source.generator = {
+  fn = function(params)
+    return {
+      {
+        title = "Create Test",
+        action = function()
+          vim.print("Called create test thingy bla")
+        end,
+      },
+    }
+  end,
+}
+
+null_ls.register(gotests_source)
 
 -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 

@@ -17,7 +17,6 @@ utils.generateGoStructTags = function()
 
     vim.print(item.value)
     local fPath = vim.fn.expand("%:p")
-    
     vim.system({ "zsh", "-c", string.format("gomodifytags -file '%s' -w -all -add-tags 'json,yaml' -transform %s", fPath, item.value)}, { text = true }):wait()
   end)
 end

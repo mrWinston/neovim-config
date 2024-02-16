@@ -1,0 +1,6 @@
+{
+  "dcmember": {
+    "body": "${1:name}: ${2:type} = field(default_factory=${2})",
+    "prefix": "dcmember"
+  }
+}
