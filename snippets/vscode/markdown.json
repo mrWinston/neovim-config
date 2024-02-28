@@ -427,6 +427,72 @@
     ],
     "prefix": "crun"
   },
+  "crun describe": {
+    "body": [
+      "```sh",
+      "oc describe ${TYPE} ${NAME}",
+      "```"
+    ],
+    "prefix": "crun describe"
+  },
+  "crun get": {
+    "body": [
+      "```sh",
+      "oc ${2/(.*)/-n ${1:ns}/} get ${3:type} ${0}",
+      "```"
+    ],
+    "prefix": "crun get"
+  },
+  "crun get containers": {
+    "body": [
+      "```sh",
+      "oc -n ${NAMESPACE} get pod ${POD}  -ojson | jq -r '.spec.containers | .[] | .name'",
+      "```"
+    ],
+    "prefix": "crun get containers"
+  },
+  "crun get event for": {
+    "body": [
+      "```sh",
+      "oc -n ${NAMESPACE} get events --field-selector involvedObject.name=${NAME} --sort-by .lastTimestamp",
+      "```"
+    ],
+    "prefix": "crun get event for"
+  },
+  "crun get ovn master logs": {
+    "body": [
+      "```sh",
+      "for pod in $(oc -n openshift-ovn-kubernetes get pods -l app=ovnkube-master -o custom-columns=:.metadata.name --no-headers); do",
+      "  oc -n openshift-ovn-kubernetes logs \"${pod}\" --tail 50 -c ovnkube-master | grep -v \"lock is held by\" | grep -v \"failed to acquire lease\"",
+      "done",
+      "```"
+    ],
+    "prefix": "crun get ovn master logs"
+  },
+  "crun get pods": {
+    "body": [
+      "```sh",
+      "oc -n ${NAMESPACE} get pods -owide ",
+      "```"
+    ],
+    "prefix": "crun get pods"
+  },
+  "crun_blackbox": {
+    "body": [
+      "```sh",
+      "oc port-forward -n openshift-route-monitor-operator deployment/blackbox-exporter 9115",
+      "```"
+    ],
+    "prefix": "crun_blackbox"
+  },
+  "crun_co": {
+    "body": [
+      "```sh",
+      "oc get co",
+      "```"
+    ],
+    "prefix": "crun_co"
+  },
   "header 1": {
     "body": [
       "# ${0}"

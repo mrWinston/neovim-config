@@ -11,8 +11,14 @@ vim.keymap.set("n", "<c-k>", "<c-w>k")
 vim.keymap.set("n", "<c-h>", "<c-w>h")
 vim.keymap.set("n", "<c-l>", "<c-w>l")
 
-vim.keymap.set("n", "gx", ":te cd %:h && xdg-open '<cfile>'<cr>")
+-- vim.keymap.set("n", "gx", ":te cd %:h && xdg-open '<cfile>'<cr>")
 
+vim.keymap.set("n", "gx", function()
+  local path = vim.fn.expand("<cfile>", false)
+  local workdir = vim.fn.expand("%:h")
+
+  vim.system({ "xdg-open", path }, { text = true, cwd = workdir }, function(obj) end)
+end)
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 vim.keymap.set("t", "<c-h>", "<C-\\><C-N><C-w>h")
@@ -223,6 +229,7 @@ wk.register({
     d = { ":ParseDate<cr>", "Parse selected Date String" },
     p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks" },
     r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor" },
+    k = { vim.fn.MdrunKillCodeblock, "Kill running codeblock under cursor" },
   },
   e = {
     name = "errors",

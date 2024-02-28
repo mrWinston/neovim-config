@@ -84,7 +84,6 @@ local simpleLs = {
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
   "marksman", -- download from https://github.com/artempyanykh/marksman/releases
   --  "remark_ls",
-  "rust_analyzer",
   "yamlls",
   "ansiblels",
 }
@@ -105,6 +104,7 @@ lspconfig.golangci_lint_ls.setup({
 })
 
 local luasnip = require("luasnip")
+luasnip.log.set_loglevel("info")
 require("luasnip.loaders.from_vscode").lazy_load({ override_priority = 1000 })
 require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets/vscode" }, override_priority = 1100 })
 require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" }, override_priority = 1100 })
