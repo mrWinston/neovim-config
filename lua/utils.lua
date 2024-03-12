@@ -14,10 +14,15 @@ utils.generateGoStructTags = function()
       return item.show
     end,
   }, function(item)
-
     vim.print(item.value)
     local fPath = vim.fn.expand("%:p")
-    vim.system({ "zsh", "-c", string.format("gomodifytags -file '%s' -w -all -add-tags 'json,yaml' -transform %s", fPath, item.value)}, { text = true }):wait()
+    vim
+      .system({
+        "zsh",
+        "-c",
+        string.format("gomodifytags -file '%s' -w -all -add-tags 'json,yaml' -transform %s", fPath, item.value),
+      }, { text = true })
+      :wait()
   end)
 end
 
@@ -30,6 +35,15 @@ utils.splitString = function(inputstr, sep)
     table.insert(t, str)
   end
   return t
+end
+
+utils.open_link_under_cursor = function()
+  local path = tostring(vim.fn.expand("<cfile>", false))
+  local workdir = tostring(vim.fn.expand("%:h"))
+  if workdir == "" then
+    workdir = tostring(vim.fn.getcwd())
+  end
+  vim.system({ "xdg-open", path }, { text = true, cwd = workdir }, function() end)
 end
 
 utils.replaceAcronym = function()
@@ -213,6 +227,76 @@ utils.toggle_peek = function()
   else
     peek.open()
   end
+end
+
+local get_window_entry_maker = function()
+  local Path = require("plenary.path")
+  local telescope_utils = require("telescope.utils")
+  local cwd = vim.fn.getcwd()
+
+
+  return function(entry)
+    local bufname = entry.info.name ~= "" and entry.info.name or "[No Name]"
+    bufname = Path:new({ bufname }):normalize(cwd)
+    local lnum = entry.info.lnum ~= 0 and entry.info.lnum or 1
+    local element = {
+      valid = true,
+      value = bufname,
+      ordinal = tostring(entry.winnr) .. " : " .. bufname,
+      display = bufname,
+      tabpage = entry.tabpage,
+      winnr = entry.winnr,
+      bufnr = entry.bufnr,
+      filename = bufname,
+      lnum = lnum,
+    }
+    vim.print(element)
+    return element
+  end
+end
+
+utils.openSpecificWindow = function()
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  local all_wins = vim.api.nvim_list_wins()
+  local windows = {}
+  for _, winnr in ipairs(all_wins) do
+    local tabpage = vim.api.nvim_win_get_tabpage(winnr)
+    local bufnr = vim.api.nvim_win_get_buf(winnr)
+    local bufinfo = vim.fn.getbufinfo(bufnr)[1]
+
+    table.insert(windows, {
+      winnr = winnr,
+      tabpage = tabpage,
+      bufnr = bufnr,
+      info = bufinfo,
+    })
+  end
+
+  pickers
+    .new({}, {
+      prompt_title = "windows",
+      finder = finders.new_table({
+        results = windows,
+        entry_maker = get_window_entry_maker(),
+      }),
+      previewer = conf.grep_previewer({}),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(_)
+        actions.select_default:replace(function(bufnr)
+          local entry = action_state.get_selected_entry(bufnr)
+          actions.close(bufnr)
+          local winnr = entry.winnr
+          vim.api.nvim_set_current_win(winnr)
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 return utils

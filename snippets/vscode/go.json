@@ -128,6 +128,10 @@
     "description": "Snippet for if statement",
     "prefix": "if"
   },
+  "imlogrus": {
+    "body": "log \"github.com/sirupsen/logrus\"",
+    "prefix": "imlogrus"
+  },
   "init function": {
     "body": "func init() {\n\t$1\n}",
     "description": "Snippet for init function",

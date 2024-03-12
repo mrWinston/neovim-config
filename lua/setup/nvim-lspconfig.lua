@@ -32,42 +32,46 @@ capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true,
 }
 
-local lspconfig = require("lspconfig")
 
 require("neodev").setup({
-  override = function(root_dir, library)
-    if root_dir:find("granite") then
-      library.enabled = true
-      library.plugins = true
-    end
-  end,
 })
 
+local lspconfig = require("lspconfig")
+
 lspconfig.lua_ls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
   settings = {
     Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = "LuaJIT",
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = { "vim", "root", "awesome", "client", "screen" },
-      },
-      workspace = {
-        checkThirdParty = false,
-        -- Make the server aware of Neovim runtime files
-        library = { "/usr/share/awesome/lib" },
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
+      completion = {
+        callSnippet = "Replace"
+      }
+    }
+  }
 })
+-- lspconfig.lua_ls.setup({
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   settings = {
+--     Lua = {
+--       runtime = {
+--         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--         version = "LuaJIT",
+--       },
+--       diagnostics = {
+--         -- Get the language server to recognize the `vim` global
+--         globals = { "vim", "root", "awesome", "client", "screen" },
+--       },
+--       workspace = {
+--         checkThirdParty = false,
+--         -- Make the server aware of Neovim runtime files
+--         library = { "/usr/share/awesome/lib" },
+--       },
+--       -- Do not send telemetry data containing a randomized but unique identifier
+--       telemetry = {
+--         enable = false,
+--       },
+--     },
+--   },
+-- })
 
 -- yarn global add @volar/vue-language-server
 lspconfig.volar.setup({
@@ -95,13 +99,13 @@ for _, value in ipairs(simpleLs) do
   })
 end
 
-lspconfig.golangci_lint_ls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = {
-    command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" },
-  },
-})
+-- lspconfig.golangci_lint_ls.setup({
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   init_options = {
+--     command = { "golangci-lint", "run", "--out-format", "json", "-j", "2" },
+--   },
+-- })
 
 local luasnip = require("luasnip")
 luasnip.log.set_loglevel("info")
@@ -181,7 +185,7 @@ cmp.setup({
   }
 })
 
-null_ls = require("null-ls")
+local null_ls = require("null-ls")
 null_ls.setup({})
 local gotests_source = {}
 gotests_source.method = null_ls.methods.CODE_ACTION
@@ -200,7 +204,7 @@ gotests_source.generator = {
 }
 
 null_ls.register(gotests_source)
-
+null_ls.register(null_ls.builtins.diagnostics.revive)
 -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
 --vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })

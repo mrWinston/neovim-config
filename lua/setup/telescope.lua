@@ -24,6 +24,8 @@ require("telescope").setup({
     --    },
   },
 })
+
+require('telescope').load_extension('fzf')
 require("telescope").load_extension("luasnip")
 --require("telescope").load_extension("make")
 --require("telescope").load_extension("gopass")

@@ -1,3 +1,5 @@
+local utils = require("utils")
+
 vim.keymap.set({ "n", "v" }, ";", ":")
 vim.keymap.set({ "n", "v" }, ":", ";")
 
@@ -13,12 +15,8 @@ vim.keymap.set("n", "<c-l>", "<c-w>l")
 
 -- vim.keymap.set("n", "gx", ":te cd %:h && xdg-open '<cfile>'<cr>")
 
-vim.keymap.set("n", "gx", function()
-  local path = vim.fn.expand("<cfile>", false)
-  local workdir = vim.fn.expand("%:h")
+vim.keymap.set("n", "gx", utils.open_link_under_cursor)
 
-  vim.system({ "xdg-open", path }, { text = true, cwd = workdir }, function(obj) end)
-end)
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 vim.keymap.set("t", "<c-h>", "<C-\\><C-N><C-w>h")
@@ -28,7 +26,6 @@ vim.keymap.set("t", "<c-l>", "<C-\\><C-N><C-w>l")
 
 vim.keymap.set({ "n", "i" }, "<c-t>", ":tabnew<cr>")
 
-local utils = require("utils")
 -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
 vim.keymap.set("n", "zR", utils.openAllFolds)
 vim.keymap.set("n", "zM", utils.closeAllFolds)
@@ -69,9 +66,16 @@ wk.register({
   r = {
     name = "run",
     r = { askCommandRun, "Run command" },
-    t = {
+    f = { require("tools.runlib").Pick, "search runnables" },
+    u = {
       name = "terraform",
       p = { createRunFunc("terraform plan"), "plan" },
+    },
+    t = {
+      name = "ToggleTerm",
+      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
+      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
+      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
     },
   },
   f = {
@@ -120,7 +124,7 @@ wk.register({
       "Jumplist",
     },
     m = { ":Telescope make<cr>", "Run Make Targets" },
-    n = {
+   n = {
       function()
         require("telescope").extensions.notify.notify()
       end,
@@ -132,6 +136,11 @@ wk.register({
       end,
       "Gopass",
     },
+    w = {
+      function()
+        require("telescope").extensions.windows.windows()
+      end, "Show Windows"
+    }
   },
   g = require("mappings_git"),
   t = {
@@ -176,12 +185,6 @@ wk.register({
       name = "Spellcheck",
       e = { ":setlocal spell spelllang=en_us<cr>", "Enable English Spellcheck" },
       g = { ":setlocal spell spelllang=de_20<cr>", "Enable German Spellcheck" },
-    },
-    t = {
-      name = "ToggleTerm",
-      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
-      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
-      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
     },
     w = {
       name = "neovide scaling",

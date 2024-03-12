@@ -353,6 +353,7 @@ return {
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
+{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   {
     "mrcjkb/rustaceanvim",
     version = "^4", -- Recommended

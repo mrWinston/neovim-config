@@ -1,0 +1,13 @@
+{
+  "go": [
+    { "cmd": "go build", "name": "go build" },
+    { "cmd": "go install", "name": "go install" },
+    { "cmd": "go mod tidy", "name": "go mod tidy" },
+    { "cmd": "go get -u '<cfile>'", "name": "go get under cursor" }
+  ],
+  "*": [{ "cmd": "gitUpdate", "name": "git update" }],
+  "terraform": [
+    { "cmd": "terraform plan", "name": "terraform plan" },
+    { "cmd": "terraform apply", "name": "terraform apply" }
+  ]
+}
