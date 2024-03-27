@@ -33,7 +33,7 @@ require("mini.indentscope").setup({
 -- end
 -- see https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-ai.md
 require("mini.ai").setup({})
-require("ini.align").setup({})
+require("mini.align").setup({})
 
 require("mini.files").setup({})
 require("mini.surround").setup({})
