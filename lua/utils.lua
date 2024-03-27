@@ -1,4 +1,5 @@
 local utils = {}
+local io = require("io")
 
 utils.generateGoStructTags = function()
   local caseOptions = {
@@ -203,6 +204,72 @@ utils.visual_selection_range = function()
   end
 end
 
+utils.selected_lines = function()
+  local vstart = vim.fn.getpos('v')
+
+  local vend = vim.fn.getpos('.')
+
+  local line_start = vstart[2]
+  local line_end = vend[2]
+
+  -- or use api.nvim_buf_get_lines
+  local lines = vim.fn.getline(line_start, line_end)
+  if type(lines) == "table" then
+    return table.concat(lines, "\n")
+  elseif type(lines) == "string" then
+    return lines
+  else
+    return
+  end
+end
+
+utils.screenshot = function()
+  local selected_text = utils.selected_lines()
+  if not selected_text then
+    vim.print("Nothing selected")
+    return
+  end
+  local n = os.tmpname()
+  local f = io.open(n, "w+b")
+  if not f then
+    vim.print("error creating tmp file: " .. n)
+    return
+  end
+  f:write(selected_text)
+  f:close()
+
+  local completed = vim
+    .system(
+      {
+        "silicon",
+        "--language",
+        vim.bo.filetype,
+        "--pad-horiz",
+        "20",
+        "--pad-vert",
+        "20",
+        "--no-window-controls",
+        "--background",
+        "#00000000",
+        "--shadow-blur-radius",
+        "10",
+        "--shadow-color",
+        "#000000",
+        "-c",
+        n,
+      },
+      { text = true }
+    )
+    :wait()
+ os.remove(n)
+
+  if completed.code ~= 0 then
+    vim.notify("Error: " .. completed.stderr)
+  else
+    vim.notify("snapshot copied")
+  end
+end
+
 utils.toggle_autoformat = function()
   if not vim.g.disable_autoformat then
     vim.g.disable_autoformat = true
@@ -233,7 +300,6 @@ local get_window_entry_maker = function()
   local Path = require("plenary.path")
   local telescope_utils = require("telescope.utils")
   local cwd = vim.fn.getcwd()
-
 
   return function(entry)
     local bufname = entry.info.name ~= "" and entry.info.name or "[No Name]"

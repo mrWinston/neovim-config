@@ -2,24 +2,29 @@ local function get_config(plugin, opts)
   require("setup/" .. plugin.name:gsub(".nvim", ""):gsub(".lua", ""):lower())
 end
 
+local enabled = true
+
 return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = false,
     priority = 1000,
+    enable = enabled,
   },
   {
     "mrWinston/mdrun.nvim",
     -- use local files in code folder instead of gh
     dev = true,
     config = get_config,
+    enable = enabled,
   },
   {
     "mrWinston/granite.nvim",
     -- use local files in code folder instead of gh
     dev = true,
     config = get_config,
+    enable = enabled,
   },
   {
     "mrWinston/mdrun.nvim",
@@ -27,26 +32,31 @@ return {
     dev = true,
     config = get_config,
     --    lazy = false,
+    enable = enabled,
   },
   {
     "marko-cerovac/material.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "mfussenegger/nvim-dap",
     config = get_config,
+    enable = enabled,
   },
   {
     "folke/which-key.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "folke/neodev.nvim",
     priority = 1000,
+    enable = enabled,
   },
-  { "leoluz/nvim-dap-go" },
-  { "theHamsta/nvim-dap-virtual-text" },
-  { "gbrlsnchs/telescope-lsp-handlers.nvim" },
+  { "leoluz/nvim-dap-go", enable = enabled },
+  { "theHamsta/nvim-dap-virtual-text", enable = enabled },
+  { "gbrlsnchs/telescope-lsp-handlers.nvim", enable = enabled },
   {
 
     "edolphin-ydf/goimpl.nvim",
@@ -56,10 +66,15 @@ return {
       { "nvim-telescope/telescope.nvim" },
       { "nvim-treesitter/nvim-treesitter" },
     },
+    enable = enabled,
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap" },
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
+    },
+    enable = enabled,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -67,6 +82,7 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = get_config,
     lazy = true,
+    enable = enabled,
   },
   {
     "ldelossa/gh.nvim",
@@ -75,46 +91,53 @@ return {
     },
     config = get_config,
     lazy = false,
+    enable = enabled,
   },
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "saadparwaiz1/cmp_luasnip" },
+    enable = enabled,
   },
   {
     "benfowler/telescope-luasnip.nvim",
+    enable = enabled,
   },
   {
     "hrsh7th/nvim-cmp",
+    enable = enabled,
   },
   {
     "hrsh7th/cmp-nvim-lsp",
+    enable = enabled,
   },
   {
     "tpope/vim-fugitive",
+    enable = enabled,
   },
   {
     "tpope/vim-repeat",
+    enable = enabled,
   },
-  {
-    "tpope/vim-surround",
-  },
+--  {
+--    "tpope/vim-surround",
+--    enable = enabled,
+--  },
   {
     "lewis6991/gitsigns.nvim",
     config = get_config,
+    enable = enabled,
   },
-  -- {
-  --   "airblade/vim-gitgutter",
-  -- },
   {
     "stevearc/dressing.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "folke/flash.nvim",
     event = "VeryLazy",
     keys = {
       {
-        "s",
+        "f",
         mode = { "n", "x", "o" },
         function()
           require("flash").jump()
@@ -122,7 +145,7 @@ return {
         desc = "Flash",
       },
       {
-        "S",
+        "F",
         mode = { "n", "x", "o" },
         function()
           require("flash").treesitter()
@@ -146,7 +169,7 @@ return {
         desc = "Treesitter Search",
       },
       {
-        "<c-s>",
+        "<c-f>",
         mode = { "c" },
         function()
           require("flash").toggle()
@@ -154,35 +177,45 @@ return {
         desc = "Toggle Flash Search",
       },
     },
+    enable = enabled,
   },
   {
     "sopa0/telescope-makefile",
     --"mrWinston/telescope-makefile",
     --branch = "fix-merge-nil",
     dependencies = "akinsho/toggleterm.nvim",
+    enable = enabled,
   },
   {
     "norcalli/nvim-terminal.lua",
     config = get_config,
+    enable = enabled,
   },
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
     config = get_config,
+    enable = enabled,
   },
   {
     "simrat39/symbols-outline.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = get_config,
+    enable = enabled,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    enable = enabled,
   },
-  { "kyazdani42/nvim-web-devicons" },
+  {
+    "kyazdani42/nvim-web-devicons",
+    enable = enabled,
+  },
   {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
@@ -192,10 +225,12 @@ return {
       "s1n7ax/nvim-window-picker",
     },
     config = get_config,
+    enable = enabled,
   },
   {
     "habamax/vim-asciidoctor",
     config = get_config,
+    enable = enabled,
   },
   {
     "neovim/nvim-lspconfig",
@@ -204,27 +239,33 @@ return {
     opts = {
       inlay_hints = { enabled = true },
     },
+    enable = enabled,
   },
   {
     "akinsho/toggleterm.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "echasnovski/mini.nvim",
     config = get_config,
     version = false,
+    enable = enabled,
   },
   {
     "nvim-lualine/lualine.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "stevearc/conform.nvim",
     config = get_config,
+    enable = enabled,
   },
   {
     "michaelb/sniprun",
     build = "sh ./install.sh",
+    enable = enabled,
   },
   {
     "folke/noice.nvim",
@@ -238,6 +279,7 @@ return {
       --   If not available, we use `mini` as the fallback
       --      "rcarriga/nvim-notify",
     },
+    enable = enabled,
   },
   {
     "s1n7ax/nvim-window-picker",
@@ -247,20 +289,24 @@ return {
     config = function()
       require("window-picker").setup()
     end,
+    enable = enabled,
   },
   {
     "toppair/peek.nvim",
     build = "deno task --quiet build:fast",
     config = get_config,
+    enable = enabled,
   },
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {}, -- this is equalent to setup({}) function
+    enable = enabled,
   },
   {
     "seblj/nvim-tabline",
     config = get_config,
+    enable = enabled,
   },
   {
     "mikesmithgh/kitty-scrollback.nvim",
@@ -272,6 +318,7 @@ return {
     config = function()
       require("kitty-scrollback").setup()
     end,
+    enable = enabled,
   },
   {
     "rcarriga/nvim-notify",
@@ -280,6 +327,7 @@ return {
       render = "compact",
       timeout = "1000",
     },
+    enable = enabled,
   },
   {
     "nvim-neorg/neorg",
@@ -290,6 +338,7 @@ return {
       "laher/neorg-exec",
     },
     config = get_config,
+    enable = enabled,
   },
   {
     "chrisgrieser/nvim-scissors",
@@ -303,10 +352,12 @@ return {
         alsoSearchSnippetBody = false,
       },
     },
+    enable = enabled,
   },
   {
     "mrWinston/friendly-snippets",
     branch = "main",
+    enable = enabled,
   },
   {
     "NeogitOrg/neogit",
@@ -319,6 +370,7 @@ return {
       "ibhagwan/fzf-lua", -- optional
     },
     config = get_config,
+    enable = enabled,
   },
   {
     "Everblush/nvim",
@@ -329,6 +381,7 @@ return {
         contrast = true,
       },
     },
+    enable = enabled,
   },
   {
     "folke/tokyonight.nvim",
@@ -346,30 +399,99 @@ return {
       dim_inactive = false,
       lualine_bold = true,
     },
+    enable = enabled,
   },
   {
     "stevearc/oil.nvim",
     opts = {},
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    enable = enabled,
   },
-{ 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+    enable = enabled,
+  },
   {
     "mrcjkb/rustaceanvim",
     version = "^4", -- Recommended
     ft = { "rust" },
+    enable = enabled,
   },
-  "mfussenegger/nvim-ansible",
-  "onsails/lspkind.nvim",
-  "nvimtools/none-ls.nvim",
-  "ElPiloto/significant.nvim",
-  "folke/trouble.nvim",
-  "sindrets/diffview.nvim",
-  "hrsh7th/cmp-path",
-  "kdheepak/lazygit.nvim",
-  "rudylee/nvim-gist",
-  "fladson/vim-kitty",
-  "dkarter/bullets.vim",
-  "projekt0n/github-nvim-theme",
-  "f3fora/cmp-spell",
+  {
+    "mrWinston/codesnap.nvim",
+    build = "make build_generator",
+    --    version = "^1",
+    branch = "main",
+    dev = true,
+    opts = {
+      save_path = "/home/maschulz/Pictures/codesnap.png",
+      mac_window_bar = false, -- (Optional) MacOS style title bar switch
+      opacity = true, -- (Optional) The code snap has some opacity by default, set it to false for 100% opacity
+      watermark = "CodeSnap PR", -- (Optional) you can custom your own watermark, but if you don't like it, just set it to ""
+      preview_title = "CodeSnap.nvim", -- (Optional) preview page title
+      editor_font_family = "CaskaydiaCove Nerd Font", -- (Optional) preview code font family
+      watermark_font_family = "Pacifico", -- (Optional) watermark font family
+      bg_color = "#00000000",
+    },
+    enable = enabled,
+  },
+  {
+    "3rd/image.nvim",
+    enable = enabled,
+    config = get_config,
+  },
+  {
+    "mfussenegger/nvim-ansible",
+    enable = enabled,
+  },
+  {
+    "onsails/lspkind.nvim",
+    enable = enabled,
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    enable = enabled,
+  },
+  {
+    "ElPiloto/significant.nvim",
+    enable = enabled,
+  },
+  {
+    "folke/trouble.nvim",
+    enable = enabled,
+  },
+  {
+    "sindrets/diffview.nvim",
+    enable = enabled,
+  },
+  {
+    "hrsh7th/cmp-path",
+    enable = enabled,
+  },
+  {
+    "kdheepak/lazygit.nvim",
+    enable = enabled,
+  },
+  {
+    "rudylee/nvim-gist",
+    enable = enabled,
+  },
+  {
+    "fladson/vim-kitty",
+    enable = enabled,
+  },
+  {
+    "dkarter/bullets.vim",
+    enable = enabled,
+  },
+  {
+    "projekt0n/github-nvim-theme",
+    enable = enabled,
+  },
+  {
+    "f3fora/cmp-spell",
+    enable = enabled,
+  },
 }

@@ -119,9 +119,18 @@ vim.filetype.add({
   },
 })
 
+-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+-- parser_config.yaml = {
+--   install_info = {
+--     files = { "src/parser.c", "src/scanner.c" },
+--     url = "https://github.com/ikatyang/tree-sitter-yaml"
+--   },
+--   maintainers = { "@stsewd" }
+-- }
+
+
 vim.treesitter.language.register("markdown", "granite")
 
---local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 --parser_config.suricata = {
 --  install_info = {
 --    url = "https://github.com/bergmannf/tree-sitter-suricata", -- local path or git repo

@@ -233,6 +233,7 @@ wk.register({
     p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks" },
     r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor" },
     k = { vim.fn.MdrunKillCodeblock, "Kill running codeblock under cursor" },
+    s = { utils.screenshot, "Screenshot Selection"},
   },
   e = {
     name = "errors",

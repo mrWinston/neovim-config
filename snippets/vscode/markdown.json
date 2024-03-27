@@ -493,6 +493,16 @@
     ],
     "prefix": "crun_co"
   },
+  "graph": {
+    "body": [
+      "```dot",
+      "digraph {",
+      "",
+      "}",
+      "```"
+    ],
+    "prefix": "graph"
+  },
   "header 1": {
     "body": [
       "# ${0}"
@@ -534,5 +544,38 @@
     ],
     "description": "Add header level 6",
     "prefix": "h6"
+  },
+  "marp_columns": {
+    "body": [
+      "<div class=\"columns\">",
+      "<div>",
+      "",
+      "Content 1",
+      "",
+      "</div>",
+      "<div>",
+      "",
+      "Content2",
+      "",
+      "</div>",
+      "</div>"
+    ],
+    "prefix": "marp_columns"
+  },
+  "marp_footer": {
+    "body": "<!-- _footer: \"ref\" -->",
+    "prefix": "marp_footer"
+  },
+  "marp_header": {
+    "body": "<!-- _header: \"Outline\" -->",
+    "prefix": "marp_header"
+  },
+  "subgraph": {
+    "body": [
+      "subgraph $1 {",
+      "  label = \"$2\"",
+      "}"
+    ],
+    "prefix": "subgraph"
   }
 }

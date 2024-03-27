@@ -81,7 +81,7 @@ lspconfig.volar.setup({
 local simpleLs = {
   "gopls",
   "bashls",
-  "tsserver", -- yarn global add typescript typescript-language-server
+  -- "tsserver", -- yarn global add typescript typescript-language-server
   "eslint", -- yarn global add vscode-langservers-extracted
   --  "jedi_language_server",
   "pylsp",
@@ -90,6 +90,7 @@ local simpleLs = {
   --  "remark_ls",
   "yamlls",
   "ansiblels",
+  "denols",
 }
 
 for _, value in ipairs(simpleLs) do
