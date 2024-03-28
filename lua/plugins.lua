@@ -326,6 +326,7 @@ return {
     opts = {
       render = "compact",
       timeout = "1000",
+      top_down = false,
     },
     enable = enabled,
   },

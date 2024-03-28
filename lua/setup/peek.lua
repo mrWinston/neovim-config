@@ -1,1 +1,3 @@
-require('peek').setup({})
+require('peek').setup({
+  theme = "light",
+})
