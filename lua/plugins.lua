@@ -433,7 +433,7 @@ return {
     build = "make build_generator",
     --    version = "^1",
     branch = "main",
-    dev = true,
+--    dev = true,
     opts = {
       save_path = "/home/maschulz/Pictures/codesnap.png",
       mac_window_bar = false, -- (Optional) MacOS style title bar switch
