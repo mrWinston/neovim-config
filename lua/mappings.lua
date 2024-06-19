@@ -231,7 +231,7 @@ wk.register({
     h = { require("granite").newHandwritten, "New Handwriting for this note" },
     d = { ":ParseDate<cr>", "Parse selected Date String" },
     p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks" },
-    r = { vim.fn.MdrunRunCodeblock, "run codeblock under cursor" },
+    r = { require("mdrun").run_codeblock_under_cursor, "run codeblock under cursor" },
     k = { vim.fn.MdrunKillCodeblock, "Kill running codeblock under cursor" },
     s = { utils.screenshot, "Screenshot Selection"},
   },

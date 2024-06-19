@@ -40,3 +40,13 @@ require("mini.surround").setup({})
 
 require("mini.comment").setup({
 })
+
+require("mini.jump2d").setup({
+  view = {
+    -- Whether to dim lines with at least one jump spot
+    dim = true,
+
+    -- How many steps ahead to show. Set to big number to show all steps.
+    n_steps_ahead = 2,
+  },
+})

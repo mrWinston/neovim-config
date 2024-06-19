@@ -35,14 +35,6 @@ return {
     enable = enabled,
   },
   {
-    "mrWinston/mdrun.nvim",
-    -- use local files in code folder instead of gh
-    dev = true,
-    config = get_config,
-    --    lazy = false,
-    enable = enabled,
-  },
-  {
     "marko-cerovac/material.nvim",
     config = get_config,
     enable = enabled,
@@ -66,7 +58,6 @@ return {
   { "theHamsta/nvim-dap-virtual-text", enable = enabled },
   { "gbrlsnchs/telescope-lsp-handlers.nvim", enable = enabled },
   {
-
     "edolphin-ydf/goimpl.nvim",
     dependencies = {
       { "nvim-lua/plenary.nvim" },
@@ -138,53 +129,6 @@ return {
   {
     "stevearc/dressing.nvim",
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    keys = {
-      {
-        "f",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").jump()
-        end,
-        desc = "Flash",
-      },
-      {
-        "F",
-        mode = { "n", "x", "o" },
-        function()
-          require("flash").treesitter()
-        end,
-        desc = "Flash Treesitter",
-      },
-      {
-        "r",
-        mode = "o",
-        function()
-          require("flash").remote()
-        end,
-        desc = "Remote Flash",
-      },
-      {
-        "R",
-        mode = { "o", "x" },
-        function()
-          require("flash").treesitter_search()
-        end,
-        desc = "Treesitter Search",
-      },
-      {
-        "<c-f>",
-        mode = { "c" },
-        function()
-          require("flash").toggle()
-        end,
-        desc = "Toggle Flash Search",
-      },
-    },
     enable = enabled,
   },
   {
@@ -336,17 +280,6 @@ return {
       timeout = "1000",
       top_down = false,
     },
-    enable = enabled,
-  },
-  {
-    "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-neorg/neorg-telescope",
-      "laher/neorg-exec",
-    },
-    config = get_config,
     enable = enabled,
   },
   {
@@ -502,5 +435,11 @@ return {
   {
     "f3fora/cmp-spell",
     enable = enabled,
+  },
+  {
+    "grapp-dev/nui-components.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim"
+    }
   },
 }

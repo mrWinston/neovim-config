@@ -9,6 +9,7 @@ local kittyToNvim = {
   ["Catppuccin-Latte"] = "catppuccin-latte",
   ["Everblush"] = "everblush",
   ["Tokyo Night"] = "tokyonight-night",
+  ["Tokyo Night Day"] = "tokyonight-day",
 }
 utils.set_table_default(kittyToNvim, "catppuccin-mocha")
 local obj = vim

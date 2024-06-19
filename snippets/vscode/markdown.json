@@ -407,14 +407,11 @@
     "body": [
       "```env",
       "CLUSTER=${1}",
+      "KUBECONFIG=",
       "```",
       "",
       "```sh",
       "ocm backplane login --multi \\$CLUSTER",
-      "```",
-      "",
-      "```env",
-      "KUBECONFIG=",
       "```"
     ],
     "prefix": "clogin"
@@ -485,6 +482,14 @@
     ],
     "prefix": "crun_blackbox"
   },
+  "crun_cluster_context": {
+    "body": [
+      "```sh",
+      "osdctl cluster context $CLUSTER_ID",
+      "```"
+    ],
+    "prefix": "crun_cluster_context"
+  },
   "crun_co": {
     "body": [
       "```sh",
@@ -492,6 +497,14 @@
       "```"
     ],
     "prefix": "crun_co"
+  },
+  "crun_console": {
+    "body": [
+      "```sh",
+      "ocm backplane console",
+      "```"
+    ],
+    "prefix": "crun_console"
   },
   "graph": {
     "body": [
@@ -569,6 +582,18 @@
   "marp_header": {
     "body": "<!-- _header: \"Outline\" -->",
     "prefix": "marp_header"
+  },
+  "oc_get_machines": {
+    "body": "oc -n openshift-machine-api get machines",
+    "prefix": "oc_get_machines"
+  },
+  "oc_pods_mon": {
+    "body": "oc -n openshift-monitoring get pods -owide",
+    "prefix": "oc_pods_mon"
+  },
+  "oc_pods_uwm": {
+    "body": "oc -n openshift-user-workload-monitoring get pods -owide",
+    "prefix": "oc_pods_uwm"
   },
   "subgraph": {
     "body": [
