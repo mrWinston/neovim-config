@@ -1,6 +1,47 @@
 local utils = {}
 local io = require("io")
 
+
+function utils.colorize()
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.statuscolumn = ""
+  vim.wo.signcolumn = "no"
+  vim.opt.listchars = { space = " " }
+
+  local buf = vim.api.nvim_get_current_buf()
+
+  local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+  while #lines > 0 and vim.trim(lines[#lines]) == "" do
+    lines[#lines] = nil
+  end
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, {})
+
+  vim.b[buf].minianimate_disable = true
+
+  vim.api.nvim_chan_send(vim.api.nvim_open_term(buf, {}), table.concat(lines, "\r\n"))
+  vim.keymap.set("n", "q", "<cmd>qa!<cr>", { silent = true, buffer = buf })
+  vim.api.nvim_create_autocmd("TextChanged", { buffer = buf, command = "normal! G$" })
+  vim.api.nvim_create_autocmd("TermEnter", { buffer = buf, command = "stopinsert" })
+
+  vim.defer_fn(function()
+    vim.b[buf].minianimate_disable = false
+  end, 2000)
+end
+
+utils.lspstuff = function()
+  local params = vim.lsp.util.make_position_params()
+  params.context = {
+    includeDeclaration = false,
+  }
+  vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_references, params, function (err, result, context, config)
+    vim.print("err:")
+    vim.print(err)
+    vim.print("Result:")
+    vim.print(result)
+  end)
+end
+
 utils.generateGoStructTags = function()
   local caseOptions = {
     { value = "snakecase", show = "snake_case" },
@@ -205,9 +246,9 @@ utils.visual_selection_range = function()
 end
 
 utils.selected_lines = function()
-  local vstart = vim.fn.getpos('v')
+  local vstart = vim.fn.getpos("v")
 
-  local vend = vim.fn.getpos('.')
+  local vend = vim.fn.getpos(".")
 
   local line_start = vstart[2]
   local line_end = vend[2]
@@ -239,29 +280,26 @@ utils.screenshot = function()
   f:close()
 
   local completed = vim
-    .system(
-      {
-        "silicon",
-        "--language",
-        vim.bo.filetype,
-        "--pad-horiz",
-        "20",
-        "--pad-vert",
-        "20",
-        "--no-window-controls",
-        "--background",
-        "#00000000",
-        "--shadow-blur-radius",
-        "10",
-        "--shadow-color",
-        "#000000",
-        "-c",
-        n,
-      },
-      { text = true }
-    )
+    .system({
+      "silicon",
+      "--language",
+      vim.bo.filetype,
+      "--pad-horiz",
+      "20",
+      "--pad-vert",
+      "20",
+      "--no-window-controls",
+      "--background",
+      "#00000000",
+      "--shadow-blur-radius",
+      "10",
+      "--shadow-color",
+      "#000000",
+      "-c",
+      n,
+    }, { text = true })
     :wait()
- os.remove(n)
+  os.remove(n)
 
   if completed.code ~= 0 then
     vim.notify("Error: " .. completed.stderr)

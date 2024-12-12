@@ -1,7 +1,6 @@
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
@@ -32,9 +31,7 @@ capabilities.textDocument.foldingRange = {
   lineFoldingOnly = true,
 }
 
-
-require("neodev").setup({
-})
+require("neodev").setup({})
 
 local lspconfig = require("lspconfig")
 
@@ -42,10 +39,10 @@ lspconfig.lua_ls.setup({
   settings = {
     Lua = {
       completion = {
-        callSnippet = "Replace"
-      }
-    }
-  }
+        callSnippet = "Replace",
+      },
+    },
+  },
 })
 
 -- yarn global add @volar/vue-language-server
@@ -75,6 +72,32 @@ for _, value in ipairs(simpleLs) do
   })
 end
 
+local configs = require("lspconfig/configs")
+
+-- if not configs.golangcilsp then
+--   configs.golangcilsp = {
+--     default_config = {
+--       cmd = { "golangci-lint-langserver", "-debug" },
+--       root_dir = lspconfig.util.root_pattern("go.mod", ".git"),
+--       init_options = {
+--         command = {
+--           "golangci-lint",
+--           "run",
+--           "--fast",
+--           "--out-format",
+--           "json",
+--           "--issues-exit-code=1",
+--         },
+--       },
+--     },
+--   }
+-- end
+
+-- lspconfig.golangci_lint_ls.setup({
+--   filetypes = { "go", "gomod" },
+--   root_dir = lspconfig.util.root_pattern("go.mod", ".git"),
+-- })
+
 local luasnip = require("luasnip")
 luasnip.log.set_loglevel("info")
 require("luasnip.loaders.from_vscode").lazy_load({ override_priority = 1000 })
@@ -83,7 +106,7 @@ require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" }, o
 require("luasnip.loaders.from_lua").load({ paths = { "./snippets" }, override_priority = 1100 })
 -- nvim-cmp setup
 local cmp = require("cmp")
-local lspkind = require('lspkind')
+local lspkind = require("lspkind")
 ---@diagnostic disable-next-line: missing-fields
 cmp.setup({
   snippet = {
@@ -146,15 +169,21 @@ cmp.setup({
   },
   formatting = {
     format = lspkind.cmp_format({
-      mode = 'symbol_text', -- show only symbol annotations
-      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+      mode = "symbol_text", -- show only symbol annotations
+      ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
       show_labelDetails = true, -- show labelDetails in menu. Disabled by default
-    })
-  }
+    }),
+  },
 })
 
 local null_ls = require("null-ls")
-null_ls.setup({})
+null_ls.setup({
+  sources = {
+    null_ls.builtins.code_actions.gomodifytags,
+    null_ls.builtins.code_actions.impl,
+    null_ls.builtins.diagnostics.golangci_lint,
+  },
+})
 local gotests_source = {}
 gotests_source.method = null_ls.methods.CODE_ACTION
 gotests_source.filetypes = { "go" }
@@ -172,7 +201,9 @@ gotests_source.generator = {
 }
 
 null_ls.register(gotests_source)
-null_ls.register(null_ls.builtins.diagnostics.revive)
+-- null_ls.register(null_ls.builtins.diagnostics.revive.with({
+--   args = { "-exclude", "./vendor/...", "-formatter", "json", "./..." },
+-- }))
 -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
 --vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })

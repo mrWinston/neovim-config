@@ -14,7 +14,29 @@ require("telescope").setup({
       },
     },
   },
-  pickers = {},
+  pickers = {
+    builtin = {
+      include_extensions = true,
+    },
+    lsp_implementations = {
+      jump_type = "never",
+    },
+    lsp_definitions = {
+      jump_type = "never",
+    },
+    lsp_type_definitions = {
+      jump_type = "never",
+    },
+    lsp_incoming_calls = {
+      jump_type = "never",
+    },
+    lsp_outgoing_calls = {
+      jump_type = "never",
+    },
+    lsp_references = {
+      jump_type = "never",
+    },
+  },
 
   extensions = {
     --    lsp_handlers = {
@@ -25,7 +47,7 @@ require("telescope").setup({
   },
 })
 
-require('telescope').load_extension('fzf')
+require("telescope").load_extension("fzf")
 require("telescope").load_extension("luasnip")
 --require("telescope").load_extension("make")
 --require("telescope").load_extension("gopass")

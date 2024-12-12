@@ -8,7 +8,7 @@ local options = {
   ignorecase = true,
   number = true,
   relativenumber = true,
-  scrolloff = 1,
+  scrolloff = 10,
   shellcmdflag = "-c",
   shiftwidth = 2,
   showcmd = true,
@@ -59,4 +59,6 @@ end
 for k, v in pairs(globalOptions) do
   vim.g[k] = v
 end
+
+vim.cmd([[autocmd FileType go set noexpandtab]])
 

@@ -304,42 +304,27 @@ local function saveDapConfigs()
   end
 end
 
-wk.register({
-  d = {
-    name = "debugger",
-    d = { dap.continue, "Start Debugging" },
-    b = { dap.toggle_breakpoint, "Toggle Breakpoint" },
-    pb = {
-      function()
-        dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
-      end,
-      "Toggle Breakpoint",
-    },
-    k = { dap.terminate, "Kill Session" },
-    u = { dapui.toggle, "Toggle dap ui" },
-    r = { dap.run_last, "Re-run last session" },
-    l = { ":DapShowLog<cr>", "Show Log" },
-    c = {
-      name = "Config Management",
-      a = { addDebugConfig, "Add Debug Configuration" },
-      m = { modifyDebugConfig, "Modify Debug Config" },
-      s = { saveDapConfigs, "Save Debug Config" },
-      l = { loadDapConfig, "Load Debug Config" },
-      p = {
-        function()
-          vim.print(dap.configurations.go)
-        end,
-        "Print Debug Config",
-      },
-      j = { require("dap.ext.vscode").load_launchjs, "load launch.json" },
-    },
-    s = {
-      name = "Step",
-      n = { ":DapStepOver<cr>", "Step Next/Over" },
-      i = { ":DapStepInto<cr>", "Step Into" },
-      o = { ":DapStepOut<cr>", "Step Out" },
-    },
-  },
-}, {
-  prefix = "<leader>",
+wk.add({
+  {
+    mode = { "n", "v" },
+    { "<leader>d", group = "debugger" },
+    { "<leader>db", dap.toggle_breakpoint, desc = "Toggle Breakpoint" },
+    { "<leader>dc", group = "Config Management" },
+    { "<leader>dca", addDebugConfig, desc = "Add Debug Configuration" },
+    { "<leader>dcj", require("dap.ext.vscode").load_launchjs, desc = "load launch.json" },
+    { "<leader>dcl", loadDapConfig, desc = "Load Debug Config" },
+    { "<leader>dcm", modifyDebugConfig, desc = "Modify Debug Config" },
+    { "<leader>dcp", function()vim.print(dap.configurations.go)end, desc = "Print Debug Config" },
+    { "<leader>dcs", saveDapConfigs, desc = "Save Debug Config" },
+    { "<leader>dd", dap.continue, desc = "Start Debugging" },
+    { "<leader>dk", dap.terminate, desc = "Kill Session" },
+    { "<leader>dl", ":DapShowLog<cr>", desc = "Show Log" },
+    { "<leader>dpb", dap.toggle_breakpoint, desc = "Toggle Breakpoint" },
+    { "<leader>dr", dap.run_last , desc = "Re-run last session" },
+    { "<leader>ds", group = "Step" },
+    { "<leader>dsi", ":DapStepInto<cr>", desc = "Step Into" },
+    { "<leader>dsn", ":DapStepOver<cr>", desc = "Step Next/Over" },
+    { "<leader>dso", ":DapStepOut<cr>", desc = "Step Out" },
+    { "<leader>du", dapui.toggle, desc = "Toggle dap ui" },
+  }
 })

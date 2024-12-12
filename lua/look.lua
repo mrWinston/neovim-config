@@ -18,7 +18,10 @@ local obj = vim
   })
   :wait()
 local theme_name = string.gsub(obj.stdout, "^%s*(.-)%s*$", "%1")
-vim.cmd("colorscheme " .. kittyToNvim[theme_name])
+--vim.cmd("colorscheme " .. kittyToNvim[theme_name])
+vim.cmd("colorscheme base16-tomorrow-night")
+
+
 
 -- set fold colors to something more tolerable
 

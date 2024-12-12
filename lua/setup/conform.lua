@@ -28,6 +28,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   end,
 })
 
-local shfmt = require("conform.formatters.shfmt")
-table.insert(shfmt.args, "-i")
-table.insert(shfmt.args, "2")
+-- local shfmt = require("conform.formatters.shfmt")
+-- table.insert(shfmt.args, "-i")
+-- table.insert(shfmt.args, "2")

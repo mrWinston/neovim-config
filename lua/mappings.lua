@@ -32,6 +32,12 @@ vim.keymap.set("n", "zM", utils.closeAllFolds)
 vim.keymap.set("n", "zm", utils.decreaseFoldLevel)
 vim.keymap.set("n", "zr", utils.increaseFoldLevel)
 
+
+--  map + <C-W>+
+--  map - <C-W>-
+vim.keymap.set("n", "+", "<C-W>>")
+vim.keymap.set("n", "-", "<C-W><")
+
 local wk = require("which-key")
 
 local change_neovide_scale_factor = function(delta)
@@ -62,273 +68,165 @@ local createRunFunc = function(command)
   end
 end
 
-wk.register({
-  r = {
-    name = "run",
-    r = { askCommandRun, "Run command" },
-    f = { require("tools.runlib").Pick, "search runnables" },
-    u = {
-      name = "terraform",
-      p = { createRunFunc("terraform plan"), "plan" },
+
+
+local gs = require("gitsigns.actions")
+wk.add(
+  {
+    {
+      mode = { "n", "v" },
+      { "<leader>c", group = "code" },
+      { "<leader>ca", vim.lsp.buf.code_action, desc = "code actions" },
+      { "<leader>cd", utils.toggle_autoformat, desc = "toggle autoformat after save" },
+      { "<leader>cf", utils.wrapFunction(require("conform").format, { lsp_fallback = true }) , desc = "format file" },
+      { "<leader>cg", group = "goto" },
+      { "<leader>cgI", require("telescope.builtin").lsp_implementations, desc = "Implementations" },
+      { "<leader>cgd", require("telescope.builtin").lsp_definitions, desc = "Definition" },
+      { "<leader>cgi", require("telescope.builtin").lsp_incoming_calls, desc = "Incoming Calls" },
+      { "<leader>cgo", require("telescope.builtin").lsp_outgoing_calls, desc = "Outgoing Calls" },
+      { "<leader>cgr", require("telescope.builtin").lsp_references, desc = "References" },
+      { "<leader>cgt", require("telescope.builtin").lsp_type_definitions, desc = "Type Definitions" },
+      { "<leader>ch", vim.lsp.buf.signature_help, desc = "Signature Help" },
+      { "<leader>ci", utils.goimpl, desc = "Run go impl" },
+      { "<leader>cr", vim.lsp.buf.rename, desc = "rename function or variable" },
+      { "<leader>cs", group = "snippets" },
+      { "<leader>csa", require("scissors").editSnippet, desc = "Add Snippet" },
+      { "<leader>cse", require("scissors").editSnippet, desc = "Edit snippet" },
+      { "<leader>cu", group = "Utility Stuff" },
+      { "<leader>cut",utils.generateGoStructTags, desc = "Generate Go struct tags" },
+      { "<leader>e", group = "errors" },
+      { "<leader>el", vim.diagnostic.setloclist, desc = "Show Errors" },
+      { "<leader>en", utils.wrapFunction(vim.diagnostic.jump, {count = 1}), desc = "Go to Next" },
+      { "<leader>eo", vim.diagnostic.open_float, desc = "Open Float Window" },
+      { "<leader>ep", utils.wrapFunction(vim.diagnostic.jump, {count = -1}), desc = "Go to Previous" },
+      { "<leader>f", group = "find" },
+      { "<leader>fb", require("telescope.builtin").buffers, desc = "Buffers" },
+      { "<leader>fc", require("telescope.builtin").commands, desc = "Commands" },
+      { "<leader>ff",require("telescope.builtin").find_files , desc = "Files" },
+      { "<leader>fg", require("telescope.builtin").live_grep, desc = "File content (grep)" },
+      { "<leader>fh", require("telescope.builtin").help_tags, desc = "Help" },
+      { "<leader>fj", require("telescope.builtin").jumplist, desc = "Jumplist" },
+      { "<leader>fm", ":Telescope make<cr>", desc = "Run Make Targets" },
+      { "<leader>fn", require("telescope").extensions.notify.notify, desc = "Show Notifications" },
+      { "<leader>fp", require("telescope").extensions.gopass.gopass, desc = "Gopass" },
+      { "<leader>fs", require("telescope.builtin").treesitter, desc = "Symbols" },
+      { "<leader>ft", require("telescope.builtin").builtin, desc = "Telescope Pickers" },
+      { "<leader>fw", require("telescope").extensions.windows.windows, desc = "Show Windows" },
+
+      { "<leader>g", group = "git" },
+      { "<leader>gG", group = "gists" },
+      { "<leader>gGc", ":GistCreate<cr>", desc = "Create Gists" },
+      { "<leader>gGl", ":GistList<cr>", desc = "List Gists" },
+      { "<leader>gP", ":Git push<cr>", desc = "Push" },
+      { "<leader>gb", group = "Branches" },
+      { "<leader>gbc",require("telescope.builtin").git_branches, desc = "Checkout" },
+      { "<leader>gbd",utils.gitDiffBranch, desc = "Diff" },
+      { "<leader>gbn",utils.createGitBranch, desc = "New Branch" },
+      { "<leader>gc", ":Git commit<cr>", desc = "Commit" },
+      { "<leader>gg", group = "gitSigns" },
+      { "<leader>ggB", gs.stage_buffer, desc = "stage buffer" },
+      { "<leader>ggH", gs.select_hunk, desc = "Select Hunk" },
+      { "<leader>ggI", gs.preview_hunk, desc = "Inspect Hunk" },
+      { "<leader>ggS",gs.undo_stage_hunk, desc = "Undo Stage Hunk" },
+      { "<leader>ggb",gs.blame_line , desc = "Blame Line" },
+      { "<leader>ggi",gs.preview_hunk_inline, desc = "Inspect Hunk (inline)" },
+      { "<leader>ggn", gs.next_hunk, desc = "Next Hunk" },
+      { "<leader>ggp", gs.prev_hunk, desc = "Prev Hunk" },
+      { "<leader>ggs",gs.stage_hunk, desc = "Stage Hunk" },
+      { "<leader>ggt", group = "Toggle" },
+      { "<leader>ggtb", gs.toggle_current_line_blame, desc = "Toggle line blame" },
+      { "<leader>ggtd", gs.toggle_deleted, desc = "Toggle Deleted" },
+      { "<leader>ggtl", gs.toggle_linehl, desc = "Toggle line higlighting" },
+      { "<leader>ggtn", gs.toggle_numhl, desc = "Toggle num higlighting" },
+      { "<leader>ggts",gs.toggle_signs, desc = "Toggle signs" },
+      { "<leader>ggtw", gs.toggle_word_diff, desc = "Toggle word diff" },
+      { "<leader>gh", group = "Github" },
+      { "<leader>ghc", group = "Commits" },
+      { "<leader>ghcc", "<cmd>GHCloseCommit<cr>", desc = "Close" },
+      { "<leader>ghce", "<cmd>GHExpandCommit<cr>", desc = "Expand" },
+      { "<leader>ghco", "<cmd>GHOpenToCommit<cr>", desc = "Open To" },
+      { "<leader>ghcp", "<cmd>GHPopOutCommit<cr>", desc = "Pop Out" },
+      { "<leader>ghcz", "<cmd>GHCollapseCommit<cr>", desc = "Collapse" },
+      { "<leader>ghi", group = "Issues" },
+      { "<leader>ghip", "<cmd>GHPreviewIssue<cr>", desc = "Preview" },
+      { "<leader>ghl", group = "Litee" },
+      { "<leader>ghlt", "<cmd>LTPanel<cr>", desc = "Toggle Panel" },
+      { "<leader>ghp", group = "Pull Request" },
+      { "<leader>ghpc", "<cmd>GHClosePR<cr>", desc = "Close" },
+      { "<leader>ghpd", "<cmd>GHPRDetails<cr>", desc = "Details" },
+      { "<leader>ghpe", "<cmd>GHExpandPR<cr>", desc = "Expand" },
+      { "<leader>ghpo", "<cmd>GHOpenPR<cr>", desc = "Open" },
+      { "<leader>ghpp", "<cmd>GHPopOutPR<cr>", desc = "PopOut" },
+      { "<leader>ghpr", "<cmd>GHRefreshPR<cr>", desc = "Refresh" },
+      { "<leader>ghpt", "<cmd>GHOpenToPR<cr>", desc = "Open To" },
+      { "<leader>ghpz", "<cmd>GHCollapsePR<cr>", desc = "Collapse" },
+      { "<leader>ghr", group = "Review" },
+      { "<leader>ghrb", "<cmd>GHStartReview<cr>", desc = "Begin" },
+      { "<leader>ghrc", "<cmd>GHCloseReview<cr>", desc = "Close" },
+      { "<leader>ghrd", "<cmd>GHDeleteReview<cr>", desc = "Delete" },
+      { "<leader>ghre", "<cmd>GHExpandReview<cr>", desc = "Expand" },
+      { "<leader>ghrs", "<cmd>GHSubmitReview<cr>", desc = "Submit" },
+      { "<leader>ghrz", "<cmd>GHCollapseReview<cr>", desc = "Collapse" },
+      { "<leader>ght", group = "Threads" },
+      { "<leader>ghtc", "<cmd>GHCreateThread<cr>", desc = "Create" },
+      { "<leader>ghtn", "<cmd>GHNextThread<cr>", desc = "Next" },
+      { "<leader>ghtt", "<cmd>GHToggleThread<cr>", desc = "Toggle" },
+      { "<leader>gl", ":LazyGit<cr>", desc = "Lazygit" },
+      { "<leader>go", ":!gh browse %:.<cr>", desc = "Open in Github" },
+      { "<leader>gp", ":Git pull<cr>", desc = "Pull" },
+      { "<leader>gs", ":Git<cr>", desc = "Status" },
+
+      { "<leader>k", group = "Knowledge mappings" },
+      { "<leader>kd", ":ParseDate<cr>", desc = "Parse selected Date String" },
+      { "<leader>kh",require("granite").newHandwritten , desc = "New Handwriting for this note" },
+      { "<leader>kk", vim.fn.MdrunKillCodeblock, desc = "Kill running codeblock under cursor" },
+      { "<leader>kl", require("granite").link_to_file, desc = "insert link" },
+      { "<leader>kn", require("granite").new_note_from_template, desc = "New Note" },
+      { "<leader>ko", require("granite").open_note, desc = "Open note" },
+      { "<leader>kp", require("granite").ParseCodequeries, desc = "Parse and fill codequery blocks" },
+      { "<leader>kr", require("mdrun").run_codeblock_under_cursor, desc = "run codeblock under cursor" },
+      { "<leader>ks", utils.screenshot, desc = "Screenshot Selection" },
+      { "<leader>kt", group = "Todos" },
+      { "<leader>kta", utils.wrapFunction(require("telescope").extensions.granite_telescope.granite_telescope, {}), desc = "all Todos" },
+      { "<leader>ktd",utils.wrapFunction(require("telescope").extensions.granite_telescope.granite_telescope, { states = {"DONE"}}), desc = "done Todos" },
+      { "<leader>kto",utils.wrapFunction(require("telescope").extensions.granite_telescope.granite_telescope, { states = {"OPEN", "IN_PROGRESS"}}), desc = "Open Todos" },
+
+      { "<leader>l", require("lazy").home, desc = "Lazy" },
+      { "<leader>r", group = "run" },
+      { "<leader>rf", require("tools.runlib").Pick, desc = "search runnables" },
+      { "<leader>rr",askCommandRun, desc = "Run command" },
+      { "<leader>rt", group = "ToggleTerm" },
+      { "<leader>rtl", ":ToggleTermSendCurrentLine<cr>", desc = "Run Line" },
+      { "<leader>rtt", ":ToggleTerm<cr>", desc = "Toggle Terminal Window" },
+      { "<leader>rtv", ":ToggleTermSendVisualSelection<cr>", desc = "Run Selection" },
+      { "<leader>ru", group = "terraform" },
+      { "<leader>rup", createRunFunc("terraform plan"), desc = "plan" },
+      { "<leader>t", utils.wrapFunction( require("neo-tree.command").execute, { toggle = true }), desc = "Open Neotree" },
+      { "<leader>u", group = "utils" },
+      { "<leader>ua", utils.replaceAcronym, desc = "Replace Acronym under Cursor" },
+      { "<leader>uc", utils.toggleCheckbox, desc = "Toggle Checkbox" },
+      { "<leader>ud", ":Noice dismiss<cr>", desc = "Dismiss Notifications" },
+      { "<leader>ul", group = "lsp/treesitter" },
+      { "<leader>uli", ":LspInfo<cr>", desc = "Lsp Server Info" },
+      { "<leader>ull", ":LspLog<cr>", desc = "Lsp Server Logs" },
+      { "<leader>ulr", ":LspRestart<cr>", desc = "Restart Lsp Server" },
+      { "<leader>ult", vim.treesitter.inspect_tree, desc = "Show Treesitter Tree" },
+      { "<leader>um",require("mini.files").open, desc = "Mini Files" },
+      { "<leader>un", ":nohlsearch<cr>", desc = "Hide Search Results" },
+      { "<leader>uo",require("outline").toggle_outline, desc = "Show Outline" },
+      { "<leader>up",require("tools.pagerduty").Pick, desc = "Look at Pagerduty" },
+      { "<leader>ur", group = "replace hotkeys" },
+      { "<leader>urn", ":s/\n//g<cr>", desc = "Remove Linebreaks" },
+      { "<leader>urt", utils.ticket_to_md_link, desc = "Convert to jira link" },
+      { "<leader>us", group = "Spellcheck" },
+      { "<leader>use", ":setlocal spell spelllang=en_us<cr>", desc = "Enable English Spellcheck" },
+      { "<leader>usg", ":setlocal spell spelllang=de_20<cr>", desc = "Enable German Spellcheck" },
+      { "<leader>uw", group = "neovide scaling" },
+      { "<leader>uwd",utils.wrapFunction(change_neovide_scale_factor, 1.25), desc = "Decrease" },
+      { "<leader>uwi",utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), desc = "Increase" },
     },
-    t = {
-      name = "ToggleTerm",
-      t = { ":ToggleTerm<cr>", "Toggle Terminal Window" },
-      v = { ":ToggleTermSendVisualSelection<cr>", "Run Selection" },
-      l = { ":ToggleTermSendCurrentLine<cr>", "Run Line" },
-    },
-  },
-  f = {
-    name = "find",
-    f = {
-      function()
-        require("telescope.builtin").find_files()
-      end,
-      "Files",
-    },
-    g = {
-      function()
-        require("telescope.builtin").live_grep()
-      end,
-      "File content (grep)",
-    },
-    b = {
-      function()
-        require("telescope.builtin").buffers()
-      end,
-      "Buffers",
-    },
-    h = {
-      function()
-        require("telescope.builtin").help_tags()
-      end,
-      "Help",
-    },
-    c = {
-      function()
-        require("telescope.builtin").commands()
-      end,
-      "Commands",
-    },
-    t = { utils.wrapFunction(require("telescope.builtin").builtin, { include_extensions = true }), "Telescope Pickers" },
-    s = {
-      function()
-        require("telescope.builtin").treesitter()
-      end,
-      "Symbols",
-    },
-    j = {
-      function()
-        require("telescope.builtin").jumplist()
-      end,
-      "Jumplist",
-    },
-    m = { ":Telescope make<cr>", "Run Make Targets" },
-   n = {
-      function()
-        require("telescope").extensions.notify.notify()
-      end,
-      "Show Notifications",
-    },
-    p = {
-      function()
-        require("telescope").extensions.gopass.gopass()
-      end,
-      "Gopass",
-    },
-    w = {
-      function()
-        require("telescope").extensions.windows.windows()
-      end, "Show Windows"
-    }
-  },
-  g = require("mappings_git"),
-  t = {
-    function()
-      require("neo-tree.command").execute({ toggle = true })
-    end,
-    "Open Neotree",
-  },
-  l = { require("lazy").home, "Lazy" },
-  u = {
-    name = "utils",
-    a = { utils.replaceAcronym, "Replace Acronym under Cursor" },
-    c = { utils.toggleCheckbox, "Toggle Checkbox" },
-    d = { ":Noice dismiss<cr>", "Dismiss Notifications" },
-    f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
-    l = {
-      name = "lsp/treesitter",
-      r = { ":LspRestart<cr>", "Restart Lsp Server" },
-      i = { ":LspInfo<cr>", "Lsp Server Info" },
-      l = { ":LspLog<cr>", "Lsp Server Logs" },
-      t = { vim.treesitter.inspect_tree, "Show Treesitter Tree" },
-    },
-    m = {
-      function()
-        require("mini.files").open()
-      end,
-      "Mini Files",
-    },
-    n = { ":nohlsearch<cr>", "Hide Search Results" },
-    o = {
-      function()
-        require("symbols-outline").toggle_outline()
-      end,
-      "Show Outline",
-    },
-    r = {
-      name = "replace hotkeys",
-      n = { ":s/\n//g<cr>", "Remove Linebreaks" },
-      t = { utils.ticket_to_md_link, "Convert to jira link" },
-    },
-    s = {
-      name = "Spellcheck",
-      e = { ":setlocal spell spelllang=en_us<cr>", "Enable English Spellcheck" },
-      g = { ":setlocal spell spelllang=de_20<cr>", "Enable German Spellcheck" },
-    },
-    w = {
-      name = "neovide scaling",
-      i = { utils.wrapFunction(change_neovide_scale_factor, 1.25), "Increase" },
-      d = { utils.wrapFunction(change_neovide_scale_factor, 1 / 1.25), "Decrease" },
-    },
-    i = { require("tools.install").installAll, "Install Dependencies" },
-  },
-  o = {
-    name = "oc commands",
-    n = { require("tools.kube").ChooseNamespace, "set namespace" },
-    f = { require("tools.kube").ChooseOutputFormat, "set output format" },
-    u = { require("tools.kube").Update, "update resources and namespaces" },
-    g = { require("tools.kube").Get, "Get something" },
-    d = { require("tools.kube").Describe, "Describe resource" },
-    D = { require("tools.kube").DescribeCursor, "Describe resource under cursor" },
-  },
-  k = {
-    name = "Knowledge mappings",
-    o = { require("granite").open_note, "Open note" },
-    t = {
-      name = "Todos",
-      o = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({ states = { "OPEN", "IN_PROGRESS" } })
-        end,
-        "Open Todos",
-      },
-      a = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({})
-        end,
-        "all Todos",
-      },
-      d = {
-        function()
-          require("telescope").extensions.granite_telescope.granite_telescope({ states = { "DONE" } })
-        end,
-        "done Todos",
-      },
-    },
-    n = { require("granite").new_note_from_template, "New Note" },
-    l = { require("granite").link_to_file, "insert link" },
-    h = { require("granite").newHandwritten, "New Handwriting for this note" },
-    d = { ":ParseDate<cr>", "Parse selected Date String" },
-    p = { require("granite").ParseCodequeries, "Parse and fill codequery blocks" },
-    r = { require("mdrun").run_codeblock_under_cursor, "run codeblock under cursor" },
-    k = { vim.fn.MdrunKillCodeblock, "Kill running codeblock under cursor" },
-    s = { utils.screenshot, "Screenshot Selection"},
-  },
-  e = {
-    name = "errors",
-    l = { vim.diagnostic.setloclist, "Show Errors" },
-    n = { vim.diagnostic.goto_next, "Go to Next" },
-    p = { vim.diagnostic.goto_prev, "Go to Previous" },
-    o = { vim.diagnostic.open_float, "Open Float Window" },
-  },
-  c = {
-    name = "code",
-    a = { vim.lsp.buf.code_action, "code actions" },
-    r = { vim.lsp.buf.rename, "rename function or variable" },
-    d = { utils.toggle_autoformat, "toggle autoformat after save" },
-    s = {
-      name = "snippets",
-      e = {
-        function()
-          require("scissors").editSnippet()
-        end,
-        "Edit snippet",
-      },
-      a = {
-        function()
-          require("scissors").addNewSnippet()
-        end,
-        "Add Snippet",
-      },
-    },
-    f = { utils.wrapFunction(require("conform").format, { lsp_fallback = true }), "format file" },
-    h = { vim.lsp.buf.signature_help, "Signature Help" },
-    g = {
-      name = "goto",
-      d = {
-        function()
-          require("telescope.builtin").lsp_definitions({ jump_type = "never" })
-        end,
-        "Definition",
-      },
-      t = {
-        function()
-          require("telescope.builtin").lsp_type_definitions({ jump_type = "never" })
-        end,
-        "Type definition",
-      },
-      r = {
-        function()
-          require("telescope.builtin").lsp_references({ jump_type = "never" })
-        end,
-        "References",
-      },
-      i = {
-        function()
-          require("telescope.builtin").lsp_incoming_calls({ jump_type = "never" })
-        end,
-        "Incoming Calls",
-      },
-      o = {
-        function()
-          require("telescope.builtin").lsp_outgoing_calls({ jump_type = "never" })
-        end,
-        "Outgoing Calls",
-      },
-      I = {
-        function()
-          require("telescope.builtin").lsp_implementations({ jump_type = "never" })
-        end,
-        "Implementations",
-      },
-      s = {
-        name = "horizontal split",
-        d = { utils.cmdThenFunc("split", vim.lsp.buf.definition), "Definition" },
-        t = { utils.cmdThenFunc("split", vim.lsp.buf.type_definition), "Type definition" },
-      },
-      v = {
-        name = "vertical split",
-        d = { utils.cmdThenFunc("vsplit", vim.lsp.buf.definition), "Definition" },
-        t = { utils.cmdThenFunc("vsplit", vim.lsp.buf.type_definition), "Type definition" },
-      },
-    },
-    i = { utils.goimpl, "Run go impl" },
-    u = {
-      name = "Utility Stuff",
-      t = { utils.generateGoStructTags, "Generate Go struct tags" },
-    },
-    w = {
-      name = "workspace actions",
-      a = { vim.lsp.buf.add_workspace_folder, "Add workspace Folder" },
-      r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace Folder" },
-      l = { vim.lsp.buf.list_workspace_folders, "List workspace Folder" },
-    },
-  },
-}, {
-  prefix = "<leader>",
-  mode = { "n", "v" },
-})
+  }
+)
 
 vim.api.nvim_create_user_command("PeekToggle", utils.toggle_peek, { nargs = 0 })
 vim.api.nvim_create_user_command("Reload", utils.reloadConfig, { nargs = 0 })

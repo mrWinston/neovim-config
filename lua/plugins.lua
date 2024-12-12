@@ -9,71 +9,49 @@ return {
     "vhyrro/luarocks.nvim",
     priority = 10000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
     opts = {
-      rocks = { "magick"}, -- specifies a list of rocks to install
+      rocks = { "magick" }, -- specifies a list of rocks to install
       -- luarocks_build_args = { "--with-lua=/my/path" }, -- extra options to pass to luarocks's configuration script
     },
-  },
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    lazy = false,
-    priority = 1000,
-    enable = enabled,
   },
   {
     "mrWinston/mdrun.nvim",
     -- use local files in code folder instead of gh
     dev = true,
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "mrWinston/granite.nvim",
     -- use local files in code folder instead of gh
     dev = true,
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "marko-cerovac/material.nvim",
-    config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "mfussenegger/nvim-dap",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "folke/which-key.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "folke/neodev.nvim",
     priority = 1000,
-    enable = enabled,
+    enabled = enabled,
   },
-  { "leoluz/nvim-dap-go", enable = enabled },
-  { "theHamsta/nvim-dap-virtual-text", enable = enabled },
-  { "gbrlsnchs/telescope-lsp-handlers.nvim", enable = enabled },
-  {
-    "edolphin-ydf/goimpl.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      { "nvim-lua/popup.nvim" },
-      { "nvim-telescope/telescope.nvim" },
-      { "nvim-treesitter/nvim-treesitter" },
-    },
-    enable = enabled,
-  },
+  { "leoluz/nvim-dap-go", enabled = enabled },
+  { "theHamsta/nvim-dap-virtual-text", enabled = enabled },
+  { "gbrlsnchs/telescope-lsp-handlers.nvim", enabled = enabled },
   {
     "rcarriga/nvim-dap-ui",
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
     },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -81,7 +59,7 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = get_config,
     lazy = true,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "ldelossa/gh.nvim",
@@ -89,84 +67,78 @@ return {
       "ldelossa/litee.nvim",
     },
     config = get_config,
-    lazy = false,
-    enable = enabled,
+    lazy = true,
+    enabled = enabled,
   },
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "saadparwaiz1/cmp_luasnip" },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "benfowler/telescope-luasnip.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "hrsh7th/nvim-cmp",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "hrsh7th/cmp-nvim-lsp",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "tpope/vim-fugitive",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "tpope/vim-repeat",
-    enable = enabled,
+    enabled = enabled,
   },
---  {
---    "tpope/vim-surround",
---    enable = enabled,
---  },
   {
     "lewis6991/gitsigns.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "stevearc/dressing.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "sopa0/telescope-makefile",
-    --"mrWinston/telescope-makefile",
-    --branch = "fix-merge-nil",
     dependencies = "akinsho/toggleterm.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "norcalli/nvim-terminal.lua",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
-    "simrat39/symbols-outline.nvim",
+    "hedyhli/outline.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "kyazdani42/nvim-web-devicons",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -177,12 +149,7 @@ return {
       "s1n7ax/nvim-window-picker",
     },
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "habamax/vim-asciidoctor",
-    config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "neovim/nvim-lspconfig",
@@ -191,33 +158,28 @@ return {
     opts = {
       inlay_hints = { enabled = true },
     },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "akinsho/toggleterm.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "echasnovski/mini.nvim",
     config = get_config,
     version = false,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-lualine/lualine.nvim",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "stevearc/conform.nvim",
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "michaelb/sniprun",
-    build = "sh ./install.sh",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "folke/noice.nvim",
@@ -231,7 +193,7 @@ return {
       --   If not available, we use `mini` as the fallback
       --      "rcarriga/nvim-notify",
     },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "s1n7ax/nvim-window-picker",
@@ -241,36 +203,24 @@ return {
     config = function()
       require("window-picker").setup()
     end,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "toppair/peek.nvim",
     build = "deno task --quiet build:fast",
     config = get_config,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {}, -- this is equalent to setup({}) function
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "seblj/nvim-tabline",
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "mikesmithgh/kitty-scrollback.nvim",
-    enabled = true,
-    lazy = true,
-    cmd = { "KittyScrollbackGenerateKittens", "KittyScrollbackCheckHealth" },
-    -- version = '*', -- latest stable version, may have breaking changes if major version changed
-    -- version = '^1.0.0', -- pin major version, include fixes and features that do not have breaking changes
-    config = function()
-      require("kitty-scrollback").setup()
-    end,
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "rcarriga/nvim-notify",
@@ -280,7 +230,7 @@ return {
       timeout = "1000",
       top_down = false,
     },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "chrisgrieser/nvim-scissors",
@@ -294,12 +244,12 @@ return {
         alsoSearchSnippetBody = false,
       },
     },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "mrWinston/friendly-snippets",
     branch = "main",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "NeogitOrg/neogit",
@@ -312,61 +262,25 @@ return {
       "ibhagwan/fzf-lua", -- optional
     },
     config = get_config,
-    enable = enabled,
-  },
-  {
-    "Everblush/nvim",
-    name = "everblush",
-    config = {
-      transparent_background = true,
-      nvim_tree = {
-        contrast = true,
-      },
-    },
-    enable = enabled,
-  },
-  {
-    "folke/tokyonight.nvim",
-    lazy = false,
-    priority = 1000,
-    opts = {},
-    config = {
-      style = "night",
-      styles = {
-        -- Background styles. Can be "dark", "transparent" or "normal"
-        sidebars = "normal", -- style for sidebars, see below
-        floats = "dark", -- style for floating windows
-      },
-      transparent = true, -- Enable this to disable setting the background color
-      dim_inactive = false,
-      lualine_bold = true,
-    },
-    enable = enabled,
-  },
-  {
-    "stevearc/oil.nvim",
-    opts = {},
-    -- Optional dependencies
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
-    enable = enabled,
+    enabled = enabled,
   },
   {
-    "mrcjkb/rustaceanvim",
+    "rcjkb/rustaceanvim",
     version = "^4", -- Recommended
     ft = { "rust" },
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "mrWinston/codesnap.nvim",
     build = "make build_generator",
     --    version = "^1",
     branch = "main",
---    dev = true,
+    --    dev = true,
     opts = {
       save_path = "/home/maschulz/Pictures/codesnap.png",
       mac_window_bar = false, -- (Optional) MacOS style title bar switch
@@ -377,69 +291,96 @@ return {
       watermark_font_family = "Pacifico", -- (Optional) watermark font family
       bg_color = "#00000000",
     },
-    enable = enabled,
-  },
-  {
-    "3rd/image.nvim",
-    enable = enabled,
-    config = get_config,
+    enabled = enabled,
   },
   {
     "mfussenegger/nvim-ansible",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "onsails/lspkind.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "nvimtools/none-ls.nvim",
-    enable = enabled,
-  },
-  {
-    "ElPiloto/significant.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "folke/trouble.nvim",
-    enable = enabled,
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
   {
     "sindrets/diffview.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "hrsh7th/cmp-path",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "kdheepak/lazygit.nvim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "rudylee/nvim-gist",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "fladson/vim-kitty",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "dkarter/bullets.vim",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "projekt0n/github-nvim-theme",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "f3fora/cmp-spell",
-    enable = enabled,
+    enabled = enabled,
   },
   {
     "grapp-dev/nui-components.nvim",
     dependencies = {
-      "MunifTanjim/nui.nvim"
-    }
+      "MunifTanjim/nui.nvim",
+    },
+  },
+  {
+    "tinted-theming/base16-vim",
   },
 }

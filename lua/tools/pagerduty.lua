@@ -6,6 +6,8 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
+local M = {}
+
 ---Acknowledge a pd incident
 ---@param incident any
 M.acknowledge_incident = function(incident)
