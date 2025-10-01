@@ -28,7 +28,7 @@ return {
     enabled = enabled,
   },
   {
-    "mrWinston/nvim-jq-playground",
+    "mrWinston/jqpreview.nvim",
     -- use local files in code folder instead of gh
     dev = true,
     enabled = enabled,
