@@ -30,7 +30,7 @@ return {
   {
     "mrWinston/jqpreview.nvim",
     -- use local files in code folder instead of gh
-    dev = true,
+--    dev = true,
     enabled = enabled,
   },
   {
