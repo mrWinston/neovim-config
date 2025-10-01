@@ -1,6 +1,25 @@
 local utils = {}
 local io = require("io")
 
+function utils.startCustomLsp()
+  vim.lsp.start({
+    cmd = { "mdlsp" },
+    root_dir = vim.fn.getcwd(), -- Use PWD as project root dir.
+  })
+end
+
+---Get the ids of all windows that are not floating or external
+---@return integer[]
+function utils.get_non_floating_windows()
+  local winout = {}
+  for i, winid in pairs(vim.api.nvim_list_wins()) do
+    local winconf = vim.api.nvim_win_get_config(winid)
+    if winconf.relative == "" and not winconf.external then
+      table.insert(winout, winid)
+    end
+  end
+  return winout
+end
 
 function utils.colorize()
   vim.wo.number = false
@@ -34,12 +53,17 @@ utils.lspstuff = function()
   params.context = {
     includeDeclaration = false,
   }
-  vim.lsp.buf_request(0, vim.lsp.protocol.Methods.textDocument_references, params, function (err, result, context, config)
-    vim.print("err:")
-    vim.print(err)
-    vim.print("Result:")
-    vim.print(result)
-  end)
+  vim.lsp.buf_request(
+    0,
+    vim.lsp.protocol.Methods.textDocument_references,
+    params,
+    function(err, result, context, config)
+      vim.print("err:")
+      vim.print(err)
+      vim.print("Result:")
+      vim.print(result)
+    end
+  )
 end
 
 utils.generateGoStructTags = function()
@@ -270,15 +294,11 @@ utils.screenshot = function()
     vim.print("Nothing selected")
     return
   end
-  local n = os.tmpname()
-  local f = io.open(n, "w+b")
-  if not f then
-    vim.print("error creating tmp file: " .. n)
-    return
-  end
-  f:write(selected_text)
-  f:close()
 
+  -- local completed = vim.system({ "/usr/bin/zsh", "-ic", "silicon --language " .. vim.bo.filetype .. " -o /tmp/bla.png" }, {
+  --   text = true,
+  --   stdin = selected_text,
+  -- }):wait()
   local completed = vim
     .system({
       "silicon",
@@ -295,14 +315,16 @@ utils.screenshot = function()
       "10",
       "--shadow-color",
       "#000000",
-      "-c",
-      n,
-    }, { text = true })
+      "-o",
+      "/tmp/screen.png",
+    }, {
+      text = true,
+      stdin = selected_text,
+    })
     :wait()
-  os.remove(n)
 
   if completed.code ~= 0 then
-    vim.notify("Error: " .. completed.stderr)
+    vim.print("Error: " .. completed.stderr)
   else
     vim.notify("snapshot copied")
   end
@@ -325,13 +347,84 @@ utils.set_table_default = function(table, default)
   setmetatable(table, mt)
 end
 
-utils.toggle_peek = function()
-  local peek = require("peek")
-  if peek.is_open() then
-    peek.close()
-  else
-    peek.open()
+utils.JQ = function()
+  -- save in buffer id
+  local inputBuffer = vim.api.nvim_get_current_buf()
+  -- new tab
+  vim.cmd.tabnew()
+  local tabpage = vim.api.nvim_get_current_tabpage()
+  local inputWin = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(inputWin, inputBuffer)
+  -- create 4 windows
+  local commandBuffer = vim.api.nvim_create_buf(false, true)
+  vim.bo[commandBuffer].filetype = "jq"
+  vim.api.nvim_buf_set_name(commandBuffer, "JQ Command")
+
+  local outBuffer = vim.api.nvim_create_buf(false, true)
+  vim.bo[outBuffer].filetype = vim.bo[inputBuffer].filetype
+  vim.api.nvim_buf_set_name(outBuffer, "JQ Output")
+  local errBuffer = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_name(errBuffer, "JQ Error")
+
+  local outWin = vim.api.nvim_open_win(outBuffer, false, { split = "right", win = inputWin })
+  local commandWin = vim.api.nvim_open_win(commandBuffer, false, { split = "below", win = inputWin, height = 10 })
+  local errWin = vim.api.nvim_open_win(errBuffer, false, { split = "below", win = outWin, height = 10 })
+
+  vim.keymap.set({ "n", "i" }, "<C-Enter>", function()
+    local jqin = table.concat(vim.api.nvim_buf_get_lines(inputBuffer, 0, -1, false), "\n")
+    local jqcmd = table.concat(vim.api.nvim_buf_get_lines(commandBuffer, 0, -1, false), "\n")
+
+    local syscmd = vim
+      .system({ "jq", jqcmd }, {
+        stdin = jqin,
+        text = true,
+      })
+      :wait()
+    if syscmd.code == 0 then
+      vim.api.nvim_buf_set_lines(outBuffer, 0, -1, false, vim.split(syscmd.stdout, "\n"))
+    end
+    vim.api.nvim_buf_set_lines(errBuffer, 0, -1, false, vim.split(syscmd.stderr, "\n"))
+  end, { buffer = commandBuffer })
+  vim.api.nvim_create_autocmd({ "WinClosed" }, {
+    pattern = { tostring(commandWin), tostring(outWin), tostring(errWin), tostring(inputWin) },
+    callback = function(event)
+      vim.api.nvim_win_close(outWin, false)
+      vim.api.nvim_buf_delete(outBuffer, {})
+      vim.api.nvim_win_close(commandWin, false)
+      vim.api.nvim_buf_delete(commandBuffer, {})
+      vim.api.nvim_win_close(errWin, false)
+      vim.api.nvim_buf_delete(errBuffer, {})
+      vim.api.nvim_win_close(inputWin, false)
+    end,
+  })
+end
+
+utils.jqrunner = function()
+  local jqcmdbuf = 0
+  local jqoutbuf = 0
+  local jqinbuf = 0
+  for id, bufid in pairs(vim.api.nvim_list_bufs()) do
+    local bufname = vim.api.nvim_buf_get_name(bufid)
+    if string.find(bufname, "jqcom") then
+      jqcmdbuf = bufid
+    elseif string.find(bufname, "jqout") then
+      jqoutbuf = bufid
+    elseif string.find(bufname, "jqinput") then
+      jqinbuf = bufid
+    end
   end
+
+  local jqin = table.concat(vim.api.nvim_buf_get_lines(jqinbuf, 0, -1, false), "\n")
+  local jqcmd = table.concat(vim.api.nvim_buf_get_lines(jqcmdbuf, 0, -1, false), "\n")
+
+  local syscmd = vim
+    .system({ "jq", jqcmd }, {
+      stdin = jqin,
+      text = true,
+    })
+    :wait()
+
+  vim.api.nvim_buf_set_lines(jqoutbuf, 0, -1, false, vim.split(syscmd.stdout, "\n"))
 end
 
 local get_window_entry_maker = function()
@@ -401,6 +494,52 @@ utils.openSpecificWindow = function()
       end,
     })
     :find()
+end
+
+bla = "%x1b%[[0-9;]*m"
+
+utils.replace_termcodes = function()
+  local all_lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+  local foundCodes = {}
+  local curcode = ""
+  local code_start_line = -1
+  local code_start_row = -1
+  local code_end_line = -1
+  local code_end_row = -1
+  for linenum, line in ipairs(all_lines) do
+    vim.print("check line: " .. linenum)
+    local curstart = 0
+    while true do
+      s, e = string.find(line, "\27%[[0-9;]*m", curstart)
+      if not s or not e then
+        break
+      end
+      code_end_line = linenum
+      code_end_row = s
+      if code_start_row ~= -1 then
+        table.insert(foundCodes, {
+          code = curcode,
+          startrow = code_start_row,
+          startline = code_start_line,
+          endrow = code_end_row,
+          endline = code_end_line,
+        })
+      end
+      curcode = string.match(line, "\27%[([0-9;]*)m", curstart)
+      code_start_line = linenum
+      code_start_row = s
+      curstart = e + 1
+    end
+  end
+
+  vim.print(foundCodes)
+  local nsid = vim.api.nvim_create_namespace("termcode")
+  for index, code in ipairs(foundCodes) do
+    local hlgroup = "DiffText"
+    if code.code == "34" then
+      vim.hl.range(0, nsid, hlgroup, { code.startline, code.startrow }, { code.endline, code.endrow }, {})
+    end
+  end
 end
 
 return utils

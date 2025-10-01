@@ -15,7 +15,7 @@ vim.keymap.set("n", "<c-l>", "<c-w>l")
 
 -- vim.keymap.set("n", "gx", ":te cd %:h && xdg-open '<cfile>'<cr>")
 
-vim.keymap.set("n", "gx", utils.open_link_under_cursor)
+-- vim.keymap.set("n", "gx", utils.open_link_under_cursor)
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
@@ -35,13 +35,18 @@ vim.keymap.set("n", "zr", utils.increaseFoldLevel)
 
 --  map + <C-W>+
 --  map - <C-W>-
-vim.keymap.set("n", "+", "<C-W>>")
-vim.keymap.set("n", "-", "<C-W><")
+vim.keymap.set("n", "+", "2<C-W>>")
+vim.keymap.set("n", "-", "2<C-W><")
 
 local wk = require("which-key")
 
 local change_neovide_scale_factor = function(delta)
   vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+end
+
+if vim.g.neovide then
+  vim.keymap.set("n", "<c-+>", utils.wrapFunction(change_neovide_scale_factor, 1.1))
+  vim.keymap.set("n", "<c-_>", utils.wrapFunction(change_neovide_scale_factor, 1/1.1))
 end
 
 local askCommandRun = function()
@@ -90,7 +95,7 @@ wk.add(
       { "<leader>ci", utils.goimpl, desc = "Run go impl" },
       { "<leader>cr", vim.lsp.buf.rename, desc = "rename function or variable" },
       { "<leader>cs", group = "snippets" },
-      { "<leader>csa", require("scissors").editSnippet, desc = "Add Snippet" },
+      { "<leader>csa", require("scissors").addNewSnippet, desc = "Add Snippet" },
       { "<leader>cse", require("scissors").editSnippet, desc = "Edit snippet" },
       { "<leader>cu", group = "Utility Stuff" },
       { "<leader>cut",utils.generateGoStructTags, desc = "Generate Go struct tags" },
@@ -103,11 +108,15 @@ wk.add(
       { "<leader>fb", require("telescope.builtin").buffers, desc = "Buffers" },
       { "<leader>fc", require("telescope.builtin").commands, desc = "Commands" },
       { "<leader>ff",require("telescope.builtin").find_files , desc = "Files" },
-      { "<leader>fg", require("telescope.builtin").live_grep, desc = "File content (grep)" },
+      { "<leader>fg", group = "grep"},
+      { "<leader>fgg", require('telescope').extensions.live_grep_args.live_grep_args, desc = "Grep" },
+      { "<leader>fgv", require("telescope-live-grep-args.shortcuts").grep_visual_selection, desc = "Visual Selection" },
+      { "<leader>fgw", require('telescope').extensions.live_grep_args.live_grep_args, desc = "File content (grep)" },
+      -- { "<leader>fg", require("telescope.builtin").live_grep, desc = "File content (grep)" },
       { "<leader>fh", require("telescope.builtin").help_tags, desc = "Help" },
       { "<leader>fj", require("telescope.builtin").jumplist, desc = "Jumplist" },
+      { "<leader>fl", require("telescope.builtin").current_buffer_fuzzy_find, desc = "Current Buffer Fuzzy" },
       { "<leader>fm", ":Telescope make<cr>", desc = "Run Make Targets" },
-      { "<leader>fn", require("telescope").extensions.notify.notify, desc = "Show Notifications" },
       { "<leader>fp", require("telescope").extensions.gopass.gopass, desc = "Gopass" },
       { "<leader>fs", require("telescope.builtin").treesitter, desc = "Symbols" },
       { "<leader>ft", require("telescope.builtin").builtin, desc = "Telescope Pickers" },
@@ -141,36 +150,6 @@ wk.add(
       { "<leader>ggts",gs.toggle_signs, desc = "Toggle signs" },
       { "<leader>ggtw", gs.toggle_word_diff, desc = "Toggle word diff" },
       { "<leader>gh", group = "Github" },
-      { "<leader>ghc", group = "Commits" },
-      { "<leader>ghcc", "<cmd>GHCloseCommit<cr>", desc = "Close" },
-      { "<leader>ghce", "<cmd>GHExpandCommit<cr>", desc = "Expand" },
-      { "<leader>ghco", "<cmd>GHOpenToCommit<cr>", desc = "Open To" },
-      { "<leader>ghcp", "<cmd>GHPopOutCommit<cr>", desc = "Pop Out" },
-      { "<leader>ghcz", "<cmd>GHCollapseCommit<cr>", desc = "Collapse" },
-      { "<leader>ghi", group = "Issues" },
-      { "<leader>ghip", "<cmd>GHPreviewIssue<cr>", desc = "Preview" },
-      { "<leader>ghl", group = "Litee" },
-      { "<leader>ghlt", "<cmd>LTPanel<cr>", desc = "Toggle Panel" },
-      { "<leader>ghp", group = "Pull Request" },
-      { "<leader>ghpc", "<cmd>GHClosePR<cr>", desc = "Close" },
-      { "<leader>ghpd", "<cmd>GHPRDetails<cr>", desc = "Details" },
-      { "<leader>ghpe", "<cmd>GHExpandPR<cr>", desc = "Expand" },
-      { "<leader>ghpo", "<cmd>GHOpenPR<cr>", desc = "Open" },
-      { "<leader>ghpp", "<cmd>GHPopOutPR<cr>", desc = "PopOut" },
-      { "<leader>ghpr", "<cmd>GHRefreshPR<cr>", desc = "Refresh" },
-      { "<leader>ghpt", "<cmd>GHOpenToPR<cr>", desc = "Open To" },
-      { "<leader>ghpz", "<cmd>GHCollapsePR<cr>", desc = "Collapse" },
-      { "<leader>ghr", group = "Review" },
-      { "<leader>ghrb", "<cmd>GHStartReview<cr>", desc = "Begin" },
-      { "<leader>ghrc", "<cmd>GHCloseReview<cr>", desc = "Close" },
-      { "<leader>ghrd", "<cmd>GHDeleteReview<cr>", desc = "Delete" },
-      { "<leader>ghre", "<cmd>GHExpandReview<cr>", desc = "Expand" },
-      { "<leader>ghrs", "<cmd>GHSubmitReview<cr>", desc = "Submit" },
-      { "<leader>ghrz", "<cmd>GHCollapseReview<cr>", desc = "Collapse" },
-      { "<leader>ght", group = "Threads" },
-      { "<leader>ghtc", "<cmd>GHCreateThread<cr>", desc = "Create" },
-      { "<leader>ghtn", "<cmd>GHNextThread<cr>", desc = "Next" },
-      { "<leader>ghtt", "<cmd>GHToggleThread<cr>", desc = "Toggle" },
       { "<leader>gl", ":LazyGit<cr>", desc = "Lazygit" },
       { "<leader>go", ":!gh browse %:.<cr>", desc = "Open in Github" },
       { "<leader>gp", ":Git pull<cr>", desc = "Pull" },
@@ -183,7 +162,7 @@ wk.add(
       { "<leader>kl", require("granite").link_to_file, desc = "insert link" },
       { "<leader>kn", require("granite").new_note_from_template, desc = "New Note" },
       { "<leader>ko", require("granite").open_note, desc = "Open note" },
-      { "<leader>kp", require("granite").ParseCodequeries, desc = "Parse and fill codequery blocks" },
+      { "<leader>kp", require("granite").run_query_in_line, desc = "Parse search query at cursor line" },
       { "<leader>kr", require("mdrun").run_codeblock_under_cursor, desc = "run codeblock under cursor" },
       { "<leader>ks", utils.screenshot, desc = "Screenshot Selection" },
       { "<leader>kt", group = "Todos" },
@@ -201,19 +180,24 @@ wk.add(
       { "<leader>rtv", ":ToggleTermSendVisualSelection<cr>", desc = "Run Selection" },
       { "<leader>ru", group = "terraform" },
       { "<leader>rup", createRunFunc("terraform plan"), desc = "plan" },
-      { "<leader>t", utils.wrapFunction( require("neo-tree.command").execute, { toggle = true }), desc = "Open Neotree" },
+      { "<leader>t", utils.wrapFunction( require("neo-tree.command").execute, { toggle = true, }), desc = "Open Neotree" },
       { "<leader>u", group = "utils" },
       { "<leader>ua", utils.replaceAcronym, desc = "Replace Acronym under Cursor" },
       { "<leader>uc", utils.toggleCheckbox, desc = "Toggle Checkbox" },
       { "<leader>ud", ":Noice dismiss<cr>", desc = "Dismiss Notifications" },
+      { "<leader>uj", require("jq-playground").JQ, desc = "Run JQ Workspace" },
+
       { "<leader>ul", group = "lsp/treesitter" },
       { "<leader>uli", ":LspInfo<cr>", desc = "Lsp Server Info" },
       { "<leader>ull", ":LspLog<cr>", desc = "Lsp Server Logs" },
       { "<leader>ulr", ":LspRestart<cr>", desc = "Restart Lsp Server" },
       { "<leader>ult", vim.treesitter.inspect_tree, desc = "Show Treesitter Tree" },
+      { "<leader>uls", utils.startCustomLsp, desc = "Custom LSP" },
+
       { "<leader>um",require("mini.files").open, desc = "Mini Files" },
       { "<leader>un", ":nohlsearch<cr>", desc = "Hide Search Results" },
-      { "<leader>uo",require("outline").toggle_outline, desc = "Show Outline" },
+      -- { "<leader>uo",require("outline").toggle_outline, desc = "Show Outline" },
+      { "<leader>uo",":Neotree toggle document_symbols right<cr>", desc = "Show Outline" },
       { "<leader>up",require("tools.pagerduty").Pick, desc = "Look at Pagerduty" },
       { "<leader>ur", group = "replace hotkeys" },
       { "<leader>urn", ":s/\n//g<cr>", desc = "Remove Linebreaks" },
@@ -228,6 +212,14 @@ wk.add(
   }
 )
 
-vim.api.nvim_create_user_command("PeekToggle", utils.toggle_peek, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Term", function(args)
+    local buf = vim.api.nvim_get_current_buf()
+    local b = vim.api.nvim_create_buf(false, true)
+    local chan = vim.api.nvim_open_term(b, {})
+    vim.api.nvim_chan_send(chan, table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, false), "\n"))
+    vim.api.nvim_win_set_buf(0, b)
+end, {})
+
 vim.api.nvim_create_user_command("Reload", utils.reloadConfig, { nargs = 0 })
 vim.api.nvim_create_user_command("Open", "!xdg-open %", { nargs = 0 })

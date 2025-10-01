@@ -15,6 +15,14 @@ require("telescope").setup({
     },
   },
   pickers = {
+    find_files = {
+      no_ignore = true,
+      hidden = true,
+      file_ignore_patterns = {
+        "vendor",
+        "pyenv",
+      },
+    },
     builtin = {
       include_extensions = true,
     },
@@ -39,6 +47,9 @@ require("telescope").setup({
   },
 
   extensions = {
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown({}),
+    },
     --    lsp_handlers = {
     --      code_action = {
     --        telescope = require('telescope.themes').get_dropdown({}),
@@ -49,6 +60,8 @@ require("telescope").setup({
 
 require("telescope").load_extension("fzf")
 require("telescope").load_extension("luasnip")
+require("telescope").load_extension("ui-select")
+require("telescope").load_extension("live_grep_args")
 --require("telescope").load_extension("make")
 --require("telescope").load_extension("gopass")
 --require("telescope").load_extension("lazygit")

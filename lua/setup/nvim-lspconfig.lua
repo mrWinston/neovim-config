@@ -5,7 +5,7 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts)
 
-require("telescope").load_extension("lsp_handlers")
+-- require("telescope").load_extension("lsp_handlers")
 local function get_maingo()
   return vim.fn.findfile("main.go", ".;")
 end
@@ -25,19 +25,23 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").default_capabilities()
---capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true,
 }
-
-require("neodev").setup({})
+capabilities.workspace = {
+  didChangeWatchedFiles = {
+    dynamicRegistration  = true,
+  },
+}
 
 local lspconfig = require("lspconfig")
-
 lspconfig.lua_ls.setup({
   settings = {
     Lua = {
+      runtime = {
+        version = "LuaJIT",
+      },
       completion = {
         callSnippet = "Replace",
       },
@@ -45,13 +49,59 @@ lspconfig.lua_ls.setup({
   },
 })
 
+
+local bicep_lsp_bin = "/home/maschulz/code/github/bicep-langserver/Bicep.LangServer.dll"
+vim.lsp.config('bicep', {
+    cmd = { "dotnet", bicep_lsp_bin };
+})
+vim.lsp.enable('bicep')
+
+
+vim.lsp.enable("azure_pipelines_ls")
+vim.lsp.config("azure_pipelines_ls", {
+  root_markers = { "azure-pipelines.yml", ".pipelines/" },
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json"] = {
+          "/azure-pipeline*.y*l",
+          "Azure-Pipelines/**/*.y*l",
+          "Pipelines/*.y*l",
+          ".pipelines/*.y*l",
+          ".pipelines/**/*.y*l",
+        },
+      },
+    },
+  },
+})
+
+vim.lsp.enable('jsonls')
+
 -- yarn global add @volar/vue-language-server
 lspconfig.volar.setup({
   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
 })
 
+--lspconfig.harper_ls.setup({})
+
+-- lspconfig.denols.setup({
+--   settings = {
+--     deno = {
+--       enable = true,
+--       unstable = { "sloppy-imports" },
+--       suggest = {
+--         imports = {
+--           hosts = {
+--             ["https://deno.land"] = true,
+--           },
+--         },
+--       },
+--     },
+--   },
+-- })
+
 local simpleLs = {
-  "gopls",
+  -- "gopls",
   "bashls",
   -- "tsserver", -- yarn global add typescript typescript-language-server
   "eslint", -- yarn global add vscode-langservers-extracted
@@ -59,10 +109,11 @@ local simpleLs = {
   "pylsp",
   "terraformls", --asdf plugin-add terraform-ls && asdf install terraform-ls latest && asdf global terraform-ls latest
   "marksman", -- download from https://github.com/artempyanykh/marksman/releases
+  -- "markdown_oxide",
   --  "remark_ls",
   "yamlls",
   "ansiblels",
-  "denols",
+  "ts_ls",
 }
 
 for _, value in ipairs(simpleLs) do
@@ -71,6 +122,11 @@ for _, value in ipairs(simpleLs) do
     capabilities = capabilities,
   })
 end
+
+vim.lsp.enable("gopls")
+-- vim.lsp.config('gopls', {
+--   cmd = {'podman-compose', 'exec', '-T', 'aro-dev-env', 'gopls', '-vv', '-logfile=pls.log', 'serve'},
+-- })
 
 local configs = require("lspconfig/configs")
 
@@ -143,12 +199,21 @@ cmp.setup({
   }),
   preselect = cmp.PreselectMode.None,
   sources = {
-    { name = "nvim_lsp" },
+    {
+      name = "nvim_lsp",
+      option = {
+        markdown_oxide = {
+          keyword_pattern = [[\(\k\| \|\/\|#\)\+]],
+        },
+      },
+    },
     -- { name = "granite_cmp", trigger_characters = {"#"} },
     { name = "luasnip" },
+    { name = "jq_cmp" },
     --    { name = "nvim_lsp_signature_help" },
     { name = "path" },
     { name = "neorg" },
+    { name = "lazydev", group_index = 0 },
     {
       name = "spell",
       option = {
@@ -181,7 +246,7 @@ null_ls.setup({
   sources = {
     null_ls.builtins.code_actions.gomodifytags,
     null_ls.builtins.code_actions.impl,
-    null_ls.builtins.diagnostics.golangci_lint,
+    --    null_ls.builtins.diagnostics.golangci_lint,
   },
 })
 local gotests_source = {}

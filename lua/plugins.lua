@@ -28,23 +28,34 @@ return {
     enabled = enabled,
   },
   {
+    "mrWinston/nvim-jq-playground",
+    -- use local files in code folder instead of gh
+    dev = true,
+    enabled = enabled,
+  },
+  {
     "mfussenegger/nvim-dap",
     config = get_config,
     enabled = enabled,
   },
+  { "leoluz/nvim-dap-go", enabled = enabled },
+  { "theHamsta/nvim-dap-virtual-text", enabled = enabled },
   {
     "folke/which-key.nvim",
     config = get_config,
     enabled = enabled,
   },
   {
-    "folke/neodev.nvim",
-    priority = 1000,
-    enabled = enabled,
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
-  { "leoluz/nvim-dap-go", enabled = enabled },
-  { "theHamsta/nvim-dap-virtual-text", enabled = enabled },
-  { "gbrlsnchs/telescope-lsp-handlers.nvim", enabled = enabled },
   {
     "rcarriga/nvim-dap-ui",
     dependencies = {
@@ -56,19 +67,30 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-live-grep-args.nvim",
+    },
     config = get_config,
     lazy = true,
     enabled = enabled,
   },
   {
-    "ldelossa/gh.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    enabled = enabled,
+  },
+  {
+    "pwntester/octo.nvim",
+    lazy = false,
     dependencies = {
-      "ldelossa/litee.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      -- OR 'ibhagwan/fzf-lua',
+      -- OR 'folke/snacks.nvim',
+      "nvim-tree/nvim-web-devicons",
     },
     config = get_config,
-    lazy = true,
-    enabled = enabled,
   },
   {
     "L3MON4D3/LuaSnip",
@@ -96,12 +118,18 @@ return {
     enabled = enabled,
   },
   {
-    "lewis6991/gitsigns.nvim",
-    config = get_config,
-    enabled = enabled,
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      input = {
+        -- your input configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      },
+    },
   },
   {
-    "stevearc/dressing.nvim",
+    "lewis6991/gitsigns.nvim",
     config = get_config,
     enabled = enabled,
   },
@@ -110,11 +138,11 @@ return {
     dependencies = "akinsho/toggleterm.nvim",
     enabled = enabled,
   },
-  {
-    "norcalli/nvim-terminal.lua",
-    config = get_config,
-    enabled = enabled,
-  },
+  -- {
+  --   "norcalli/nvim-terminal.lua",
+  --   config = get_config,
+  --   enabled = enabled,
+  -- },
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
@@ -137,7 +165,11 @@ return {
     enabled = enabled,
   },
   {
-    "kyazdani42/nvim-web-devicons",
+    "nvim-tree/nvim-web-devicons",
+    enabled = enabled,
+  },
+  {
+    "lucc/nvimpager",
     enabled = enabled,
   },
   {
@@ -146,7 +178,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
-      "s1n7ax/nvim-window-picker",
+      "nvim-tree/nvim-web-devicons",
     },
     config = get_config,
     enabled = enabled,
@@ -188,60 +220,26 @@ return {
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      --      "rcarriga/nvim-notify",
     },
-    enabled = enabled,
+    enabled = true,
   },
-  {
-    "s1n7ax/nvim-window-picker",
-    name = "window-picker",
-    event = "VeryLazy",
-    version = "2.*",
-    config = function()
-      require("window-picker").setup()
-    end,
-    enabled = enabled,
-  },
-  {
-    "toppair/peek.nvim",
-    build = "deno task --quiet build:fast",
-    config = get_config,
-    enabled = enabled,
-  },
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    opts = {}, -- this is equalent to setup({}) function
-    enabled = enabled,
-  },
-  {
-    "seblj/nvim-tabline",
-    config = get_config,
-    enabled = enabled,
-  },
-  {
-    "rcarriga/nvim-notify",
-    lazy = true,
-    opts = {
-      render = "compact",
-      timeout = "1000",
-      top_down = false,
-    },
-    enabled = enabled,
-  },
+  -- {
+  --   "seblj/nvim-tabline",
+  --   config = get_config,
+  --   enabled = enabled,
+  -- },
   {
     "chrisgrieser/nvim-scissors",
     dependencies = "nvim-telescope/telescope.nvim", -- optional
     opts = {
       snippetDir = vim.fn.stdpath("config") .. "/snippets/vscode/",
       jsonFormatter = "jq",
-      telescope = {
-        -- By default, the query only searches snippet prefixes. Set this to
-        -- `true` to also search the body of the snippets.
-        alsoSearchSnippetBody = false,
+      snippetSelection = {
+        telescope = {
+          -- By default, the query only searches snippet prefixes. Set this to
+          -- `true` to also search the body of the snippets.
+          alsoSearchSnippetBody = false,
+        },
       },
     },
     enabled = enabled,
@@ -270,7 +268,7 @@ return {
     enabled = enabled,
   },
   {
-    "rcjkb/rustaceanvim",
+    "mrcjkb/rustaceanvim",
     version = "^4", -- Recommended
     ft = { "rust" },
     enabled = enabled,
@@ -383,4 +381,24 @@ return {
   {
     "tinted-theming/base16-vim",
   },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "zbirenbaum/copilot.lua",
+    },
+    config = get_config,
+  },
+  -- {
+  --   "OXY2DEV/markview.nvim",
+  --   lazy = false, -- Recommended
+  --   -- ft = "markdown" -- If you decide to lazy-load anyway
+  --
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "nvim-tree/nvim-web-devicons",
+  --   },
+  --   config = get_config,
+  -- },
 }

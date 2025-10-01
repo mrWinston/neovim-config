@@ -506,6 +506,10 @@
     ],
     "prefix": "crun_console"
   },
+  "end_slide": {
+    "body": "<!-- end_slide -->",
+    "prefix": "end_slide"
+  },
   "graph": {
     "body": [
       "```dot",
@@ -594,6 +598,22 @@
   "oc_pods_uwm": {
     "body": "oc -n openshift-user-workload-monitoring get pods -owide",
     "prefix": "oc_pods_uwm"
+  },
+  "pause": {
+    "body": "<!-- pause -->",
+    "prefix": "pause"
+  },
+  "slides_column": {
+    "body": "<!-- column: 0 -->",
+    "prefix": "slides_column"
+  },
+  "slides_column_layout": {
+    "body": "<!-- column_layout: [1, 1] -->",
+    "prefix": "slides_column_layout"
+  },
+  "slides_pause": {
+    "body": "<!-- pause -->",
+    "prefix": "slides_pause"
   },
   "subgraph": {
     "body": [

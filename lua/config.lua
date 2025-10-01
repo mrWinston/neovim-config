@@ -23,11 +23,12 @@ local options = {
   foldenable = true,
   foldlevel = 99,
   foldlevelstart = 99,
---  foldexpr = 'nvim_treesitter#foldexpr()',
---  foldmethod = 'expr',
+  --  foldexpr = 'nvim_treesitter#foldexpr()',
+  --  foldmethod = 'expr',
 }
 
 local globalOptions = {
+  root_spec = { "cwd" },
   markdown_folding = 1,
   markdown_recommended_style = 0,
   disable_autoformat = true,
@@ -43,22 +44,38 @@ local globalOptions = {
   lazygit_floating_window_winblend = 1,
   lazygit_floating_window_use_plenary = 1,
   netrw_browsex_viewer = "cd %:h && xdg-open",
---  markdown_fenced_languages = {"bash", "lua", "go", "typescript", "python"}
+  --  markdown_fenced_languages = {"bash", "lua", "go", "typescript", "python"}
 }
 
-if vim.g.neovide then
-  globalOptions["neovide_cursor_animate_command_line"] = false
-  globalOptions["neovide_scale_factor"] = 1.0
-  vim.o.guifont = '0xProto Nerd Font:h10'
-end
 
-for k, v in pairs(options) do
-  vim.o[k] = v
-end
+-- for k, v in pairs(options) do
+--   vim.o[k] = v
+-- end
 
-for k, v in pairs(globalOptions) do
-  vim.g[k] = v
-end
+-- for k, v in pairs(globalOptions) do
+--   vim.g[k] = v
+-- end
 
 vim.cmd([[autocmd FileType go set noexpandtab]])
 
+-- balance open wins on resize
+vim.api.nvim_command('autocmd VimResized * wincmd =')
+
+
+local group = vim.api.nvim_create_augroup("Markdown Wrap Settings", { clear = true })
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = { "*.md" },
+  group = group,
+  command = "setlocal nowrap",
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    if vim.bo.filetype == "Outline" then
+      if #utils.get_non_floating_windows() > 1 then
+        return
+      end
+      vim.cmd("q")
+    end
+  end,
+})

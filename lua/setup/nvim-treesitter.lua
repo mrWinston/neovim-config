@@ -128,8 +128,8 @@ vim.filetype.add({
 --   maintainers = { "@stsewd" }
 -- }
 
-
 vim.treesitter.language.register("markdown", "granite")
+vim.treesitter.language.register("sql", "dataview")
 
 --parser_config.suricata = {
 --  install_info = {
@@ -154,4 +154,26 @@ vim.filetype.add({
   },
 })
 
-vim.treesitter.language.register('go', 'gomacro')
+vim.treesitter.language.register("go", "gomacro")
+require("nvim-treesitter.parsers").list["markdown_inline"] = {
+  experimental = true,
+  install_info = {
+    files = { "src/parser.c", "src/scanner.c" },
+    location = "tree-sitter-markdown-inline",
+    url = "/home/maschulz/code/github/tree-sitter-markdown",
+  },
+  maintainers = { "@MDeiml" },
+  readme_name = "markdown_inline (needed for full highlighting)",
+}
+
+require("nvim-treesitter.parsers").list["markdown"] = {
+  experimental = true,
+  install_info = {
+    files = { "src/parser.c", "src/scanner.c" },
+    location = "tree-sitter-markdown",
+    url = "/home/maschulz/code/github/tree-sitter-markdown",
+  },
+  maintainers = { "@MDeiml" },
+  readme_name = "markdown",
+}
+

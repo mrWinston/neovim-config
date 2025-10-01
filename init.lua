@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 -- if not vim.loop.fs_stat(lazypath) then
@@ -24,20 +25,26 @@ require("lazy").setup("plugins", {
   },
 })
 
+
+local chan
+local confpath = vim.fn.stdpath("config")
+local function ensure_job()
+  if chan then
+    return chan
+  end
+  chan = vim.fn.jobstart({ 'go', 'run', '.' }, { rpc = true, cwd = confpath .. "/go"})
+  return chan
+end
+
+vim.api.nvim_create_user_command('GoConf', function(args)
+  vim.fn.rpcrequest(ensure_job(), 'configure', args.fargs)
+end, { nargs = '*' })
+vim.fn.rpcrequest(ensure_job(), 'configure')
+
 --require("plugins")
 require("mappings")
 require("config")
 require("look")
-if vim.g.neovide then
-  vim.o.guifont = "BlexMono Nerd Font:h14"
-  vim.g.neovide_transparency = 0.9
-  vim.g.neovide_window_blurred = true
-  vim.g.neovide_fullscreen = false
-  vim.g.neovide_remember_window_size = false
-  vim.g.neovide_cursor_trail_size = 0.4
-  vim.g.neovide_cursor_animation_length = 0.06
-  vim.g.neovide_scroll_animation_length = 0.1
---  vim.g.neovide_cursor_animation_length = 0
-  -- vim.g.neovide_scroll_animation_length = 0
-end
 -- require("tools.install").installAll()
+
+

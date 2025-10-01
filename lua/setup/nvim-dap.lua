@@ -25,7 +25,7 @@ require("dap-go").setup({
       request = "launch",
       mode = "test",
       program = "./${relativeFileDirname}",
-      args = {"-test.v"},
+      args = { "-test.v" },
     },
   },
 })
@@ -85,7 +85,7 @@ require("dapui").setup({
     {
       elements = {
         "repl",
-        --        "console",
+        -- "console",
       },
       size = 0.25, -- 25% of total lines
       position = "bottom",
@@ -108,6 +108,56 @@ require("dapui").setup({
 local dapui = require("dapui")
 
 local dap = require("dap")
+
+---Source the given files in default shell and show the env vars that are defined afterwards
+---@param files string[] List of files to be sourced
+---@return {[string]: string}
+local getEnvsWithSourcedFiles = function(files)
+  ---@type string[]
+  local shellArgs = {}
+  local defaultShell = os.getenv("SHELL")
+
+  table.insert(shellArgs, defaultShell)
+  table.insert(shellArgs, "-o")
+  table.insert(shellArgs, "allexport")
+  table.insert(shellArgs, "-c")
+
+  local shellCommand = ""
+  for _, f in pairs(files) do
+    shellCommand = shellCommand .. "source " .. f .. "; "
+  end
+  shellCommand = shellCommand .. "jq -n env;"
+  table.insert(shellArgs, shellCommand)
+
+  local runout = vim.system(shellArgs, { text = true }):wait()
+  if runout.code ~= 0 then
+    vim.notify(runout.stderr, vim.log.levels.ERROR)
+    return {}
+  end
+
+  return vim.json.decode(runout.stdout)
+end
+
+dap.listeners.on_config["go"] = function(config)
+  local newconfig = vim.deepcopy(config)
+  if config["envFile"] then
+    local originalEnv = getEnvsWithSourcedFiles({})
+    local newEnv = getEnvsWithSourcedFiles(config["envFile"])
+    if newconfig.env == nil then
+      newconfig.env = {}
+    end
+    newconfig.env = vim.tbl_extend("force", newconfig.env, newEnv)
+
+    for k, v in pairs(originalEnv) do
+      if newconfig.env[k] == v then
+        newconfig.env[k] = nil
+      end
+    end
+  end
+
+  newconfig.outputMode = "remote"
+  return newconfig
+end
 
 dap.defaults.fallback.focus_terminal = true
 
@@ -314,17 +364,23 @@ wk.add({
     { "<leader>dcj", require("dap.ext.vscode").load_launchjs, desc = "load launch.json" },
     { "<leader>dcl", loadDapConfig, desc = "Load Debug Config" },
     { "<leader>dcm", modifyDebugConfig, desc = "Modify Debug Config" },
-    { "<leader>dcp", function()vim.print(dap.configurations.go)end, desc = "Print Debug Config" },
+    {
+      "<leader>dcp",
+      function()
+        vim.print(dap.configurations.go)
+      end,
+      desc = "Print Debug Config",
+    },
     { "<leader>dcs", saveDapConfigs, desc = "Save Debug Config" },
     { "<leader>dd", dap.continue, desc = "Start Debugging" },
     { "<leader>dk", dap.terminate, desc = "Kill Session" },
     { "<leader>dl", ":DapShowLog<cr>", desc = "Show Log" },
     { "<leader>dpb", dap.toggle_breakpoint, desc = "Toggle Breakpoint" },
-    { "<leader>dr", dap.run_last , desc = "Re-run last session" },
+    { "<leader>dr", dap.run_last, desc = "Re-run last session" },
     { "<leader>ds", group = "Step" },
     { "<leader>dsi", ":DapStepInto<cr>", desc = "Step Into" },
     { "<leader>dsn", ":DapStepOver<cr>", desc = "Step Next/Over" },
     { "<leader>dso", ":DapStepOut<cr>", desc = "Step Out" },
     { "<leader>du", dapui.toggle, desc = "Toggle dap ui" },
-  }
+  },
 })

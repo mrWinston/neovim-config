@@ -38,7 +38,33 @@ require("mini.align").setup({})
 require("mini.files").setup({})
 require("mini.surround").setup({})
 
-require("mini.comment").setup({
+require("mini.comment").setup({})
+
+require("mini.pairs").setup({
+  mappings = {
+    ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+    ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+    ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+
+    [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+    ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+    ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+
+    ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^%a\\].", register = { cr = false } },
+    ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+    ["`"] = { action = "open", pair = "``", neigh_pattern = "[^%a\\].", register = { cr = false } },
+  },
+})
+
+require("mini.notify").setup({})
+
+vim.notify = require("mini.notify").make_notify({
+  ERROR = { duration = 5000, hl_group = "DiagnosticError" },
+  WARN = { duration = 5000, hl_group = "DiagnosticWarn" },
+  INFO = { duration = 5000, hl_group = "DiagnosticInfo" },
+  DEBUG = { duration = 0, hl_group = "DiagnosticHint" },
+  TRACE = { duration = 0, hl_group = "DiagnosticOk" },
+  OFF = { duration = 0, hl_group = "MiniNotifyNormal" },
 })
 
 require("mini.jump2d").setup({
